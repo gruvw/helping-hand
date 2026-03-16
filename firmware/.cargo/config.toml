@@ -1,0 +1,14 @@
+[build]
+target = "riscv32imac-esp-espidf"
+
+[target.riscv32imac-esp-espidf]
+linker = "ldproxy"
+# This allows 'cargo run' to automatically flash your C6
+runner = "espflash flash --monitor"
+
+[unstable]
+# This tells Cargo to compile the standard library for RISC-V on the fly
+build-std = ["std", "panic_abort"]
+
+[env]
+MCU = "esp32c6"

@@ -1,0 +1,13 @@
+[package]
+name = "esp32c6-ap-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+esp-idf-sys = { version = "0.35", features = ["binstart"] }
+esp-idf-svc = "0.49"
+embedded-svc = "0.28"
+anyhow = "1.0"
+
+[build-dependencies]
+embuild = "0.32"
