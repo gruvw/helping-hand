@@ -6,64 +6,43 @@ use esp_idf_hal::units::FromValueType;
 use pwm_pca9685::{Address, Channel, Pca9685};
 
 fn main() -> Result<()> {
-    // Standard ESP-IDF patch linking
     esp_idf_svc::sys::link_patches();
 
-    println!("Starting PCA9685 Servo Sweep...");
-
-    // 1. Take peripherals
     let peripherals = Peripherals::take().unwrap();
-
-    // 2. Configure I2C on Pins 4 (SDA) and 5 (SCL)
     let sda = peripherals.pins.gpio4;
     let scl = peripherals.pins.gpio5;
 
-    // 100 kHz is the standard I2C speed, which is plenty for the PCA9685
     let config = I2cConfig::new().baudrate(100.kHz().into());
     let i2c = I2cDriver::new(peripherals.i2c0, sda, scl, &config)?;
 
-    // 3. Initialize the PCA9685
-    // Address::default() uses the default 0x40 I2C address for the PCA9685
     let mut pwm = Pca9685::new(i2c, Address::default()).unwrap();
 
-    // 4. Configure PWM frequency to 50Hz for the servo
-    // The PCA9685 internal clock is 25MHz.
-    // Prescale formula: (25,000,000 / (4096 * 50Hz)) - 1 = ~121
+    // 50Hz frequency
     pwm.set_prescale(121).unwrap();
     pwm.enable().unwrap();
 
-    // 5. Define our sweep ticks based on your requirements
-    // 1ms = 205 ticks
-    // 4ms = 819 ticks
-    let min_tick = 205;
-    let max_tick = 819;
+    // Corrected tick values for 0.5ms to 2.5ms range
+    let pos_0_degrees = 102; // 0.5ms
+    let pos_180_degrees = 512; // 2.5ms
 
-    println!(
-        "Sweeping from 1ms ({} ticks) to 4ms ({} ticks)...",
-        min_tick, max_tick
-    );
+    println!("Starting snappy jumps...");
 
-    // 6. Sweep Loop
     loop {
-        // Sweep up (0 to 180 degrees)
-        for tick in min_tick..=max_tick {
-            // Channel::C0 corresponds to the "0" pin on the PCA9685 board
-            // We turn the pulse ON at tick 0, and OFF at our calculated tick
-            pwm.set_channel_on_off(Channel::C0, 0, tick).unwrap();
+        // 1. Jump to 180 degrees immediately
+        println!("Jumping to 180...");
+        pwm.set_channel_on_off(Channel::C0, 0, pos_180_degrees)
+            .unwrap();
 
-            // Adjust this delay to make the sweep faster or slower
-            FreeRtos::delay_ms(5);
-        }
+        // Wait 1 second for the physical arm to finish moving
+        FreeRtos::delay_ms(1000);
 
-        FreeRtos::delay_ms(500); // Pause at 180 degrees
+        // 2. Jump to 0 degrees immediately
+        println!("Jumping to 0...");
+        pwm.set_channel_on_off(Channel::C0, 0, pos_0_degrees)
+            .unwrap();
 
-        // Sweep down (180 to 0 degrees)
-        for tick in (min_tick..=max_tick).rev() {
-            pwm.set_channel_on_off(Channel::C0, 0, tick).unwrap();
-            FreeRtos::delay_ms(5);
-        }
-
-        FreeRtos::delay_ms(500); // Pause at 0 degrees
+        // Wait 1 second
+        FreeRtos::delay_ms(1000);
     }
 }
 // use esp_idf_svc::eventloop::EspSystemEventLoop;

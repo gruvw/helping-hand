@@ -40,6 +40,8 @@
         pkgs.cmake
         pkgs.ninja
         pkgs.llvmPackages.libclang.lib
+        pkgs.zlib
+        pkgs.stdenv.cc.cc.lib
       ];
 
       shellHook = ''
@@ -47,6 +49,8 @@
         export MCU=esp32c6
         export ESP_IDF_TOOLS_INSTALL_DIR=fromenv
         export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+        export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+        export LD_LIBRARY_PATH="${pkgs.zlib}/lib:${pkgs.llvmPackages.libclang.lib}/lib:${pkgs.stdenv.cc.cc.lib}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
       '';
     };
   };
