@@ -593,6 +593,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "embassy-time",
+ "embedded-hal 1.0.0",
  "embuild",
  "esp-idf-hal",
  "esp-idf-svc",
