@@ -16,16 +16,17 @@
     - [x] Provided arms
         - [x] 3 lengths
         - [x] Bendable arm design
-- [ ] Electronics
+- [x] Electronics
     - [x] Alimentation
     - [x] ESP32 C6
     - [x] Servo controller I2C
     - [x] Servo Motors
+    - [x] Standalone systems (no PC connection)
 - [ ] Firmware (Rust)
     - [x] HTTP local webserver
-    - [ ] Motor control
-    - [ ] Basic new button setup interface
+    - [x] Motor control
     - [ ] Basic button pressing interface
+    - [ ] Basic new button setup interface
 - [ ] Documentation
     - [ ] Mechanical design modular parts schematics/drawings
     - [ ] Export necessary CAD files
@@ -35,6 +36,7 @@
 ## Version 1.0.0
 
 - [ ] Mechanical design
+    - [ ] Electronics enclosure with servo ports
     - [ ] Use square nuts designs (at least for rails)
     - [ ] Might want to use O rings for bolts (avoid plastic deformation)
     - [ ] Square bottom angle on servo attachment
@@ -53,6 +55,7 @@
 ## Version 1.1.0
 
 - [ ] Electronics + Firmware
+    - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED
     - [ ] Push button for hardware actions (setup or reset)
 
