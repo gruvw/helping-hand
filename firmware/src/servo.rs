@@ -1,8 +1,8 @@
+use esp_idf_hal::delay::FreeRtos;
 use esp_idf_hal::gpio::{InputPin, OutputPin};
 use esp_idf_hal::i2c::{I2c, I2cConfig, I2cDriver};
 use pwm_pca9685::{Address, Channel, Pca9685};
-
-use crate::debug_println;
+use std::time::Duration;
 
 // properties of the servo
 const SERVO_FREQUENCY: u32 = 50; // 50 Hz
@@ -10,6 +10,7 @@ const SERVO_ANGLE_MIN: f32 = 0.0;
 const SERVO_ANGLE_MAX: f32 = 180.0;
 const SERVO_ANGLE_MIN_TIME_MS: f32 = 0.5;
 const SERVO_ANGLE_MAX_TIME_MS: f32 = 2.5;
+const SERVO_ANGLE_SETTLE_MS: u32 = 350;
 
 // properties of the PCA9685
 const PCA9685_FREQUENCY: u32 = 25_000_000; // 25 MHz
@@ -27,6 +28,8 @@ const SERVO_ANGLE_MAX_TICKS: u16 =
 // prescale = round(osc_clock / (4096 × update_rate)) − 1
 const PCA9685_PRESCALE: u8 =
     (PCA9685_FREQUENCY as f32 / (PCA9685_RANGE * SERVO_FREQUENCY) as f32 - 1.0).round() as u8;
+
+const LOG_TAG: &str = "ServoManager";
 
 pub struct ServoManager<'a> {
     pca: Pca9685<I2cDriver<'a>>,
@@ -49,20 +52,14 @@ impl<'a> ServoManager<'a> {
             .expect("failed to set PCA9685 prescale");
         pca.enable().expect("failed to enable PCA9685");
 
-        debug_println!(
-            "ServoManager: PCA9685 ready (prescale={})",
-            PCA9685_PRESCALE
-        );
+        log::info!(target: LOG_TAG, "initialized, PCA9685 ready (prescale={})", PCA9685_PRESCALE);
 
         Self { pca }
     }
 
     /// Set angle for the given `channel`, angle is clamped between `SERVO_ANGLE_MIN` and
     /// `SERVO_ANGLE_MAX`.
-    pub fn move_to_angle<I2C>(&mut self, channel: Channel, angle: f32)
-    where
-        I2C: embedded_hal::i2c::I2c,
-    {
+    fn hold_angle(&mut self, channel: Channel, angle: f32) {
         let angle = angle.clamp(SERVO_ANGLE_MIN, SERVO_ANGLE_MAX);
 
         // linear interpolation between min and and max angles ticks
@@ -72,11 +69,28 @@ impl<'a> ServoManager<'a> {
                     / (SERVO_ANGLE_MAX - SERVO_ANGLE_MIN)))
             .round() as u16;
 
-        debug_println!("PCA9685: set channel {:?} to {}°", channel, angle);
+        log::info!(target: LOG_TAG, "hold angle channel {:?} to {}°", channel, angle);
 
         // signal goes high at time 0, goes low at time `ticks`
         self.pca
             .set_channel_on_off(channel, 0, ticks)
             .expect("failed to set PCA9685 channel on/off");
+    }
+
+    fn release(&mut self, channel: Channel) {
+        self.pca
+            .set_channel_full_off(channel)
+            .expect("failed to release channel");
+
+        log::info!(target: LOG_TAG, "release channel {:?}", channel);
+    }
+
+    pub fn click(&mut self, channel: Channel, angle: f32, duration: Duration) {
+        self.hold_angle(channel, angle);
+        FreeRtos::delay_ms(SERVO_ANGLE_SETTLE_MS);
+        FreeRtos::delay_ms(duration.as_millis() as u32);
+        self.hold_angle(channel, SERVO_ANGLE_MIN);
+        FreeRtos::delay_ms(SERVO_ANGLE_SETTLE_MS);
+        self.release(channel);
     }
 }
