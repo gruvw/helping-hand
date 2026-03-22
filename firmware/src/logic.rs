@@ -8,7 +8,11 @@ use pwm_pca9685::Channel;
 
 use crate::servo::ServoManager;
 
+const LOG_TAG: &str = "logic";
+
 pub fn handle_index(req: Request<&mut EspHttpConnection>) -> anyhow::Result<()> {
+    log::info!(target: LOG_TAG, "index handling");
+
     let mut response = req.into_ok_response()?;
     response.write(b"Hello World!")?;
     Ok(())
@@ -18,6 +22,8 @@ pub fn handle_click(
     req: Request<&mut EspHttpConnection>,
     sm: &Arc<Mutex<ServoManager>>,
 ) -> anyhow::Result<()> {
+    log::info!(target: LOG_TAG, "click handling");
+
     let uri = req.uri();
     let query = uri.split_once('?').map(|(_, q)| q).unwrap_or("");
 
@@ -40,6 +46,14 @@ pub fn handle_click(
         }
     }
 
+    log::info!(
+        target: LOG_TAG,
+        "click parameters: channel={}, angle={}, duration={}ms",
+        channel_nb,
+        angle,
+        duration_ms,
+    );
+
     let channel = match channel_nb {
         0 => Channel::C0,
         1 => Channel::C1,
@@ -58,7 +72,5 @@ pub fn handle_click(
         .expect("failed to acquire servo manager mutex")
         .click(channel, angle, Duration::from_millis(duration_ms));
 
-    let mut response = req.into_ok_response()?;
-    response.write(b"OK")?;
     Ok(())
 }
