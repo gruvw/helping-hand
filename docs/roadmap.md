@@ -16,6 +16,7 @@
     - [x] Provided arms
         - [x] 3 lengths
         - [x] Bendable arm design
+    - [ ] New screws and reprint
 - [x] Electronics
     - [x] Alimentation
     - [x] ESP32 C6
@@ -27,6 +28,7 @@
     - [x] Motor control
     - [x] Basic button pressing interface
     - [ ] Basic new button setup interface
+    - [ ] Hardcoded home WiFi credentials
 - [ ] Software
     - [ ] Basic new button setup interface
     - [ ] Basic button pressing interface
@@ -44,21 +46,29 @@
     - [ ] Use square nuts designs (at least for rails)
     - [ ] Might want to use O rings for bolts (avoid plastic deformation)
     - [ ] Square bottom angle on servo attachment
-    - [ ] Try PETG for arms bending
-    - [ ] Test Prusa printing at the end
     - [ ] Release downloads with custom tolerances
 - [ ] Firmware
     - [ ] Refined communication protocol with main application
+    - [ ] Button long press interface
+    - [ ] Button double press interface
 - [ ] Software
     - [ ] Full application with accessible design to control multiple devices
     - [ ] Set up procedure to configure new buttons/servos
     - [ ] Set up for new WiFi procedure full connection system config
+- [ ] Evaluation
+    - [ ] Stress test the system with long endurance testing for multiple days (find a way to record pressing intention and pressing success)
+    - [ ] Evaluation of mechanical design for multiple remote types
+    - [ ] Interface evaluation for ease of manipulation
 - [ ] Documentation
-    - [ ] Web generator application tool for CAD parts (custom tolerances)
+    - [ ] Full CAD downloads
 
 ## Version 2.0.0
 
+- [ ] Mechanical design
+    - [ ] Try PETG for arms bending
+    - [ ] Test Prusa printing at the end
 - [ ] Electronics + Firmware
+    - [ ] Captive portal for custom wifi setup
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED
     - [ ] Push button for hardware actions (setup or reset)
@@ -67,5 +77,7 @@
 - [ ] Software
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
+- [ ] Documentation
+    - [ ] Web generator application tool for CAD parts (custom tolerances)
 
 - [ ] IR replayer compatible module
