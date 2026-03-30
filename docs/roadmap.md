@@ -22,11 +22,15 @@
     - [x] Servo controller I2C
     - [x] Servo Motors
     - [x] Standalone systems (no PC connection)
-- [ ] Firmware (Rust)
+- [x] Firmware (Rust)
     - [x] HTTP local webserver
     - [x] Motor control
-    - [ ] Basic button pressing interface
+    - [x] Basic button pressing interface
     - [ ] Basic new button setup interface
+- [ ] Software
+    - [ ] Basic new button setup interface
+    - [ ] Basic button pressing interface
+    - [ ] HTTP security testing from Android IOS & desktops
 - [ ] Documentation
     - [ ] Mechanical design modular parts schematics/drawings
     - [ ] Export necessary CAD files
@@ -52,11 +56,16 @@
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
 
-## Version 1.1.0
+## Version 2.0.0
 
 - [ ] Electronics + Firmware
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED
     - [ ] Push button for hardware actions (setup or reset)
+- [ ] Firmware
+    - [ ] Connection to Wi-Fi network from AP mode
+- [ ] Software
+    - [ ] Connection to Wi-Fi network from AP mode
+    - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
 
 - [ ] IR replayer compatible module
