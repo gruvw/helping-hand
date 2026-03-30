@@ -26,9 +26,10 @@
 - [x] Firmware (Rust)
     - [x] HTTP local webserver
     - [x] Motor control
-    - [x] Basic button pressing interface
-    - [ ] Basic new button setup interface
-    - [ ] Hardcoded home WiFi credentials
+    - [x] Basic button pressing interface (click)
+    - [x] Basic new button setup interface (set + reset)
+    - [x] Hardcoded home Wi-Fi credentials
+    - [x] Option to run Wi-Fi as AP mode
 - [ ] Software
     - [ ] Basic new button setup interface
     - [ ] Basic button pressing interface

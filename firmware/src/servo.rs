@@ -59,7 +59,7 @@ impl<'a> ServoManager<'a> {
 
     /// Set angle for the given `channel`, angle is clamped between `SERVO_ANGLE_MIN` and
     /// `SERVO_ANGLE_MAX`.
-    fn hold_angle(&mut self, channel: Channel, angle: f32) {
+    pub fn hold_angle(&mut self, channel: Channel, angle: f32) {
         let angle = angle.clamp(SERVO_ANGLE_MIN, SERVO_ANGLE_MAX);
 
         // linear interpolation between min and and max angles ticks
@@ -85,12 +85,21 @@ impl<'a> ServoManager<'a> {
         log::info!(target: LOG_TAG, "release channel {:?}", channel);
     }
 
+    pub fn reset(&mut self, channel: Channel) {
+        self.hold_angle(channel, SERVO_ANGLE_MIN);
+        FreeRtos::delay_ms(SERVO_ANGLE_SETTLE_MS);
+        self.release(channel);
+    }
+
     pub fn click(&mut self, channel: Channel, angle: f32, duration: Duration) {
         self.hold_angle(channel, angle);
         FreeRtos::delay_ms(SERVO_ANGLE_SETTLE_MS);
         FreeRtos::delay_ms(duration.as_millis() as u32);
-        self.hold_angle(channel, SERVO_ANGLE_MIN);
+        self.reset(channel);
+    }
+
+    pub fn set(&mut self, channel: Channel, angle: f32) {
+        self.hold_angle(channel, angle);
         FreeRtos::delay_ms(SERVO_ANGLE_SETTLE_MS);
-        self.release(channel);
     }
 }
