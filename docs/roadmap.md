@@ -16,6 +16,7 @@
     - [x] Provided arms
         - [x] 3 lengths
         - [x] Bendable arm design
+    - [ ] New screws and reprint
 - [x] Electronics
     - [x] Alimentation
     - [x] ESP32 C6
@@ -45,18 +46,23 @@
     - [ ] Release downloads with custom tolerances
 - [ ] Firmware
     - [ ] Refined communication protocol with main application
+    - [ ] Button long press interface
+    - [ ] Button double press interface
 - [ ] Software
     - [ ] Full application with accessible design to control multiple devices
     - [ ] Set up procedure to configure new buttons/servos
     - [ ] Set up for new WiFi procedure full connection system config
 - [ ] Documentation
-    - [ ] Web generator application tool for CAD parts (custom tolerances)
+    - [ ] Full CAD downloads
 
 ## Version 1.1.0
 
 - [ ] Electronics + Firmware
+    - [ ] Captive portal for custom wifi setup
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED
     - [ ] Push button for hardware actions (setup or reset)
+- [ ] Documentation
+    - [ ] Web generator application tool for CAD parts (custom tolerances)
 
 - [ ] IR replayer compatible module
