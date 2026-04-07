@@ -4,6 +4,7 @@ use std::sync::Mutex;
 use esp_idf_hal::delay::FreeRtos;
 use esp_idf_hal::peripherals::Peripherals;
 
+use helping_hand::fs::fs_setup;
 use helping_hand::network::network_setup;
 use helping_hand::server::server_setup;
 use helping_hand::servo::ServoManager;
@@ -25,11 +26,13 @@ fn main() -> ! {
     );
     let sm = Arc::new(Mutex::new(sm));
 
+    let _fs = fs_setup();
     let _network = network_setup(peripherals.modem);
     let _server = server_setup(sm);
 
     log::info!(target: LOG_TAG, "device intitialized");
 
+    // keep alive loop
     loop {
         FreeRtos::delay_ms(u32::MAX);
     }

@@ -16,7 +16,7 @@
     - [x] Provided arms
         - [x] 3 lengths
         - [x] Bendable arm design
-    - [ ] New screws and reprint
+    - [x] New longger screws and reprint
 - [x] Electronics
     - [x] Alimentation
     - [x] ESP32 C6
@@ -30,15 +30,12 @@
     - [x] Basic new button setup interface (set + reset)
     - [x] Hardcoded home Wi-Fi credentials
     - [x] Option to run Wi-Fi as AP mode
+    - [ ] Wi-Fi reconnection system
+    - [ ] Persisted config store on device + get endpoint
 - [ ] Software
     - [ ] Basic new button setup interface
     - [ ] Basic button pressing interface
     - [ ] HTTP security testing from Android IOS & desktops
-- [ ] Documentation
-    - [ ] Mechanical design modular parts schematics/drawings
-    - [ ] Export necessary CAD files
-    - [ ] Project README
-    - [ ] GitHub release
 
 ## Version 1.0.0
 
@@ -49,19 +46,21 @@
     - [ ] Square bottom angle on servo attachment
     - [ ] Release downloads with custom tolerances
 - [ ] Firmware
-    - [ ] Refined communication protocol with main application
     - [ ] Button long press interface
-    - [ ] Button double press interface
+    - [ ] Refined communication protocol with main application
 - [ ] Software
-    - [ ] Full application with accessible design to control multiple devices
+    - [ ] New device interface
+    - [ ] Full application with accessible mode design to control multiple devices
     - [ ] Set up procedure to configure new buttons/servos
-    - [ ] Set up for new WiFi procedure full connection system config
 - [ ] Evaluation
     - [ ] Stress test the system with long endurance testing for multiple days (find a way to record pressing intention and pressing success)
     - [ ] Evaluation of mechanical design for multiple remote types
     - [ ] Interface evaluation for ease of manipulation
 - [ ] Documentation
+    - [ ] Mechanical design modular parts schematics/drawings
     - [ ] Full CAD downloads
+    - [ ] Project README
+    - [ ] GitHub release
 
 ## Version 2.0.0
 
@@ -75,6 +74,8 @@
     - [ ] Push button for hardware actions (setup or reset)
 - [ ] Firmware
     - [ ] Connection to Wi-Fi network from AP mode
+    - [ ] Button double press interface
+    - [ ] More complex button systems, like sequences
 - [ ] Software
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints

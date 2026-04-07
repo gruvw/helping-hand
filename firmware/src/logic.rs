@@ -6,7 +6,10 @@ use std::{
 use esp_idf_svc::http::server::{EspHttpConnection, Request};
 use pwm_pca9685::Channel;
 
-use crate::servo::ServoManager;
+use crate::{
+    fs::{get_config, store_config},
+    servo::ServoManager,
+};
 
 const LOG_TAG: &str = "logic";
 
@@ -163,6 +166,28 @@ pub fn handle_reset(
     sm.lock()
         .expect("failed to acquire servo manager mutex")
         .reset(channel);
+
+    Ok(())
+}
+
+pub fn handle_get_config(req: Request<&mut EspHttpConnection>) -> anyhow::Result<()> {
+    log::info!(target: LOG_TAG, "get-config handling");
+
+    let config = get_config();
+
+    let mut response = req.into_ok_response()?;
+    response.write(config.as_bytes())?;
+
+    Ok(())
+}
+
+pub fn handle_store_config(
+    _req: Request<&mut EspHttpConnection>,
+    body: String,
+) -> anyhow::Result<()> {
+    log::info!(target: LOG_TAG, "store-config handling");
+
+    store_config(body);
 
     Ok(())
 }

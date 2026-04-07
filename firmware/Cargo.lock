@@ -833,6 +833,7 @@ name = "helping-hand"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "const_format",
  "dotenvy",
  "embassy-time",
  "embedded-hal 1.0.0",

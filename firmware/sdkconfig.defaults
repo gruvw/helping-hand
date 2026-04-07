@@ -1,12 +1,19 @@
-# Rust often needs a bit of an extra main task stack size compared to C (the default is 3K)
-# You might have to increase this further if you allocate large stack variables in the main task
+# increase this if allocate large stack variables in the main task
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
-
-# Increase a bit these stack sizes as they are also a bit too small by default
 CONFIG_ESP_SYSTEM_EVENT_TASK_STACK_SIZE=4096
 CONFIG_FREERTOS_IDLE_TASK_STACKSIZE=4096
 
-# You might have to increase this further if you spawn your own Rust threads
-# that allocate large stack variables; or better yet - use
-# `std::thread::Builder::new().stack_size(XXX)` for spawning
 CONFIG_PTHREAD_TASK_STACK_SIZE_DEFAULT=4096
+
+# 8MB of flash
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="8MB"
+
+# flash storage
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="/home/gruvw/data/repositories/helping-hand/firmware/partitions.csv"
+CONFIG_PARTITION_TABLE_FILENAME="/home/gruvw/data/repositories/helping-hand/firmware/partitions.csv"
+
+# SPIFFS filesystem
+CONFIG_SPIFFS=y
+CONFIG_SPIFFS_CHECK_ON_STARTUP=y

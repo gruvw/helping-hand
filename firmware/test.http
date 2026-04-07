@@ -1,0 +1,13 @@
+### Hello World
+
+GET http://hh-0001.local/
+
+### Get config
+
+GET http://hh-0001.local/config
+
+### Post config
+
+POST http://hh-0001.local/config
+
+save state?
