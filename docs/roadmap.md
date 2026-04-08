@@ -35,7 +35,7 @@
 - [ ] Software
     - [ ] Basic new button setup interface
     - [ ] Basic button pressing interface
-    - [ ] HTTP security testing and MDNS queries from Android & IOS & desktop
+    - [ ] HTTP security testing and mDNS queries from Android & IOS & desktop
 - [ ] Documentation
     - [ ] GitHub release
 
@@ -51,9 +51,12 @@
     - [ ] Button long press interface
     - [ ] Refined communication protocol with main application
 - [ ] Software
+    - [ ] Application logo
     - [ ] New device interface
     - [ ] Full set up procedure to configure new buttons/servos
     - [ ] Full application with accessible mode design to control multiple devices
+        - [ ] Auto cycling mode
+        - [ ] Press for next mode
     - [ ] Settings page for configuration
 - [ ] Evaluation
     - [ ] Stress test the system with long endurance testing for multiple days (find a way to record pressing intention and pressing success)
@@ -84,6 +87,7 @@
 - [ ] Software
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
+    - [ ] i18n
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
 

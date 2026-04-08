@@ -1,0 +1,18 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude: [lib/**.g.dart]
+
+linter:
+  rules:
+    prefer_double_quotes: true
+    require_trailing_commas: true
+    always_use_package_imports: true
+    directives_ordering: true
+
+formatter:
+  # page_width: 100
+  trailing_commas: preserve
+
+plugins:
+  riverpod_lint: ^3.1.3

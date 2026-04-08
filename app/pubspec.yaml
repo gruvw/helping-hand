@@ -1,0 +1,76 @@
+name: helping_hand
+description: "Accessible home automation."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.1
+
+dependency_overrides:
+  test_api: 0.7.7
+  analyzer: ^10.0.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # language
+  collection: ^1.19.0
+
+  # ui
+  gap: ^3.0.1
+  material_symbols_icons: ^4.2815.0
+
+  # state
+  go_router: ^17.2.0
+  flutter_hooks: ^0.21.2
+  hooks_riverpod: ^3.2.1
+
+  # persistence
+  drift: ^2.32.1
+  drift_flutter: ^0.3.0
+
+  # native
+  path_provider: ^2.1.5
+  flutter_native_splash: ^2.4.6
+
+dev_dependencies:
+  # testing
+  flutter_test:
+    sdk: flutter
+
+  # build
+  build_runner: ^2.13.1
+  drift_dev: ^2.32.1
+
+  # lints
+  flutter_lints: ^6.0.0
+
+  flutter_launcher_icons: ^0.14.3
+
+  # commands to set the application name:
+  # `dart run change_app_package_name:main app.numly.android --android`
+  # `dart run change_app_package_name:main app.numly.ios --ios`
+  change_app_package_name: ^1.5.0
+  freezed: ^3.2.3
+
+flutter:
+  generate: true
+  uses-material-design: true
+
+# command to generate the icons: `dart run flutter_launcher_icons`
+flutter_launcher_icons:
+  image_path: assets/logo/helping-hand.png
+  android: true
+  web:
+    generate: true
+
+# command to generate the splash screen: `dart run flutter_native_splash:create`
+flutter_native_splash:
+  android: true
+  ios: true
+  web: true
+  color: "#FFFFFF"
+  image: assets/logo/helping-hand.png
+  android_12:
+    color: "#FFFFFF"
