@@ -9,5 +9,6 @@ GET http://hh-0001.local/config
 ### Post config
 
 POST http://hh-0001.local/config
+Content-Type: text/plain
 
-save state?
+save state 1245

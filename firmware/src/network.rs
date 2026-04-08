@@ -15,12 +15,14 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
-const CONNECTION_CHECK_SEC: u64 = 30;
-
 const DEVICE_ID: &str = env!("DEVICE_ID");
+const NET_AP_PWD: &str = env!("NET_AP_PWD");
+
 const NET_SSID: &str = env!("NET_SSID");
 const NET_PWD: &str = env!("NET_PWD");
-const NET_AP_PWD: &str = env!("NET_AP_PWD");
+const AUTH_METHOD: AuthMethod = AuthMethod::WPA2Personal;
+
+const CONNECTION_CHECK_SEC: u64 = 30;
 
 const LOG_TAG: &str = "network";
 
@@ -37,9 +39,9 @@ fn start_connection_check_task(wifi: Arc<Mutex<EspWifi<'static>>>) {
 
         match wifi_lock.is_connected() {
             Ok(false) => {
-                log::info!(target: LOG_TAG, "periodic check failed, retrying...");
+                log::warn!(target: LOG_TAG, "periodic check failed, retrying...");
                 if let Err(e) = wifi_lock.connect() {
-                    log::error!(target: LOG_TAG, "retry failed: {:?}", e);
+                    log::error!(target: LOG_TAG, "could not retry: {:?}", e);
                 }
             }
             Err(e) => log::error!(target: LOG_TAG, "failed to check status: {:?}", e),
@@ -86,12 +88,12 @@ pub fn network_setup(modem: Modem<'static>) -> Network {
 
         if !NET_SSID.is_empty() {
             // wifi mode
-            log::info!(target: LOG_TAG, "Connecting to Wi-Fi: {} {}", NET_SSID, NET_PWD);
+            log::info!(target: LOG_TAG, "connecting to Wi-Fi: {}", NET_SSID);
             wifi_lock
                 .set_configuration(&WifiConfiguration::Client(ClientConfiguration {
                     ssid: NET_SSID.try_into().unwrap(),
                     password: NET_PWD.try_into().unwrap(),
-                    auth_method: AuthMethod::WPA2WPA3Personal,
+                    auth_method: AUTH_METHOD,
                     ..Default::default()
                 }))
                 .expect("failed to set STA config");

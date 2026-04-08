@@ -1,33 +1,55 @@
+use const_format::formatcp;
+use esp_idf_hal::sys::{
+    esp_vfs_fat_mount_config_t, esp_vfs_fat_spiflash_mount_rw_wl, wl_handle_t,
+    CONFIG_WL_SECTOR_SIZE, ESP_OK, WL_INVALID_HANDLE,
+};
+use std::ffi::CString;
 use std::fs;
 
-use esp_idf_svc::fs::spiffs::Spiffs;
-
-const PARTITION_LABEL: &str = "spiffs";
-const CONFIG_PATH: &str = "/spiffs/config.txt";
+const PARTITION_LABEL: &str = "storage";
+const BASE_PATH: &str = "/fatfs";
+const CONFIG_PATH: &str = formatcp!("{}/config.txt", BASE_PATH);
 
 const LOG_TAG: &str = "fs";
 
-pub fn fs_setup() -> Spiffs {
-    let spiffs = unsafe { Spiffs::new(PARTITION_LABEL) };
-    let mut spiffs = spiffs.expect("failed to mount SPIFFS filesystem");
-    spiffs.format().expect("aa");
+pub fn fs_setup() {
+    log::info!(target: LOG_TAG, "setting up the file system");
 
-    log::info!(target: LOG_TAG, "SPIFFS mounted at /{}", PARTITION_LABEL);
+    let partition_label = CString::new(PARTITION_LABEL).unwrap();
+    let base_path = CString::new(BASE_PATH).unwrap();
 
-    spiffs
+    let mount_config = esp_vfs_fat_mount_config_t {
+        format_if_mount_failed: true,
+        max_files: 5,
+        allocation_unit_size: CONFIG_WL_SECTOR_SIZE as usize,
+        ..Default::default()
+    };
+
+    let mut wl_handle: wl_handle_t = WL_INVALID_HANDLE;
+
+    let ret = unsafe {
+        esp_vfs_fat_spiflash_mount_rw_wl(
+            base_path.as_ptr(),
+            partition_label.as_ptr(),
+            &mount_config,
+            &mut wl_handle,
+        )
+    };
+
+    if ret != ESP_OK {
+        log::error!(target: LOG_TAG, "failed to mount FATFS (0x{:x})", ret);
+    } else {
+        log::info!(target: LOG_TAG, "FATFS mounted successfully at {}", BASE_PATH);
+    }
 }
 
 pub fn get_config() -> String {
-    fs::read_to_string(CONFIG_PATH).unwrap_or(String::new())
+    fs::read_to_string(CONFIG_PATH).unwrap_or_default()
 }
 
 pub fn store_config(config: String) {
     match fs::write(CONFIG_PATH, config) {
-        Ok(_) => {
-            log::info!(target: LOG_TAG, "config successfully saved to {}", CONFIG_PATH);
-        }
-        Err(e) => {
-            log::error!(target: LOG_TAG, "failed to write config: {}", e);
-        }
+        Ok(_) => log::info!(target: LOG_TAG, "Config saved to {}", CONFIG_PATH),
+        Err(e) => log::error!(target: LOG_TAG, "Failed to write config: {}", e),
     }
 }

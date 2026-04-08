@@ -30,32 +30,36 @@
     - [x] Basic new button setup interface (set + reset)
     - [x] Hardcoded home Wi-Fi credentials
     - [x] Option to run Wi-Fi as AP mode
-    - [ ] Wi-Fi reconnection system
-    - [ ] Persisted config store on device + get endpoint
+    - [x] Wi-Fi reconnection system
+    - [x] Persisted config store on device + get endpoint
 - [ ] Software
     - [ ] Basic new button setup interface
     - [ ] Basic button pressing interface
-    - [ ] HTTP security testing from Android IOS & desktops
+    - [ ] HTTP security testing and MDNS queries from Android & IOS & desktop
+- [ ] Documentation
+    - [ ] GitHub release
 
 ## Version 1.0.0
 
 - [ ] Mechanical design
+    - [ ] Wider base
     - [ ] Electronics enclosure with servo ports
     - [ ] Use square nuts designs (at least for rails)
     - [ ] Might want to use O rings for bolts (avoid plastic deformation)
     - [ ] Square bottom angle on servo attachment
-    - [ ] Release downloads with custom tolerances
 - [ ] Firmware
     - [ ] Button long press interface
     - [ ] Refined communication protocol with main application
 - [ ] Software
     - [ ] New device interface
+    - [ ] Full set up procedure to configure new buttons/servos
     - [ ] Full application with accessible mode design to control multiple devices
-    - [ ] Set up procedure to configure new buttons/servos
+    - [ ] Settings page for configuration
 - [ ] Evaluation
     - [ ] Stress test the system with long endurance testing for multiple days (find a way to record pressing intention and pressing success)
     - [ ] Evaluation of mechanical design for multiple remote types
     - [ ] Interface evaluation for ease of manipulation
+    - [ ] Real world integration testing with measurements
 - [ ] Documentation
     - [ ] Mechanical design modular parts schematics/drawings
     - [ ] Full CAD downloads
@@ -65,17 +69,18 @@
 ## Version 2.0.0
 
 - [ ] Mechanical design
+    - [ ] Release downloads with custom tolerances
     - [ ] Try PETG for arms bending
     - [ ] Test Prusa printing at the end
 - [ ] Electronics + Firmware
-    - [ ] Captive portal for custom wifi setup
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED
     - [ ] Push button for hardware actions (setup or reset)
 - [ ] Firmware
     - [ ] Connection to Wi-Fi network from AP mode
+    - [ ] Captive portal for custom wifi setup
     - [ ] Button double press interface
-    - [ ] More complex button systems, like sequences
+    - [ ] More complex button systems, like press sequences
 - [ ] Software
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints

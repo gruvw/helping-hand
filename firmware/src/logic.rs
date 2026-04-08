@@ -175,7 +175,7 @@ pub fn handle_get_config(req: Request<&mut EspHttpConnection>) -> anyhow::Result
 
     let config = get_config();
 
-    let mut response = req.into_ok_response()?;
+    let mut response = req.into_response(200, Some("OK"), &[("Content-Type", "text/plain")])?;
     response.write(config.as_bytes())?;
 
     Ok(())

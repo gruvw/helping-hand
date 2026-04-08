@@ -8,12 +8,3 @@ CONFIG_PTHREAD_TASK_STACK_SIZE_DEFAULT=4096
 # 8MB of flash
 CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
 CONFIG_ESPTOOLPY_FLASHSIZE="8MB"
-
-# flash storage
-CONFIG_PARTITION_TABLE_CUSTOM=y
-CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="/home/gruvw/data/repositories/helping-hand/firmware/partitions.csv"
-CONFIG_PARTITION_TABLE_FILENAME="/home/gruvw/data/repositories/helping-hand/firmware/partitions.csv"
-
-# SPIFFS filesystem
-CONFIG_SPIFFS=y
-CONFIG_SPIFFS_CHECK_ON_STARTUP=y

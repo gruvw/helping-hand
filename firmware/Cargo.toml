@@ -9,7 +9,7 @@ rust-version = "1.82"
 [[bin]]
 name = "helping-hand"
 path = "src/main.rs"
-harness = false # do not use the built-in cargo test harness -> resolve rust-analyzer errors
+harness = false
 
 [profile.release]
 opt-level = "s"
@@ -26,14 +26,10 @@ esp-idf-svc = { git = "https://github.com/esp-rs/esp-idf-svc.git" }
 [[package.metadata.esp-idf-sys.extra_components]]
 remote_component = { name = "espressif/mdns", version = "1.2" }
 
-[[package.metadata.esp-idf-sys.extra_components]]
-remote_component = { name = "joltwallet/littlefs", version = "1.14" }
-
 [dependencies]
 log = "0.4"
 anyhow = "1.0"
 esp-idf-svc = { version = "0.52.1", features = ["critical-section", "embassy-time-driver", "embassy-sync", "std", "alloc", "embedded-storage"] }
-# Remove `generic-queue-8` if you plan to use `embassy-time` WITH `embassy-executor`
 embassy-time = { version = "0.5", features = ["generic-queue-8"] }
 pwm-pca9685 = "1.0.0"
 esp-idf-hal = "0.46.2"

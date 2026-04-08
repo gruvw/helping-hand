@@ -56,29 +56,8 @@ impl<'a> ServoManager<'a> {
 
         let mut manager = Self { pca };
 
-        // reset all channels
-        log::info!(target: LOG_TAG, "Resetting all channels...");
-        for i in 0..16 {
-            let channel = match i {
-                0 => Channel::C0,
-                1 => Channel::C1,
-                2 => Channel::C2,
-                3 => Channel::C3,
-                4 => Channel::C4,
-                5 => Channel::C5,
-                6 => Channel::C6,
-                7 => Channel::C7,
-                8 => Channel::C8,
-                9 => Channel::C9,
-                10 => Channel::C10,
-                11 => Channel::C11,
-                12 => Channel::C12,
-                13 => Channel::C13,
-                14 => Channel::C14,
-                _ => Channel::C15,
-            };
-            manager.reset(channel);
-        }
+        log::info!(target: LOG_TAG, "resetting all channels...");
+        manager.reset(Channel::All);
 
         manager
     }

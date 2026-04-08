@@ -4,6 +4,7 @@ use std::sync::Mutex;
 use esp_idf_hal::delay::FreeRtos;
 use esp_idf_hal::peripherals::Peripherals;
 
+use esp_idf_svc::log::EspLogger;
 use helping_hand::fs::fs_setup;
 use helping_hand::network::network_setup;
 use helping_hand::server::server_setup;
@@ -13,7 +14,7 @@ const LOG_TAG: &str = "main";
 
 fn main() -> ! {
     esp_idf_svc::sys::link_patches();
-    esp_idf_svc::log::EspLogger::initialize_default();
+    EspLogger::initialize_default();
 
     log::info!(target: LOG_TAG, "device started");
 
