@@ -8,16 +8,11 @@ use pwm_pca9685::Channel;
 
 use crate::{
     fs::{get_config, store_config},
+    server::{HttpStatus, RequestExt},
     servo::ServoManager,
 };
 
 const LOG_TAG: &str = "logic";
-
-fn bad_request(req: Request<&mut EspHttpConnection>, msg: &str) -> anyhow::Result<()> {
-    let mut response = req.into_response(400, Some("Bad Request"), &[])?;
-    response.write(msg.as_bytes())?;
-    Ok(())
-}
 
 fn map_channel(nb: u8) -> Option<Channel> {
     match nb {
@@ -36,8 +31,11 @@ fn map_channel(nb: u8) -> Option<Channel> {
 pub fn handle_index(req: Request<&mut EspHttpConnection>) -> anyhow::Result<()> {
     log::info!(target: LOG_TAG, "index handling");
 
-    let mut response = req.into_ok_response()?;
+    let headers = [("Content-Type", "text/plain")];
+
+    let mut response = req.into_cors_response(HttpStatus::Ok, &headers)?;
     response.write(b"Hello World!")?;
+
     Ok(())
 }
 
@@ -61,7 +59,7 @@ pub fn handle_click(
                 "angle" => angle = value.parse().unwrap_or(angle),
                 "duration" => duration_ms = value.parse().unwrap_or(duration_ms),
                 _ => {
-                    return bad_request(req, "invalid query parameter");
+                    return req.bad_request("invalid query parameter");
                 }
             }
         }
@@ -77,12 +75,14 @@ pub fn handle_click(
 
     let channel = match map_channel(channel_nb) {
         Some(c) => c,
-        None => return bad_request(req, "invalid channel"),
+        None => return req.bad_request("invalid channel"),
     };
 
     sm.lock()
         .expect("failed to acquire servo manager mutex")
         .click(channel, angle, Duration::from_millis(duration_ms));
+
+    req.into_status_response(HttpStatus::NoContent as u16)?;
 
     Ok(())
 }
@@ -105,7 +105,7 @@ pub fn handle_set(
                 "channel" => channel_nb = value.parse().unwrap_or(channel_nb),
                 "angle" => angle = value.parse().unwrap_or(angle),
                 _ => {
-                    return bad_request(req, "invalid query parameter");
+                    return req.bad_request("invalid query parameter");
                 }
             }
         }
@@ -120,12 +120,14 @@ pub fn handle_set(
 
     let channel = match map_channel(channel_nb) {
         Some(c) => c,
-        None => return bad_request(req, "invalid channel"),
+        None => return req.bad_request("invalid channel"),
     };
 
     sm.lock()
         .expect("failed to acquire servo manager mutex")
         .set(channel, angle);
+
+    req.into_status_response(HttpStatus::NoContent as u16)?;
 
     Ok(())
 }
@@ -146,7 +148,7 @@ pub fn handle_reset(
             match key {
                 "channel" => channel_nb = value.parse().unwrap_or(channel_nb),
                 _ => {
-                    return bad_request(req, "invalid query parameter");
+                    return req.bad_request("invalid query parameter");
                 }
             }
         }
@@ -160,12 +162,14 @@ pub fn handle_reset(
 
     let channel = match map_channel(channel_nb) {
         Some(c) => c,
-        None => return bad_request(req, "invalid channel"),
+        None => return req.bad_request("invalid channel"),
     };
 
     sm.lock()
         .expect("failed to acquire servo manager mutex")
         .reset(channel);
+
+    req.into_status_response(HttpStatus::NoContent as u16)?;
 
     Ok(())
 }
@@ -175,19 +179,25 @@ pub fn handle_get_config(req: Request<&mut EspHttpConnection>) -> anyhow::Result
 
     let config = get_config();
 
-    let mut response = req.into_response(200, Some("OK"), &[("Content-Type", "text/plain")])?;
+    let mut response = req.into_response(
+        HttpStatus::Ok as u16,
+        Some("OK"),
+        &[("Content-Type", "text/plain")],
+    )?;
     response.write(config.as_bytes())?;
 
     Ok(())
 }
 
 pub fn handle_store_config(
-    _req: Request<&mut EspHttpConnection>,
+    req: Request<&mut EspHttpConnection>,
     body: String,
 ) -> anyhow::Result<()> {
     log::info!(target: LOG_TAG, "store-config handling");
 
     store_config(body);
+
+    req.into_status_response(HttpStatus::NoContent as u16)?;
 
     Ok(())
 }

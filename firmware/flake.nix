@@ -29,7 +29,6 @@
     devShells.${system}.default = pkgs.mkShell {
       packages = [
         (pkgs.rust-bin.nightly.latest.default.override {
-          targets = [ "riscv32imac-unknown-none-elf" ];
           extensions = [ "rust-src" "rust-analyzer" ];
         })
 

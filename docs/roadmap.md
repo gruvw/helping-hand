@@ -33,9 +33,12 @@
     - [x] Wi-Fi reconnection system
     - [x] Persisted config store on device + get endpoint
 - [ ] Software
+    - [x] GitHub CI
+    - [x] HTTP and web security exploration
+    - [ ] Basic local DB
+    - [ ] HTTP security testing and mDNS queries from Android & IOS & desktop
     - [ ] Basic new button setup interface
     - [ ] Basic button pressing interface
-    - [ ] HTTP security testing and mDNS queries from Android & IOS & desktop
 - [ ] Documentation
     - [ ] GitHub release
 
