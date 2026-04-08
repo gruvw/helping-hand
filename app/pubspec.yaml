@@ -33,6 +33,7 @@ dependencies:
   # native
   path_provider: ^2.1.5
   flutter_native_splash: ^2.4.6
+  http: ^1.6.0
 
 dev_dependencies:
   # testing
