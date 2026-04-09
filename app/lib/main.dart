@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:helping_hand/state/persistence/kvs/providers.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:http/http.dart" as http;
 
@@ -12,10 +13,19 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: PnaIotTester(),
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 400),
+            padding: EdgeInsets.all(30),
+            child: Column(
+              children: [
+                PnaIotTester(),
+                DbTester(),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -27,7 +37,6 @@ class PnaIotTester extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // useState mimics the DOM element text manipulation in your JS snippet
     final logState = useState<String>("Waiting...");
     final isLoading = useState<bool>(false);
 
@@ -38,8 +47,6 @@ class PnaIotTester extends HookConsumerWidget {
       try {
         final uri = Uri.parse("http://hh-0001.local/");
 
-        // Standard HTTP GET request.
-        // On Web, the browser handles the underlying fetch and PNA preflight.
         final response = await http
             .get(uri)
             .timeout(
@@ -79,6 +86,30 @@ class PnaIotTester extends HookConsumerWidget {
           child: Text(logState.value),
         ),
       ],
+    );
+  }
+}
+
+class DbTester extends HookConsumerWidget {
+  const DbTester({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dbVal = ref.watch(kvsAccessibleUiProvider);
+    return dbVal.maybeWhen(
+      data: (data) => Column(
+        children: [
+          Text(data.toString()),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(kvsAccessibleUiProvider.notifier).set(!data);
+            },
+            child: Text("Change val"),
+          ),
+        ],
+      ),
+      error: (err, _) => SelectableText(err.toString()),
+      orElse: () => CircularProgressIndicator(),
     );
   }
 }
