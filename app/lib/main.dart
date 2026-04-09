@@ -39,18 +39,19 @@ class PnaIotTester extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final logState = useState<String>("Waiting...");
     final isLoading = useState<bool>(false);
+    final site = useState<String>("http://hh-0001.local/");
 
     Future<void> testIoT() async {
       logState.value = "Sending request...";
       isLoading.value = true;
 
       try {
-        final uri = Uri.parse("http://hh-0001.local/");
+        final uri = Uri.parse(site.value);
 
         final response = await http
             .get(uri)
             .timeout(
-              const Duration(seconds: 10),
+              const Duration(seconds: 20),
               onTimeout: () => throw Exception("Connection timed out"),
             );
 
@@ -70,6 +71,12 @@ class PnaIotTester extends HookConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text("Site: ${site.value}"),
+        TextField(
+          onSubmitted: (val) {
+            site.value = val;
+          },
+        ),
         ElevatedButton(
           onPressed: isLoading.value ? null : testIoT,
           child: const Text("Fetch IoT Device"),
