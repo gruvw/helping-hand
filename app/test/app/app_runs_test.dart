@@ -9,7 +9,7 @@ void main() {
 
     expect(find.byType(Application), findsOneWidget);
 
-    // TODO
+    // TODO router check
     // expect(
     //   router.state.path,
     //   AppRoutes.initial.path,
