@@ -39,3 +39,4 @@ const_format = "0.2"
 [build-dependencies]
 dotenvy = "0.15"
 embuild = "0.33"
+rcgen = "0.13"

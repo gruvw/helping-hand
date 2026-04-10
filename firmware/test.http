@@ -2,6 +2,11 @@
 
 GET http://hh-0001.local/
 
+### Hello World HTTPS
+
+# @curl-insecure
+GET https://hh-0001.local/
+
 ### Get config
 
 GET http://hh-0001.local/config

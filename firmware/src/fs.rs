@@ -1,7 +1,7 @@
 use const_format::formatcp;
 use esp_idf_hal::sys::{
-    esp_vfs_fat_mount_config_t, esp_vfs_fat_spiflash_mount_rw_wl, wl_handle_t,
-    CONFIG_WL_SECTOR_SIZE, ESP_OK, WL_INVALID_HANDLE,
+    CONFIG_WL_SECTOR_SIZE, ESP_OK, WL_INVALID_HANDLE, esp_vfs_fat_mount_config_t,
+    esp_vfs_fat_spiflash_mount_rw_wl, wl_handle_t,
 };
 use std::ffi::CString;
 use std::fs;

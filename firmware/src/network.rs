@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
-const DEVICE_ID: &str = env!("DEVICE_ID");
+const DEVICE_NAME: &str = env!("DEVICE_NAME");
 const NET_AP_PWD: &str = env!("NET_AP_PWD");
 
 const NET_SSID: &str = env!("NET_SSID");
@@ -32,20 +32,22 @@ pub struct Network {
 }
 
 fn start_connection_check_task(wifi: Arc<Mutex<EspWifi<'static>>>) {
-    thread::spawn(move || loop {
-        thread::sleep(Duration::from_secs(CONNECTION_CHECK_SEC));
+    thread::spawn(move || {
+        loop {
+            thread::sleep(Duration::from_secs(CONNECTION_CHECK_SEC));
 
-        let mut wifi_lock = wifi.lock().expect("failed to aquire wifi lock");
+            let mut wifi_lock = wifi.lock().expect("failed to aquire wifi lock");
 
-        match wifi_lock.is_connected() {
-            Ok(false) => {
-                log::warn!(target: LOG_TAG, "periodic check failed, retrying...");
-                if let Err(e) = wifi_lock.connect() {
-                    log::error!(target: LOG_TAG, "could not retry: {:?}", e);
+            match wifi_lock.is_connected() {
+                Ok(false) => {
+                    log::warn!(target: LOG_TAG, "periodic check failed, retrying...");
+                    if let Err(e) = wifi_lock.connect() {
+                        log::error!(target: LOG_TAG, "could not retry: {:?}", e);
+                    }
                 }
+                Err(e) => log::error!(target: LOG_TAG, "failed to check status: {:?}", e),
+                Ok(true) => {} // connected
             }
-            Err(e) => log::error!(target: LOG_TAG, "failed to check status: {:?}", e),
-            Ok(true) => {} // connected
         }
     });
 }
@@ -55,8 +57,6 @@ pub fn network_setup(modem: Modem<'static>) -> Network {
     let nvs = EspDefaultNvsPartition::take().expect("failed to take NVS partition");
     let driver =
         WifiDriver::new(modem, sys_loop.clone(), Some(nvs)).expect("failed to create Wi-Fi driver");
-
-    let name = format!("HH-{}", DEVICE_ID);
 
     let sta_netif = EspNetif::new(NetifStack::Sta).expect("failed to create station netif");
 
@@ -104,10 +104,10 @@ pub fn network_setup(modem: Modem<'static>) -> Network {
             start_connection_check_task(wifi.clone());
         } else {
             // ap mode
-            log::info!(target: LOG_TAG, "Starting Wi-Fi AP: {}", name);
+            log::info!(target: LOG_TAG, "Starting Wi-Fi AP: {}", DEVICE_NAME);
             wifi_lock
                 .set_configuration(&WifiConfiguration::AccessPoint(AccessPointConfiguration {
-                    ssid: name.as_str().try_into().unwrap(),
+                    ssid: DEVICE_NAME.try_into().unwrap(),
                     password: NET_AP_PWD.try_into().unwrap(),
                     auth_method: AuthMethod::WPA2WPA3Personal,
                     ..Default::default()
@@ -119,9 +119,9 @@ pub fn network_setup(modem: Modem<'static>) -> Network {
     }
 
     let mut mdns = EspMdns::take().expect("failed to take mDNS");
-    mdns.set_hostname(&name)
+    mdns.set_hostname(&DEVICE_NAME)
         .expect("failed to set mDNS hostname");
-    log::info!(target: LOG_TAG, "mDNS configured: {}.local", name);
+    log::info!(target: LOG_TAG, "mDNS configured: {}.local", DEVICE_NAME);
 
     Network {
         _wifi: wifi,
