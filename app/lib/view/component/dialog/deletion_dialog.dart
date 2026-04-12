@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:helping_hand/static/styles.dart";
-import "package:helping_hand/view/component/modal/cancel_dialog.dart";
-import "package:helping_hand/view/component/modal/plain_dialog.dart";
+import "package:helping_hand/view/component/dialog/cancel_dialog.dart";
+import "package:helping_hand/view/component/dialog/plain_dialog.dart";
 
 class DeletionDialog extends StatelessWidget {
   final String title;

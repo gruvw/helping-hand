@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/view/component/button/solid.dart";
-import "package:helping_hand/view/component/modal/plain_dialog.dart";
+import "package:helping_hand/view/component/dialog/plain_dialog.dart";
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/view/component/button/outlined.dart";
 import "package:helping_hand/view/component/button/solid.dart";
-import "package:helping_hand/view/component/modal/plain_dialog.dart";
+import "package:helping_hand/view/component/dialog/plain_dialog.dart";
 
 class CancelDialog extends StatelessWidget {
   final String title;
@@ -32,7 +32,10 @@ class CancelDialog extends StatelessWidget {
 
     return PlainDialog(
       title: title,
-      body: body,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: body,
+      ),
       actions: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

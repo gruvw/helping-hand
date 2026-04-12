@@ -1,10 +1,10 @@
 // local validations
 // validation functions must be fast as they are often evaluated on every key press
 
-typedef ValidationFunction<T> = ValidationResult Function(T input);
+typedef ValidationFunction<T> = Future<ValidationResult> Function(T input);
 
 ValidationFunction<T> alwaysValid<T>(Function(T input) callback) {
-  return (input) {
+  return (input) async {
     callback(input);
     return ValidResult();
   };

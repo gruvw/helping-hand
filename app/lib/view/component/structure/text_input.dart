@@ -12,6 +12,7 @@ class TextInput extends HookWidget {
   final TextCapitalization? capitalization;
   final bool autoFocus;
   final bool wrap;
+  final bool displayClearButton;
   final void Function(String value)? onChanged;
 
   const TextInput({
@@ -25,6 +26,7 @@ class TextInput extends HookWidget {
     this.capitalization,
     this.wrap = false,
     this.autoFocus = false,
+    this.displayClearButton = false,
   });
 
   @override
@@ -120,7 +122,7 @@ class TextInput extends HookWidget {
         suffixIcon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (!isEmpty) clearButton,
+            if (displayClearButton && !isEmpty) clearButton,
             if (isTextSensitive != null) visibilityButton,
           ],
         ),

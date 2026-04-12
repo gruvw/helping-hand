@@ -2,18 +2,20 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:helping_hand/static/styles.dart";
 
-typedef ModalCallback = bool? Function();
-typedef ModalCallbackVal<T> = bool? Function(T);
+typedef ModalCallback = Future<bool?> Function();
+typedef ModalCallbackVal<T> = Future<bool?> Function(T);
 
 VoidCallback popModalOnPressed(
   BuildContext context,
   ModalCallback? onPressed,
 ) {
-  return () {
+  return () async {
     // pop by default if null is returned
-    final shouldPop = onPressed?.call() ?? true;
+    final shouldPop = await onPressed?.call() ?? true;
     if (shouldPop) {
-      context.pop();
+      if (context.mounted) {
+        context.pop();
+      }
     }
   };
 }
@@ -33,6 +35,7 @@ class PlainDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Styles.colorSecondary,
       shape: RoundedRectangleBorder(
         side: BorderSide(
           width: 3,
