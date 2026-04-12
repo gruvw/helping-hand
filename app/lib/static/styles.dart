@@ -11,10 +11,12 @@ abstract class Styles {
   static const colorIgnored = Colors.grey;
 
   static const fontFamily = "Noto Sans";
+  static const iconWeight = 600.0;
 
   static const contentMaxWidth = 500.0;
   static const standardSpacing = 2.0;
 
+  static const iconEdit = Symbols.edit;
   static const iconFavorite = Symbols.star;
   static const iconNext = Symbols.arrow_forward;
   static const iconPrevious = Symbols.arrow_back;

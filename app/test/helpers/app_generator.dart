@@ -1,8 +1,8 @@
 import "package:drift/native.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:helping_hand/main.dart";
 import "package:helping_hand/state/persistence/database/core/database.dart";
 import "package:helping_hand/state/persistence/providers.dart";
+import "package:helping_hand/view/application.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:hooks_riverpod/misc.dart";
 

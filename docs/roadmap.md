@@ -94,6 +94,7 @@
     - [ ] i18n
     - [ ] Multiple application profiles if you go to your friend's house for eample
     - [ ] Recently used tile
+    - [ ] Custom tiles ordering
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
 

@@ -1,7 +1,7 @@
 import "package:helping_hand/state/persistence/database/core/database.dart";
 
 class Queries {
-  // ignore: unused_field TODO
+  // ignore: unused_field TODO db queries
   final Database _db;
 
   Queries(this._db);

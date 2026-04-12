@@ -4,7 +4,7 @@ import "package:flutter_native_splash/flutter_native_splash.dart";
 import "package:helping_hand/state/persistence/kvs/providers.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/static/values.dart";
-import "package:helping_hand/view/pages/overview/overview_page.dart";
+import "package:helping_hand/view/navigation/router.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:http/http.dart" as http;
 
@@ -16,20 +16,24 @@ class Application extends StatelessWidget {
     // hide splash screen
     FlutterNativeSplash.remove();
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: Values.applicationTitle,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: Styles.fontFamily,
         scaffoldBackgroundColor: Styles.colorBackground,
         primaryColor: Styles.colorForeground,
+        cardColor: Styles.colorBackground,
+        iconTheme: const IconThemeData(
+          weight: Styles.iconWeight,
+        ),
       ),
-      home: OverviewPage(),
+      routerConfig: router,
     );
   }
 }
 
-// TODO remote testers
+// TODO remove remote testers
 class PnaIotTester extends HookConsumerWidget {
   const PnaIotTester({super.key});
 

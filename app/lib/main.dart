@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:helping_hand/view/application.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -9,9 +10,8 @@ void main() {
   // preserve the splash screen for initialization
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // TODO go router
   // set browser URL when pushing routes
-  // GoRouter.optionURLReflectsImperativeAPIs = true;
+  GoRouter.optionURLReflectsImperativeAPIs = true;
 
   runApp(
     ProviderScope(
