@@ -2,15 +2,14 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:helping_hand/static/styles.dart";
 
-typedef ModalCallback = Future<bool?> Function();
-typedef ModalCallbackVal<T> = Future<bool?> Function(T);
+typedef ModalCallback = Future<bool> Function();
+typedef ModalCallbackVal<T> = Future<bool> Function(T);
 
 VoidCallback popModalOnPressed(
   BuildContext context,
   ModalCallback? onPressed,
 ) {
   return () async {
-    // pop by default if null is returned
     final shouldPop = await onPressed?.call() ?? true;
     if (shouldPop) {
       if (context.mounted) {

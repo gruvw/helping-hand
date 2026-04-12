@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:gap/gap.dart";
+import "package:go_router/go_router.dart";
 import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/view/component/dialog/cancel_dialog.dart";
@@ -37,7 +38,7 @@ class AsyncTextDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final offlineNameController = useTextEditingController(
+    final textController = useTextEditingController(
       text: initialValue,
     );
 
@@ -69,34 +70,36 @@ class AsyncTextDialog extends HookWidget {
       ),
     );
 
+    Future<bool> submit() async {
+      final text = textController.text;
+      if (text.isEmpty) {
+        return false;
+      }
+
+      final currentGen = ++generation.value;
+      validationError.value = null;
+      isValidating.value = true;
+      final result = await validation.call(text);
+      if (currentGen == generation.value) {
+        validationError.value = result;
+        isValidating.value = false;
+        if (result.isValid) {
+          return onSubmit?.call(textController.text) ?? true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+
     return CancelDialog(
       title: title,
       cancelText: cancelText,
       confirmedText: submitText,
       confirmEnabled: true,
       onCancel: onCancel,
-      onConfirm: () async {
-        final text = offlineNameController.text;
-        if (text.isEmpty) {
-          return false;
-        }
-
-        final currentGen = ++generation.value;
-        validationError.value = null;
-        isValidating.value = true;
-        final result = await validation.call(text);
-        if (currentGen == generation.value) {
-          validationError.value = result;
-          isValidating.value = false;
-          if (result.isValid) {
-            return onSubmit?.call(offlineNameController.text);
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      },
+      onConfirm: submit,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,15 +108,27 @@ class AsyncTextDialog extends HookWidget {
             child: TextInput(
               autoFocus: true,
               wrap: wrap,
-              controller: offlineNameController,
+              controller: textController,
               placeholder: placeholder,
               label: inputLabel,
               errorText: validationError.value?.errorMessage,
               capitalization: capitalization,
+              onSubmitted: (_) async {
+                final shouldPop = await submit();
+                if (shouldPop && context.mounted) {
+                  context.pop();
+                }
+              },
             ),
           ),
-          Gap(5),
-          validationIndicator,
+          if (isValidating.value || validationValue != null)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Gap(5),
+                validationIndicator,
+              ],
+            ),
         ],
       ),
     );

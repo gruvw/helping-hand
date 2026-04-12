@@ -22,6 +22,7 @@ class RemotesScreen extends StatelessWidget {
             placeholder: "hh-0001",
             submitText: "Register",
             validation: (name) async {
+              // TODO dependency injection http service
               final uri = Uri.parse("http://$name.local");
 
               return http

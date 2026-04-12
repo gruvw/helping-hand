@@ -14,6 +14,7 @@ class TextInput extends HookWidget {
   final bool wrap;
   final bool displayClearButton;
   final void Function(String value)? onChanged;
+  final void Function(String value)? onSubmitted;
 
   const TextInput({
     super.key,
@@ -23,6 +24,7 @@ class TextInput extends HookWidget {
     this.errorText,
     this.isTextSensitive,
     this.onChanged,
+    this.onSubmitted,
     this.capitalization,
     this.wrap = false,
     this.autoFocus = false,
@@ -92,6 +94,7 @@ class TextInput extends HookWidget {
       style: Styles.textNormal,
       cursorColor: Styles.colorPrimary,
       onChanged: onChanged,
+      onSubmitted: onSubmitted,
       maxLines: wrap ? null : 1,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
