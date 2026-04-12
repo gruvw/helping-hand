@@ -21,9 +21,9 @@ class Application extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: Styles.fontFamily,
-        scaffoldBackgroundColor: Styles.colorBackground,
-        primaryColor: Styles.colorForeground,
-        cardColor: Styles.colorBackground,
+        scaffoldBackgroundColor: Styles.colorSecondary,
+        primaryColor: Styles.colorPrimary,
+        cardColor: Styles.colorSecondary,
         iconTheme: const IconThemeData(
           weight: Styles.iconWeight,
         ),

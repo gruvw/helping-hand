@@ -2,9 +2,9 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:helping_hand/view/navigation/routes.dart";
-import "package:helping_hand/view/pages/overview/overview_page.dart";
-import "package:helping_hand/view/pages/overview/screens/remotes/remotes_screen.dart";
-import "package:helping_hand/view/pages/overview/screens/tiles/tiles_screen.dart";
+import "package:helping_hand/view/page/overview/overview_page.dart";
+import "package:helping_hand/view/page/overview/screens/remotes/remotes_screen.dart";
+import "package:helping_hand/view/page/overview/screens/tiles/tiles_screen.dart";
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
