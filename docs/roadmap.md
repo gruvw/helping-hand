@@ -35,8 +35,8 @@
 - [ ] Software
     - [x] GitHub CI
     - [x] HTTP and web security exploration
-    - [ ] Basic local DB
-    - [ ] HTTP security testing and mDNS queries from Android & IOS & desktop
+    - [x] Basic local DB
+    - [x] HTTP security testing and mDNS queries from Android & IOS & desktop
     - [ ] Basic new button setup interface
     - [ ] Basic button pressing interface
 - [ ] Documentation
@@ -57,6 +57,7 @@
     - [ ] Application logo
     - [ ] New device interface
     - [ ] Full set up procedure to configure new buttons/servos
+    - [ ] Persisted buttons config from app
     - [ ] Full application with accessible mode design to control multiple devices
         - [ ] Auto cycling mode
         - [ ] Press for next mode
@@ -91,6 +92,8 @@
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
     - [ ] i18n
+    - [ ] Multiple application profiles if you go to your friend's house for eample
+    - [ ] Recently used tile
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
 

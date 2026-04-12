@@ -10,7 +10,7 @@ abstract class Styles {
   static const colorSuccess = Colors.green;
   static const colorIgnored = Colors.grey;
 
-  static const fontFamily = "Roboto";
+  static const fontFamily = "Noto Sans";
 
   static const contentMaxWidth = 500.0;
   static const standardSpacing = 2.0;
