@@ -1,10 +1,10 @@
 import "package:drift/drift.dart";
 
-// TODO tiles modeling
+// TODO tile modeling
 // @UseRowClass(Score, constructor: "fromData")
-class TilesTable extends Table {
+class TileTable extends Table {
   @override
-  String get tableName => "high_score";
+  String get tableName => "tile";
 
   @override
   Set<Column> get primaryKey => {key};

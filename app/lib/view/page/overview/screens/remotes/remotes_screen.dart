@@ -24,11 +24,12 @@ class RemotesScreen extends ConsumerWidget {
             submitText: "Register",
             validation: (name) async {
               return ref
-                  .read(requestProvider)
-                  .getConfig(remoteName: name)
+                  .read(remoteRequestServiceProvider(name))
+                  .getConfig()
                   .then(
                     (_) => ValidResult(),
                     onError: (e) => InvalidResult(
+                      // FIXME (later) proper user facing errors
                       errorMessage: "could not reach the remote: $e",
                     ),
                   );

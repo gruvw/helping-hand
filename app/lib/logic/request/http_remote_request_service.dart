@@ -1,17 +1,24 @@
-import "package:helping_hand/logic/request/request_service.dart";
+import "package:helping_hand/logic/request/remote_request_service.dart";
+import "package:helping_hand/model/config/config.dart";
 import "package:http/http.dart" as http;
 
-class HttpRequestService implements RequestService {
+class HttpRemoteRequestService implements RemoteRequestService {
+  final String remoteName;
+  final bool isHttps;
   final Duration timeout;
 
-  HttpRequestService({required this.timeout});
+  HttpRemoteRequestService({
+    required this.remoteName,
+    required this.isHttps,
+    required this.timeout,
+  });
+
+  late final _uri = Uri.parse("http${isHttps ? 's' : ''}://$remoteName.local");
 
   @override
-  Future<String> getConfig({required String remoteName}) async {
-    final uri = Uri.parse("http://$remoteName.local");
-
+  Future<String> getConfig() async {
     return http
-        .get(uri)
+        .get(_uri)
         .timeout(
           timeout,
           onTimeout: () => throw Exception("connection timed out"),
@@ -20,11 +27,7 @@ class HttpRequestService implements RequestService {
   }
 
   @override
-  Future<void> click({
-    required int channel,
-    required double angle,
-    required int durationMs,
-  }) {
+  Future<void> perform(ActionConfig actionConfig) {
     // TODO: implement click
     throw UnimplementedError();
   }

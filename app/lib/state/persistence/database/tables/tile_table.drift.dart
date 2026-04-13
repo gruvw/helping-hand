@@ -1,17 +1,17 @@
 // dart format width=80
 // ignore_for_file: type=lint
 import 'package:drift/drift.dart' as i0;
-import 'package:helping_hand/state/persistence/database/tables/tiles_table.drift.dart'
+import 'package:helping_hand/state/persistence/database/tables/tile_table.drift.dart'
     as i1;
-import 'package:helping_hand/state/persistence/database/tables/tiles_table.dart'
+import 'package:helping_hand/state/persistence/database/tables/tile_table.dart'
     as i2;
 
-class $TilesTableTable extends i2.TilesTable
-    with i0.TableInfo<$TilesTableTable, i1.TilesTableData> {
+class $TileTableTable extends i2.TileTable
+    with i0.TableInfo<$TileTableTable, i1.TileTableData> {
   @override
   final i0.GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TilesTableTable(this.attachedDatabase, [this._alias]);
+  $TileTableTable(this.attachedDatabase, [this._alias]);
   static const i0.VerificationMeta _keyMeta = const i0.VerificationMeta('key');
   @override
   late final i0.GeneratedColumn<String> key = i0.GeneratedColumn<String>(
@@ -27,10 +27,10 @@ class $TilesTableTable extends i2.TilesTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'high_score';
+  static const String $name = 'tile';
   @override
   i0.VerificationContext validateIntegrity(
-    i0.Insertable<i1.TilesTableData> instance, {
+    i0.Insertable<i1.TileTableData> instance, {
     bool isInserting = false,
   }) {
     final context = i0.VerificationContext();
@@ -49,9 +49,9 @@ class $TilesTableTable extends i2.TilesTable
   @override
   Set<i0.GeneratedColumn> get $primaryKey => {key};
   @override
-  i1.TilesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  i1.TileTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return i1.TilesTableData(
+    return i1.TileTableData(
       key: attachedDatabase.typeMapping.read(
         i0.DriftSqlType.string,
         data['${effectivePrefix}key'],
@@ -60,15 +60,15 @@ class $TilesTableTable extends i2.TilesTable
   }
 
   @override
-  $TilesTableTable createAlias(String alias) {
-    return $TilesTableTable(attachedDatabase, alias);
+  $TileTableTable createAlias(String alias) {
+    return $TileTableTable(attachedDatabase, alias);
   }
 }
 
-class TilesTableData extends i0.DataClass
-    implements i0.Insertable<i1.TilesTableData> {
+class TileTableData extends i0.DataClass
+    implements i0.Insertable<i1.TileTableData> {
   final String key;
-  const TilesTableData({required this.key});
+  const TileTableData({required this.key});
   @override
   Map<String, i0.Expression> toColumns(bool nullToAbsent) {
     final map = <String, i0.Expression>{};
@@ -76,12 +76,12 @@ class TilesTableData extends i0.DataClass
     return map;
   }
 
-  factory TilesTableData.fromJson(
+  factory TileTableData.fromJson(
     Map<String, dynamic> json, {
     i0.ValueSerializer? serializer,
   }) {
     serializer ??= i0.driftRuntimeOptions.defaultSerializer;
-    return TilesTableData(key: serializer.fromJson<String>(json['key']));
+    return TileTableData(key: serializer.fromJson<String>(json['key']));
   }
   @override
   Map<String, dynamic> toJson({i0.ValueSerializer? serializer}) {
@@ -89,15 +89,15 @@ class TilesTableData extends i0.DataClass
     return <String, dynamic>{'key': serializer.toJson<String>(key)};
   }
 
-  i1.TilesTableData copyWith({String? key}) =>
-      i1.TilesTableData(key: key ?? this.key);
-  TilesTableData copyWithCompanion(i1.TilesTableCompanion data) {
-    return TilesTableData(key: data.key.present ? data.key.value : this.key);
+  i1.TileTableData copyWith({String? key}) =>
+      i1.TileTableData(key: key ?? this.key);
+  TileTableData copyWithCompanion(i1.TileTableCompanion data) {
+    return TileTableData(key: data.key.present ? data.key.value : this.key);
   }
 
   @override
   String toString() {
-    return (StringBuffer('TilesTableData(')
+    return (StringBuffer('TileTableData(')
           ..write('key: $key')
           ..write(')'))
         .toString();
@@ -108,21 +108,21 @@ class TilesTableData extends i0.DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is i1.TilesTableData && other.key == this.key);
+      (other is i1.TileTableData && other.key == this.key);
 }
 
-class TilesTableCompanion extends i0.UpdateCompanion<i1.TilesTableData> {
+class TileTableCompanion extends i0.UpdateCompanion<i1.TileTableData> {
   final i0.Value<String> key;
   final i0.Value<int> rowid;
-  const TilesTableCompanion({
+  const TileTableCompanion({
     this.key = const i0.Value.absent(),
     this.rowid = const i0.Value.absent(),
   });
-  TilesTableCompanion.insert({
+  TileTableCompanion.insert({
     required String key,
     this.rowid = const i0.Value.absent(),
   }) : key = i0.Value(key);
-  static i0.Insertable<i1.TilesTableData> custom({
+  static i0.Insertable<i1.TileTableData> custom({
     i0.Expression<String>? key,
     i0.Expression<int>? rowid,
   }) {
@@ -132,11 +132,11 @@ class TilesTableCompanion extends i0.UpdateCompanion<i1.TilesTableData> {
     });
   }
 
-  i1.TilesTableCompanion copyWith({
+  i1.TileTableCompanion copyWith({
     i0.Value<String>? key,
     i0.Value<int>? rowid,
   }) {
-    return i1.TilesTableCompanion(
+    return i1.TileTableCompanion(
       key: key ?? this.key,
       rowid: rowid ?? this.rowid,
     );
@@ -156,7 +156,7 @@ class TilesTableCompanion extends i0.UpdateCompanion<i1.TilesTableData> {
 
   @override
   String toString() {
-    return (StringBuffer('TilesTableCompanion(')
+    return (StringBuffer('TileTableCompanion(')
           ..write('key: $key, ')
           ..write('rowid: $rowid')
           ..write(')'))

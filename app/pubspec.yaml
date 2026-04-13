@@ -29,7 +29,6 @@ dependencies:
       path: packages/hooks_riverpod
       ref: 0eb7d77
 
-
   # persistence
   drift: ^2.32.1
   drift_flutter: ^0.3.0
@@ -38,7 +37,6 @@ dependencies:
   path_provider: ^2.1.5
   flutter_native_splash: ^2.4.6
   http: ^1.6.0
-  
 
 dev_dependencies:
   # testing

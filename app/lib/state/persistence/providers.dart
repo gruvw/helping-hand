@@ -5,6 +5,16 @@ final dbProvider = Provider<Database>(
   (ref) => Database.native(),
 );
 
+final remoteNamesProvider = StreamProvider<List<String>>((ref) {
+  final db = ref.watch(dbProvider);
+
+  return db
+      .select(db.remoteTable)
+      .map((remote) => remote.name)
+      .watch()
+      .distinct();
+});
+
 // final highScoreForTrainingLengthProvider =
 //     StreamProvider.family<Score?, GameSetting>(
 //       (ref, gameSetting) {
