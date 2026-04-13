@@ -1,9 +1,13 @@
+import "package:drift/drift.dart";
 import "package:flutter/material.dart";
 import "package:helping_hand/logic/validation.dart";
+import "package:helping_hand/state/persistence/database/tables/remote_table.drift.dart";
+import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
 import "package:helping_hand/view/component/structure/title_bar.dart";
+import "package:helping_hand/view/page/overview/screens/remotes/remote_line.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class RemotesScreen extends ConsumerWidget {
@@ -11,7 +15,10 @@ class RemotesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final newRemoteButton = ListTile(
+    final db = ref.watch(dbProvider);
+    final remoteIds = ref.watch(remoteIdsProvider);
+
+    final newRemoteItem = ListTile(
       leading: Icon(Styles.iconAdd),
       title: Text("Register New Remote"),
       onTap: () {
@@ -22,55 +29,62 @@ class RemotesScreen extends ConsumerWidget {
             inputLabel: "Remote name",
             placeholder: "hh-0001",
             submitText: "Register",
-            validation: (name) async {
-              return ref
-                  .read(remoteRequestServiceProvider(name))
+            onSubmit: (remoteId) async {
+              final result = await ref
+                  .read(remoteRequestServiceProvider(remoteId))
                   .getConfig()
-                  .then(
+                  .then<ValidationResult>(
                     (_) => ValidResult(),
                     onError: (e) => InvalidResult(
                       // FIXME (later) proper user facing errors
                       errorMessage: "could not reach the remote: $e",
                     ),
                   );
-            },
-            onSubmit: (name) async {
-              // TODO save remote
-              return true;
+
+              if (!result.isValid) {
+                return result;
+              }
+
+              await db
+                  .into(db.remoteTable)
+                  .insert(
+                    RemoteTableCompanion.insert(
+                      id: remoteId,
+                      name: remoteId,
+                    ),
+                    mode: InsertMode.insertOrIgnore,
+                  );
+
+              return result;
             },
           ),
         );
       },
     );
 
-    final length = 10;
     return TitleScreen(
       title: "Remotes",
-      child: ListView.separated(
-        itemCount: length,
-        separatorBuilder: (context, index) {
-          return Divider();
-        },
-        itemBuilder: (context, index) {
-          if (index == length - 1) {
-            return newRemoteButton;
-          }
+      child: remoteIds.maybeWhen(
+        data: (remoteIds) {
+          return ListView.separated(
+            itemCount: remoteIds.length + 1,
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+            itemBuilder: (context, index) {
+              if (index == remoteIds.length) {
+                return newRemoteItem;
+              }
 
-          return ExpansionTile(
-            title: Text(
-              index.toString(),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            shape: const Border(),
-            children: Iterable.generate(10, (i) => i).map((item) {
-              return ListTile(
-                title: Text(item.toString()),
-                leading: Icon(Icons.label_outline, size: 18),
-                onTap: () {},
-              );
-            }).toList(),
+              return RemoteLine(remoteId: remoteIds[index]);
+            },
           );
         },
+        orElse: () => Center(
+          child: CircularProgressIndicator(
+            color: Styles.colorPrimary,
+          ),
+        ),
       ),
     );
   }

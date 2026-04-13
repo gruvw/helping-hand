@@ -8,9 +8,22 @@ final remoteRequestServiceProvider =
       //   timeout: Duration(seconds: 10),
       //   remoteName: remoteName,
       // ),
-      (ref, remoteName) => FakeRemoteRequestService(
+      (ref, remoteId) => FakeRemoteRequestService(
         requestTime: Duration(seconds: 1),
-        failureRate: 0.3,
-        remoteName: remoteName,
+        failureRate: 0.4,
+        remoteId: remoteId,
       ),
     );
+
+final remoteConfigProvider = FutureProvider.family<String?, String>(
+  (ref, remoteId) {
+    final remoteRequestService = ref.watch(
+      remoteRequestServiceProvider(remoteId),
+    );
+
+    return remoteRequestService.getConfig().then<String?>(
+      (config) => config,
+      onError: (_) => null,
+    );
+  },
+);

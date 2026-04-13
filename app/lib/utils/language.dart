@@ -58,3 +58,17 @@ extension RandomDuration on Random {
     return min + Duration(milliseconds: nextInt(range + 1));
   }
 }
+
+extension SplitOnce on String {
+  (String, String?) splitOnce(String pattern) {
+    if (pattern.isEmpty) return (this, null);
+
+    final index = indexOf(pattern);
+    if (index == -1) return (this, null);
+
+    final firstPart = substring(0, index);
+    final remainder = substring(index + pattern.length);
+
+    return (firstPart, remainder);
+  }
+}

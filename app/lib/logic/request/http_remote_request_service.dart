@@ -1,19 +1,19 @@
 import "package:helping_hand/logic/request/remote_request_service.dart";
-import "package:helping_hand/model/config/config.dart";
+import "package:helping_hand/model/config/action.dart";
 import "package:http/http.dart" as http;
 
 class HttpRemoteRequestService implements RemoteRequestService {
-  final String remoteName;
+  final String remoteId;
   final bool isHttps;
   final Duration timeout;
 
   HttpRemoteRequestService({
-    required this.remoteName,
+    required this.remoteId,
     required this.isHttps,
     required this.timeout,
   });
 
-  late final _uri = Uri.parse("http${isHttps ? 's' : ''}://$remoteName.local");
+  late final _uri = Uri.parse("http${isHttps ? 's' : ''}://$remoteId.local");
 
   @override
   Future<String> getConfig() async {

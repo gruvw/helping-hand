@@ -1,4 +1,4 @@
-import "package:helping_hand/model/config/config.dart";
+import "package:helping_hand/model/config/action.dart";
 
 abstract class RemoteRequestService {
   Future<String> getConfig();

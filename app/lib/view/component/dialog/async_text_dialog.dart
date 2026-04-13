@@ -12,9 +12,9 @@ class AsyncTextDialog extends HookWidget {
   final String title;
   final String? placeholder;
   final String? initialValue;
-  final ValidationFunction<String> validation;
+  final ValidationFunction<String>? validation;
   final ModalCallback? onCancel;
-  final ModalCallbackVal<String>? onSubmit;
+  final FutureValidationFunction<String> onSubmit;
   final String? inputLabel;
   final String? submitText;
   final String? cancelText;
@@ -24,11 +24,11 @@ class AsyncTextDialog extends HookWidget {
   const AsyncTextDialog({
     super.key,
     required this.title,
-    required this.validation,
+    required this.onSubmit,
+    this.validation,
     this.placeholder,
     this.initialValue,
     this.onCancel,
-    this.onSubmit,
     this.inputLabel,
     this.submitText,
     this.cancelText,
@@ -42,62 +42,69 @@ class AsyncTextDialog extends HookWidget {
       text: initialValue,
     );
 
-    // validation
-    final validationError = useState<ValidationResult?>(null);
-    final isValidating = useState(false);
-    final generation = useRef(0);
+    useListenable(textController);
 
-    final validationValue = validationError.value;
-    final validationIndicator = Container(
+    // validation
+    final validationResultState = useState<ValidationResult?>(null);
+    final validationResult =
+        validationResultState.value ??
+        (validation?.call(textController.text) ?? ValidResult());
+
+    final isSubmitValidatingState = useState(false);
+    final isSubmitValidatedState = useState(false);
+
+    final submitValidationIndicator = Container(
       padding: EdgeInsets.only(top: 11),
       child: SizedBox(
         width: 20,
         height: 20,
-        child: isValidating.value
+        child: isSubmitValidatingState.value
             ? CircularProgressIndicator(
                 color: Styles.colorPrimary,
                 padding: EdgeInsets.all(2),
               )
-            : validationValue == null
-            ? SizedBox()
-            : Icon(
-                validationValue.isValid ? Styles.iconValid : Styles.iconInvalid,
-                color: validationValue.isValid
+            : isSubmitValidatedState.value
+            ? Icon(
+                validationResult.isValid
+                    ? Styles.iconValid
+                    : Styles.iconInvalid,
+                color: validationResult.isValid
                     ? Styles.colorSuccess
                     : Styles.colorDanger,
                 size: 25,
-              ),
+              )
+            : SizedBox(),
       ),
     );
 
     Future<bool> submit() async {
       final text = textController.text;
-      if (text.isEmpty) {
+      if (text.isEmpty ||
+          isSubmitValidatingState.value ||
+          !validationResult.isValid) {
         return false;
       }
 
-      final currentGen = ++generation.value;
-      validationError.value = null;
-      isValidating.value = true;
-      final result = await validation.call(text);
-      if (currentGen == generation.value) {
-        validationError.value = result;
-        isValidating.value = false;
-        if (result.isValid) {
-          return onSubmit?.call(textController.text) ?? true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
+      isSubmitValidatingState.value = true;
+
+      final result = await onSubmit.call(text);
+
+      validationResultState.value = result;
+      isSubmitValidatedState.value = true;
+      isSubmitValidatingState.value = false;
+
+      return result.isValid;
     }
 
     return CancelDialog(
       title: title,
       cancelText: cancelText,
       confirmedText: submitText,
-      confirmEnabled: true,
+      confirmEnabled:
+          textController.text.isNotEmpty &&
+          validationResult.isValid &&
+          !isSubmitValidatingState.value &&
+          !isSubmitValidatedState.value,
       onCancel: onCancel,
       onConfirm: submit,
       body: Row(
@@ -111,7 +118,7 @@ class AsyncTextDialog extends HookWidget {
               controller: textController,
               placeholder: placeholder,
               label: inputLabel,
-              errorText: validationError.value?.errorMessage,
+              errorText: validationResultState.value?.errorMessage,
               capitalization: capitalization,
               onSubmitted: (_) async {
                 final shouldPop = await submit();
@@ -119,14 +126,20 @@ class AsyncTextDialog extends HookWidget {
                   context.pop();
                 }
               },
+              onChanged: (_) {
+                isSubmitValidatedState.value = false;
+                validationResultState.value = validation?.call(
+                  textController.text,
+                );
+              },
             ),
           ),
-          if (isValidating.value || validationValue != null)
+          if (isSubmitValidatingState.value || isSubmitValidatedState.value)
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Gap(5),
-                validationIndicator,
+                submitValidationIndicator,
               ],
             ),
         ],

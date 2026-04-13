@@ -30,6 +30,7 @@ abstract class Styles {
   static const iconVisible = Symbols.visibility;
   static const iconValid = Symbols.check;
   static const iconInvalid = Symbols.clear;
+  static const iconOffline = Symbols.cloud_off;
   static const iconFavorite = Symbols.star;
   static const iconNext = Symbols.arrow_forward;
   static const iconPrevious = Symbols.arrow_back;

@@ -1,21 +1,21 @@
 import "dart:math";
 
 import "package:helping_hand/logic/request/remote_request_service.dart";
-import "package:helping_hand/model/config/config.dart";
+import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/utils/language.dart";
 
 class FakeRemoteRequestService implements RemoteRequestService {
   static final List<String> _connectedRemotes = ["hh-0001", "hh-0002"];
 
   final Random _random = Random();
-  String _config = "";
+  String _config = "alex";
 
-  final String remoteName;
+  final String remoteId;
   final Duration requestTime;
   final double failureRate;
 
   FakeRemoteRequestService({
-    required this.remoteName,
+    required this.remoteId,
     required this.requestTime,
     required this.failureRate,
   });
@@ -23,7 +23,7 @@ class FakeRemoteRequestService implements RemoteRequestService {
   Future<void> _fakeRequest() async {
     await Future.delayed(_random.nextDuration(requestTime, requestTime * 2));
 
-    if (!_connectedRemotes.contains(remoteName)) {
+    if (!_connectedRemotes.contains(remoteId)) {
       throw Exception("could not reach fake remote");
     }
 
