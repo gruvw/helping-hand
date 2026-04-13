@@ -45,3 +45,16 @@ extension RandomListPick<T> on List<T> {
 extension RelativeRoute on BuildContext {
   void goRelative(String relativeLocation) => go("./$relativeLocation");
 }
+
+extension RandomDuration on Random {
+  /// Returns a random Duration between [min] and [max]
+  Duration nextDuration(Duration min, Duration max) {
+    assert(
+      max >= min,
+      "max duration must be greater than or equal to min duration",
+    );
+
+    final int range = max.inMilliseconds - min.inMilliseconds;
+    return min + Duration(milliseconds: nextInt(range + 1));
+  }
+}

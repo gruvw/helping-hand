@@ -1,15 +1,16 @@
 import "package:flutter/material.dart";
 import "package:helping_hand/logic/validation.dart";
+import "package:helping_hand/state/request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
 import "package:helping_hand/view/component/structure/title_bar.dart";
-import "package:http/http.dart" as http;
+import "package:hooks_riverpod/hooks_riverpod.dart";
 
-class RemotesScreen extends StatelessWidget {
+class RemotesScreen extends ConsumerWidget {
   const RemotesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final newRemoteButton = ListTile(
       leading: Icon(Styles.iconAdd),
       title: Text("Register New Remote"),
@@ -22,19 +23,13 @@ class RemotesScreen extends StatelessWidget {
             placeholder: "hh-0001",
             submitText: "Register",
             validation: (name) async {
-              // TODO dependency injection http service
-              final uri = Uri.parse("http://$name.local");
-
-              return http
-                  .get(uri)
-                  .timeout(
-                    const Duration(seconds: 20),
-                    onTimeout: () => throw Exception("Connection timed out"),
-                  )
+              return ref
+                  .read(requestProvider)
+                  .getConfig(remoteName: name)
                   .then(
                     (_) => ValidResult(),
                     onError: (e) => InvalidResult(
-                      errorMessage: "Could not detect remote. $e",
+                      errorMessage: "could not reach the remote: $e",
                     ),
                   );
             },
