@@ -16,4 +16,4 @@ GET http://hh-0001.local/config
 POST http://hh-0001.local/config
 Content-Type: text/plain
 
-save state 1245
+testremote

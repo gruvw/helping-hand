@@ -25,7 +25,10 @@ class RemoteLine extends ConsumerWidget {
 
     final remoteName = remote.value?.name;
     final remoteFullName =
-        remoteName?.nmap((name) => "$name ($remoteId)") ?? remoteId;
+        remoteName?.nmap(
+          (name) => name != remoteId ? "$name ($remoteId)" : remoteId,
+        ) ??
+        remoteId;
 
     final isOnline = remote.maybeWhen(
       data: (remote) => remote.isOnline ? true : false,
@@ -39,7 +42,12 @@ class RemoteLine extends ConsumerWidget {
       ),
       controlAffinity: ListTileControlAffinity.leading,
       leading: remote.maybeWhen(
-        data: (remote) => remote.isOnline ? null : Icon(Styles.iconOffline),
+        data: (remote) => remote.isOnline
+            ? null
+            : Icon(
+                Styles.iconOffline,
+                color: Styles.colorPrimary,
+              ),
         orElse: () => SizedBox(
           width: 23,
           height: 23,
@@ -56,7 +64,7 @@ class RemoteLine extends ConsumerWidget {
               // TODO add remote tile
             },
             icon: Icon(
-              Styles.iconAdd,
+              Styles.iconAddTile,
               color: Styles.colorPrimary,
             ),
           ),
@@ -64,7 +72,7 @@ class RemoteLine extends ConsumerWidget {
             tooltip: "Options",
             color: Styles.colorSecondary,
             icon: Icon(
-              Styles.iconEdit,
+              Styles.iconMore,
               color: Styles.colorPrimary,
             ),
             itemBuilder: (context) => [
@@ -107,7 +115,10 @@ class RemoteLine extends ConsumerWidget {
                   );
                 },
                 enabled: isOnline,
-                child: Text("Rename"),
+                child: ListTile(
+                  leading: Icon(Styles.iconEdit),
+                  title: Text("Rename"),
+                ),
               ),
               PopupMenuItem(
                 onTap: () {
@@ -131,9 +142,15 @@ class RemoteLine extends ConsumerWidget {
                     },
                   );
                 },
-                child: Text(
-                  "Remove",
-                  style: TextStyle(color: Styles.colorDanger),
+                child: ListTile(
+                  leading: Icon(
+                    Styles.iconAddFolder,
+                    color: Styles.colorDanger,
+                  ),
+                  title: Text(
+                    "Remove",
+                    style: TextStyle(color: Styles.colorDanger),
+                  ),
                 ),
               ),
             ],
@@ -145,7 +162,10 @@ class RemoteLine extends ConsumerWidget {
       children: remote.maybeWhen(
         data: (remote) {
           final newActionItem = ListTile(
-            leading: Icon(Styles.iconAdd),
+            leading: Icon(
+              Styles.iconAdd,
+              color: Styles.colorPrimary,
+            ),
             title: Text("Register New Action"),
             onTap: () {
               showDialog(
@@ -161,7 +181,10 @@ class RemoteLine extends ConsumerWidget {
             ...?remote.actionConfigs?.map(
               (actionConfig) => ListTile(
                 title: Text(actionConfig.name),
-                leading: Icon(Styles.iconLabel),
+                leading: Icon(
+                  Styles.iconLabel,
+                  color: Styles.colorPrimary,
+                ),
                 trailing: IconButton(
                   onPressed: () {
                     // TODO add button tile
@@ -169,7 +192,10 @@ class RemoteLine extends ConsumerWidget {
                         .read(remoteRequestServiceProvider(remoteId))
                         .perform(actionConfig);
                   },
-                  icon: Icon(Styles.iconAdd),
+                  icon: Icon(
+                    Styles.iconAddTile,
+                    color: Styles.colorPrimary,
+                  ),
                 ),
               ),
             ),

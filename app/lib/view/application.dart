@@ -22,6 +22,7 @@ class Application extends StatelessWidget {
         cardColor: Styles.colorSecondary,
         iconTheme: const IconThemeData(
           weight: Styles.iconWeight,
+          color: Styles.colorPrimary,
         ),
       ),
       routerConfig: router,

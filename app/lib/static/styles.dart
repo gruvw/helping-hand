@@ -14,7 +14,7 @@ abstract class Styles {
   static const disabledOpacity = 0.4;
 
   static const fontFamily = "Noto Sans";
-  static const iconWeight = 600.0;
+  static const iconWeight = 700.0;
 
   static const textTitle = TextStyle(fontSize: 20);
   static const textNormal = TextStyle(fontSize: 15);
@@ -24,7 +24,11 @@ abstract class Styles {
   static const standardSpacing = 2.0;
 
   static const iconAdd = Symbols.add;
+  static const iconAddTile = Symbols.add_box;
+  static const iconAddFolder = Symbols.create_new_folder;
   static const iconEdit = Symbols.edit;
+  static const iconDelete = Symbols.delete;
+  static const iconMore = Symbols.more_vert;
   static const iconClear = Symbols.clear;
   static const iconHidden = Symbols.visibility_off;
   static const iconVisible = Symbols.visibility;
@@ -43,5 +47,4 @@ abstract class Styles {
   static const iconLabel = Symbols.label;
   static const iconNext = Symbols.arrow_forward;
   static const iconPrevious = Symbols.arrow_back;
-  static const iconNoData = Symbols.check_indeterminate_small;
 }

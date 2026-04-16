@@ -35,26 +35,38 @@ class OverviewPage extends StatelessWidget {
                   subState.pop();
                 }
               },
-              icon: Icon(Styles.iconPrevious),
+              icon: Icon(
+                Styles.iconPrevious,
+                color: Styles.colorSecondary,
+              ),
             ),
       actions: [
         if (routerPath != OverviewRoute.remotes.path)
           PopupMenuButton(
             tooltip: "Edit",
-            icon: Icon(Styles.iconEdit),
+            icon: Icon(
+              Styles.iconMore,
+              color: Styles.colorSecondary,
+            ),
             color: Styles.colorSecondary,
             itemBuilder: (context) => [
               PopupMenuItem(
                 onTap: () {
                   context.push(OverviewRoute.remotes.path);
                 },
-                child: Text("Remotes"),
+                child: ListTile(
+                  leading: Icon(Styles.iconAddTile),
+                  title: Text("Remotes"),
+                ),
               ),
               PopupMenuItem(
                 onTap: () {
                   // TODO new folder logic
                 },
-                child: Text("New Folder"),
+                child: ListTile(
+                  leading: Icon(Styles.iconAddFolder),
+                  title: Text("New Folder"),
+                ),
               ),
             ],
           ),
