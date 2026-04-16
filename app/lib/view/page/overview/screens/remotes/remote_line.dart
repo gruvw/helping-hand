@@ -36,6 +36,10 @@ class RemoteLine extends ConsumerWidget {
     );
 
     final item = ExpansionTile(
+      collapsedTextColor: Styles.colorPrimary,
+      collapsedIconColor: Styles.colorPrimary,
+      iconColor: Styles.colorPrimary,
+      textColor: Styles.colorPrimary,
       title: Text(
         remoteFullName,
         style: TextStyle(fontWeight: FontWeight.bold),
@@ -116,7 +120,10 @@ class RemoteLine extends ConsumerWidget {
                 },
                 enabled: isOnline,
                 child: ListTile(
-                  leading: Icon(Styles.iconEdit),
+                  leading: Icon(
+                    Styles.iconEdit,
+                    color: Styles.colorPrimary,
+                  ),
                   title: Text("Rename"),
                 ),
               ),
@@ -144,7 +151,7 @@ class RemoteLine extends ConsumerWidget {
                 },
                 child: ListTile(
                   leading: Icon(
-                    Styles.iconAddFolder,
+                    Styles.iconDelete,
                     color: Styles.colorDanger,
                   ),
                   title: Text(

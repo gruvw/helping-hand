@@ -55,6 +55,8 @@
     - [ ] Button long press interface
     - [ ] Refined communication protocol with main application
 - [ ] Software
+    - [ ] Remove and rename remote action interface
+    - [ ] Folder and tiles system
     - [ ] Application logo
     - [ ] New device interface
     - [ ] Full set up procedure to configure new buttons/servos

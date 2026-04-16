@@ -55,7 +55,10 @@ class OverviewPage extends StatelessWidget {
                   context.push(OverviewRoute.remotes.path);
                 },
                 child: ListTile(
-                  leading: Icon(Styles.iconAddTile),
+                  leading: Icon(
+                    Styles.iconAddTile,
+                    color: Styles.colorPrimary,
+                  ),
                   title: Text("Remotes"),
                 ),
               ),
@@ -64,7 +67,10 @@ class OverviewPage extends StatelessWidget {
                   // TODO new folder logic
                 },
                 child: ListTile(
-                  leading: Icon(Styles.iconAddFolder),
+                  leading: Icon(
+                    Styles.iconAddFolder,
+                    color: Styles.colorPrimary,
+                  ),
                   title: Text("New Folder"),
                 ),
               ),

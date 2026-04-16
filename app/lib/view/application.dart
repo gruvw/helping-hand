@@ -16,6 +16,7 @@ class Application extends StatelessWidget {
       title: Values.applicationTitle,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: false,
         fontFamily: Styles.fontFamily,
         scaffoldBackgroundColor: Styles.colorSecondary,
         primaryColor: Styles.colorPrimary,

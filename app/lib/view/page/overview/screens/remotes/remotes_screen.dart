@@ -19,7 +19,10 @@ class RemotesScreen extends ConsumerWidget {
     final remoteIds = ref.watch(remoteIdsProvider);
 
     final newRemoteItem = ListTile(
-      leading: Icon(Styles.iconAdd),
+      leading: Icon(
+        Styles.iconAdd,
+        color: Styles.colorPrimary,
+      ),
       title: Text("Register New Remote"),
       onTap: () {
         showDialog(
