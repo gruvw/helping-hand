@@ -83,7 +83,7 @@ pub fn handle_click(
         .expect("failed to acquire servo manager mutex")
         .click(channel, angle, Duration::from_millis(duration_ms));
 
-    req.into_status_response(HttpStatus::NoContent as u16)?;
+    req.into_cors_response(HttpStatus::NoContent, &[])?;
 
     Ok(())
 }
@@ -128,7 +128,7 @@ pub fn handle_set(
         .expect("failed to acquire servo manager mutex")
         .set(channel, angle);
 
-    req.into_status_response(HttpStatus::NoContent as u16)?;
+    req.into_cors_response(HttpStatus::NoContent, &[])?;
 
     Ok(())
 }
@@ -170,7 +170,7 @@ pub fn handle_reset(
         .expect("failed to acquire servo manager mutex")
         .reset(channel);
 
-    req.into_status_response(HttpStatus::NoContent as u16)?;
+    req.into_cors_response(HttpStatus::NoContent, &[])?;
 
     Ok(())
 }
@@ -180,11 +180,7 @@ pub fn handle_get_config(req: Request<&mut EspHttpConnection>) -> anyhow::Result
 
     let config = get_config();
 
-    let mut response = req.into_response(
-        HttpStatus::Ok as u16,
-        Some("OK"),
-        &[("Content-Type", "text/plain")],
-    )?;
+    let mut response = req.into_cors_response(HttpStatus::Ok, &[("Content-Type", "text/plain")])?;
     response.write(config.as_bytes())?;
 
     Ok(())
@@ -198,7 +194,7 @@ pub fn handle_store_config(
 
     store_config(body);
 
-    req.into_status_response(HttpStatus::NoContent as u16)?;
+    req.into_cors_response(HttpStatus::NoContent, &[])?;
 
     Ok(())
 }

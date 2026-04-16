@@ -3,7 +3,7 @@ import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
-import "package:helping_hand/state/request.dart";
+import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
@@ -161,6 +161,7 @@ class RemoteLine extends ConsumerWidget {
             ...?remote.actionConfigs?.map(
               (actionConfig) => ListTile(
                 title: Text(actionConfig.name),
+                leading: Icon(Styles.iconLabel),
                 trailing: IconButton(
                   onPressed: () {
                     // TODO add button tile

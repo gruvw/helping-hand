@@ -4,7 +4,7 @@
 const namePattern = "[a-zA-Z0-9_\\- ]{1,30}";
 final nameRegex = RegExp("^$namePattern\$");
 
-abstract class ActionConfig {
+sealed class ActionConfig {
   static final typeSeparator = ":";
   static final valueSeparator = ",";
 

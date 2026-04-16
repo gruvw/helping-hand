@@ -6,7 +6,7 @@ import "package:gap/gap.dart";
 import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/state/remote_notifier.dart";
-import "package:helping_hand/state/request.dart";
+import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/static/values.dart";
 import "package:helping_hand/view/component/button/outlined.dart";

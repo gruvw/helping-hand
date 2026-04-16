@@ -21,7 +21,7 @@ use crate::logic::handle_set;
 use crate::logic::handle_store_config;
 use crate::servo::ServoManager;
 
-// TODO improve detection
+// TODO improve detection (only http and https protocols)
 const ALLOWED_ORIGIN_SUFFIX: &str = "://hh.gruvw.com";
 const ALLOWED_ORIGIN: &str = formatcp!("https{}", ALLOWED_ORIGIN_SUFFIX);
 

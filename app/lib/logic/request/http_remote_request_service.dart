@@ -13,40 +13,43 @@ class HttpRemoteRequestService implements RemoteRequestService {
     required this.timeout,
   });
 
+  Future<http.Response> _onTimeout() => throw Exception("connection timed out");
+
   late final _uri = Uri.parse("http${isHttps ? 's' : ''}://$remoteId.local");
 
   @override
-  Future<String> getConfig() async {
-    return http
-        .get(_uri)
-        .timeout(
-          timeout,
-          onTimeout: () => throw Exception("connection timed out"),
-        )
-        .then((res) => res.body);
-  }
-
-  @override
   Future<void> perform(ActionConfig actionConfig) {
-    // TODO: implement click
-    throw UnimplementedError();
+    return http
+        .post(_uri.resolve(actionConfig.endpoint))
+        .timeout(timeout, onTimeout: _onTimeout);
   }
 
   @override
   Future<void> reset({required int channel}) {
-    // TODO: implement reset
-    throw UnimplementedError();
+    return http
+        .post(_uri.resolve("/reset?channel=$channel"))
+        .timeout(timeout, onTimeout: _onTimeout);
   }
 
   @override
   Future<void> set({required int channel, required int angle}) {
-    // TODO: implement set
-    throw UnimplementedError();
+    return http
+        .post(_uri.resolve("/set?channel=$channel&angle=$angle"))
+        .timeout(timeout, onTimeout: _onTimeout);
+  }
+
+  @override
+  Future<String> getConfig() async {
+    return http
+        .get(_uri.resolve("/config"))
+        .timeout(timeout, onTimeout: _onTimeout)
+        .then((res) => res.body);
   }
 
   @override
   Future<void> storeConfig({required String config}) {
-    // TODO: implement storeConfig
-    throw UnimplementedError();
+    return http
+        .post(_uri.resolve("/config"), body: config)
+        .timeout(timeout, onTimeout: _onTimeout);
   }
 }

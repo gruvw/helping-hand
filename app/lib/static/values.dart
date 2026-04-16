@@ -2,6 +2,8 @@ abstract class Values {
   static const applicationTitle = "Helping Hand";
   static const databaseName = "hh_db";
 
+  static const remoteRequestTimeout = Duration(seconds: 10);
+
   static const maxChannel = 8;
   static const allChannels = 20;
 

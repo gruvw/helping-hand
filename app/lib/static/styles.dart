@@ -40,6 +40,7 @@ abstract class Styles {
   static const iconDoubleUp = Symbols.keyboard_double_arrow_up;
   static const iconDown = Symbols.keyboard_arrow_down;
   static const iconDoubleDown = Symbols.keyboard_double_arrow_down;
+  static const iconLabel = Symbols.label;
   static const iconNext = Symbols.arrow_forward;
   static const iconPrevious = Symbols.arrow_back;
   static const iconNoData = Symbols.check_indeterminate_small;

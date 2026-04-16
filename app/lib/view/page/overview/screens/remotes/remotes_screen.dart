@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/state/persistence/database/tables/remote_table.drift.dart";
 import "package:helping_hand/state/persistence/providers.dart";
-import "package:helping_hand/state/request.dart";
+import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
 import "package:helping_hand/view/component/structure/title_bar.dart";
