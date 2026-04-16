@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:helping_hand/logic/validation.dart";
-import "package:helping_hand/model/config/remote.dart";
+import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
 import "package:helping_hand/state/request.dart";
@@ -8,6 +8,7 @@ import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
 import "package:helping_hand/view/component/dialog/deletion_dialog.dart";
+import "package:helping_hand/view/page/overview/screens/remotes/new_remote_action_dialog.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class RemoteLine extends ConsumerWidget {
@@ -25,14 +26,6 @@ class RemoteLine extends ConsumerWidget {
     final remoteName = remote.value?.name;
     final remoteFullName =
         remoteName?.nmap((name) => "$name ($remoteId)") ?? remoteId;
-
-    final newActionItem = ListTile(
-      leading: Icon(Styles.iconAdd),
-      title: Text("Register New Action"),
-      onTap: () {
-        // TODO register new button dialog
-      },
-    );
 
     final isOnline = remote.maybeWhen(
       data: (remote) => remote.isOnline ? true : false,
@@ -86,7 +79,7 @@ class RemoteLine extends ConsumerWidget {
                         placeholder: remoteName,
                         submitText: "Rename",
                         validation: (remoteName) {
-                          final match = Remote.nameRegex.firstMatch(remoteName);
+                          final match = nameRegex.firstMatch(remoteName);
 
                           if (match == null) {
                             return InvalidResult(
@@ -151,6 +144,19 @@ class RemoteLine extends ConsumerWidget {
       shape: const Border(),
       children: remote.maybeWhen(
         data: (remote) {
+          final newActionItem = ListTile(
+            leading: Icon(Styles.iconAdd),
+            title: Text("Register New Action"),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => NewRemoteActionDialog(
+                  remoteId: remoteId,
+                ),
+              );
+            },
+          );
+
           return [
             ...?remote.actionConfigs?.map(
               (actionConfig) => ListTile(
@@ -158,6 +164,9 @@ class RemoteLine extends ConsumerWidget {
                 trailing: IconButton(
                   onPressed: () {
                     // TODO add button tile
+                    ref
+                        .read(remoteRequestServiceProvider(remoteId))
+                        .perform(actionConfig);
                   },
                   icon: Icon(Styles.iconAdd),
                 ),

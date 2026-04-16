@@ -6,6 +6,7 @@ class PlainButton extends StatelessWidget {
   final Widget? leading;
   final bool enabled;
   final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   final Color backgroundColor;
   final Color foregroundColor;
   final Color borderColor;
@@ -13,21 +14,23 @@ class PlainButton extends StatelessWidget {
 
   const PlainButton({
     super.key,
-    required this.child,
     required this.foregroundColor,
     required this.backgroundColor,
     required this.borderColor,
+    required this.child,
     this.leading,
     this.enabled = true,
     this.horizontalPadding = 10,
     this.onPressed,
+    this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      // button disabled when onPressed is null
+      // button disabled when onPressed and onLongPress is null
       onPressed: enabled ? (onPressed ?? () {}) : null,
+      onLongPress: enabled ? (onLongPress ?? () {}) : null,
       style: OutlinedButton.styleFrom(
         foregroundColor: foregroundColor, // used for splash color
         padding: EdgeInsets.symmetric(

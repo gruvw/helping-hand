@@ -8,6 +8,16 @@ final remoteRequestServiceProvider =
       //   timeout: Duration(seconds: 10),
       //   remoteName: remoteName,
       // ),
+      // (ref, remoteId) => ref
+      //     .watch(kvsHttpsProvider)
+      //     .maybeWhen(
+      //       data: (useHttps) => true,
+      //       orElse: () => FakeRemoteRequestService(
+      //         requestTime: Duration(seconds: 1),
+      //         failureRate: 0.4,
+      //         remoteId: remoteId,
+      //       ),
+      //     ),
       (ref, remoteId) => FakeRemoteRequestService(
         requestTime: Duration(seconds: 1),
         failureRate: 0.4,

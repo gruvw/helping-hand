@@ -23,6 +23,15 @@ final kvsAccessibleUiProvider = KvsNotifierProvider<bool>(
   },
 );
 
+final kvsHttpsProvider = KvsNotifierProvider<bool>(
+  () {
+    return KvsNotifier.boolean(
+      configKey: "use_https",
+      defaultValue: false,
+    );
+  },
+);
+
 // final kvsLastGameIdProvider =
 //     NotifierProvider<KvsNotifier<String?>, AsyncValue<GameId?>>(() {
 //       return KvsNotifier.string(

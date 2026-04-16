@@ -2,6 +2,7 @@
 // aquired by the remote config
 
 const namePattern = "[a-zA-Z0-9_\\- ]{1,30}";
+final nameRegex = RegExp("^$namePattern\$");
 
 abstract class ActionConfig {
   static final typeSeparator = ":";
@@ -51,7 +52,7 @@ class ClickConfig extends ActionConfig {
 
   @override
   String serialize() =>
-      "$actionType${ActionConfig.typeSeparator}${[channel, angle, durationMs].join(ActionConfig.valueSeparator)}";
+      "$actionType${ActionConfig.typeSeparator}$name${ActionConfig.valueSeparator}${[channel, angle, durationMs].join(ActionConfig.valueSeparator)}";
 }
 
 List<ActionConfig> parseConfigActions(String config) {

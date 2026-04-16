@@ -8,7 +8,7 @@ class TextInput extends HookWidget {
   final String? label;
   final String? placeholder;
   final String? errorText;
-  final bool? isTextSensitive;
+  final bool? isContentPrivate;
   final TextCapitalization? capitalization;
   final bool autoFocus;
   final bool wrap;
@@ -22,7 +22,7 @@ class TextInput extends HookWidget {
     this.placeholder,
     this.controller,
     this.errorText,
-    this.isTextSensitive,
+    this.isContentPrivate,
     this.onChanged,
     this.onSubmitted,
     this.capitalization,
@@ -42,7 +42,7 @@ class TextInput extends HookWidget {
     final isEmpty = textController.text.isEmpty;
 
     // Used to display (or not) the visibility button
-    final isHidden = useState(isTextSensitive);
+    final isHidden = useState(isContentPrivate);
     final shouldHideText = isHidden.value ?? false;
 
     // Only display error when field is not empty or not focused
@@ -83,6 +83,9 @@ class TextInput extends HookWidget {
       ),
     );
 
+    final displayClearButton = this.displayClearButton && !isEmpty;
+    final displayVisibilityButton = isContentPrivate != null;
+
     return TextField(
       focusNode: focus,
       textCapitalization: capitalization ?? TextCapitalization.none,
@@ -122,13 +125,15 @@ class TextInput extends HookWidget {
         hintStyle: Styles.textNormal.apply(
           color: Styles.colorHint,
         ),
-        suffixIcon: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (displayClearButton && !isEmpty) clearButton,
-            if (isTextSensitive != null) visibilityButton,
-          ],
-        ),
+        suffixIcon: displayClearButton || displayVisibilityButton
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (displayClearButton) clearButton,
+                  if (displayVisibilityButton) visibilityButton,
+                ],
+              )
+            : null,
       ),
     );
   }

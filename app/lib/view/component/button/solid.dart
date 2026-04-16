@@ -4,12 +4,13 @@ import "package:helping_hand/view/component/button/plain.dart";
 class PlainSolidButton extends PlainButton {
   const PlainSolidButton({
     super.key,
-    required super.child,
-    required super.onPressed,
-    required super.foregroundColor,
-    required super.backgroundColor,
     super.enabled,
     super.leading,
+    required super.foregroundColor,
+    required super.backgroundColor,
+    required super.onPressed,
+    super.onLongPress,
+    required super.child,
   }) : super(
          borderColor: backgroundColor,
        );
@@ -18,10 +19,11 @@ class PlainSolidButton extends PlainButton {
 class SolidButtonPrimary extends PlainSolidButton {
   const SolidButtonPrimary({
     super.key,
-    required super.child,
-    required super.onPressed,
     super.enabled,
     super.leading,
+    required super.onPressed,
+    super.onLongPress,
+    required super.child,
   }) : super(
          foregroundColor: Styles.colorSecondary,
          backgroundColor: Styles.colorPrimary,
@@ -31,10 +33,11 @@ class SolidButtonPrimary extends PlainSolidButton {
 class SolidButtonSecondary extends PlainSolidButton {
   const SolidButtonSecondary({
     super.key,
-    required super.child,
-    required super.onPressed,
     super.enabled,
     super.leading,
+    required super.onPressed,
+    super.onLongPress,
+    required super.child,
   }) : super(
          foregroundColor: Styles.colorPrimary,
          backgroundColor: Styles.colorSecondary,

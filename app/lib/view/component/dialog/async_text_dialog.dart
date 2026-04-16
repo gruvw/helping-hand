@@ -66,8 +66,8 @@ class AsyncTextDialog extends HookWidget {
             : isSubmitValidatedState.value
             ? Icon(
                 validationResult.isValid
-                    ? Styles.iconValid
-                    : Styles.iconInvalid,
+                    ? Styles.iconSuccess
+                    : Styles.iconError,
                 color: validationResult.isValid
                     ? Styles.colorSuccess
                     : Styles.colorDanger,

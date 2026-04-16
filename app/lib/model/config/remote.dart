@@ -3,8 +3,6 @@ import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/utils/language.dart";
 
 class Remote {
-  static final nameRegex = RegExp("^$namePattern\$");
-
   final String id; // hh-0001
   final String name;
   // final String icon;

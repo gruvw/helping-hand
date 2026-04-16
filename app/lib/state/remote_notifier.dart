@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/model/config/remote.dart";
 import "package:helping_hand/state/persistence/database/tables/remote_table.drift.dart";
 import "package:helping_hand/state/persistence/providers.dart";
@@ -17,7 +18,7 @@ class RemoteNotifier extends AsyncNotifier<Remote> {
     final db = ref.watch(dbProvider);
     final offlineRemote = ref.watch(remoteProvider(remoteId)).requireValue!;
 
-    // preload with offline remote
+    // preload value with offline remote
     state = AsyncData(offlineRemote);
     state = AsyncValue.loading();
 
@@ -40,9 +41,9 @@ class RemoteNotifier extends AsyncNotifier<Remote> {
   }
 
   Future<bool> rename(String name) async {
-    final match = Remote.nameRegex.firstMatch(name);
+    final matches = nameRegex.hasMatch(name);
     final remote = state.value;
-    if (match == null || remote == null) return false;
+    if (!matches || remote == null) return false;
 
     final newRemote = Remote(
       name: name,
@@ -56,6 +57,34 @@ class RemoteNotifier extends AsyncNotifier<Remote> {
         .then<bool>(
           (_) {
             state = AsyncData(newRemote);
+            return true;
+          },
+          onError: (_) {
+            return false;
+          },
+        );
+  }
+
+  Future<bool> addAction(ActionConfig newActionConfig) async {
+    final remote = state.value;
+    final actionConfigs = remote?.actionConfigs;
+    if (remote == null || actionConfigs == null) return false;
+
+    final newRemote = Remote(
+      name: remote.name,
+      id: remote.id,
+      actionConfigs: [
+        ...actionConfigs,
+        newActionConfig,
+      ],
+    );
+
+    return await ref
+        .read(remoteRequestServiceProvider(remoteId))
+        .storeConfig(config: newRemote.serialize())
+        .then(
+          (_) {
+            ref.invalidate(remoteConfigProvider(remoteId));
             return true;
           },
           onError: (_) {

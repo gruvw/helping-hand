@@ -29,14 +29,18 @@ abstract class Styles {
   static const iconHidden = Symbols.visibility_off;
   static const iconVisible = Symbols.visibility;
   static const iconValid = Symbols.check;
-  static const iconInvalid = Symbols.clear;
+  static const iconInvalid = Symbols.error;
+  static const iconSuccess = Symbols.check;
+  static const iconError = Symbols.error;
   static const iconOffline = Symbols.cloud_off;
   static const iconFavorite = Symbols.star;
+  static const iconLeft = Symbols.keyboard_arrow_left;
+  static const iconRight = Symbols.keyboard_arrow_right;
+  static const iconUp = Symbols.keyboard_arrow_up;
+  static const iconDoubleUp = Symbols.keyboard_double_arrow_up;
+  static const iconDown = Symbols.keyboard_arrow_down;
+  static const iconDoubleDown = Symbols.keyboard_double_arrow_down;
   static const iconNext = Symbols.arrow_forward;
   static const iconPrevious = Symbols.arrow_back;
   static const iconNoData = Symbols.check_indeterminate_small;
-  static const iconProgress = Symbols.timeline;
-  static const iconCompleted = Symbols.check_circle;
-  static const iconRepeat = Symbols.forward_media;
-  static const iconEndless = Symbols.flag;
 }

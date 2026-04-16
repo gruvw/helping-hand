@@ -24,6 +24,7 @@ fn map_channel(nb: u8) -> Option<Channel> {
         5 => Some(Channel::C5),
         6 => Some(Channel::C6),
         7 => Some(Channel::C7),
+        20 => Some(Channel::All),
         _ => None,
     }
 }

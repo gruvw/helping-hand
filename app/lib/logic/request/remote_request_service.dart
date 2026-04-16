@@ -8,8 +8,9 @@ abstract class RemoteRequestService {
 
   Future<void> set({
     required int channel,
-    required double angle,
+    required int angle,
   });
+
   Future<void> reset({
     required int channel,
   });

@@ -39,7 +39,7 @@ class HttpRemoteRequestService implements RemoteRequestService {
   }
 
   @override
-  Future<void> set({required int channel, required double angle}) {
+  Future<void> set({required int channel, required int angle}) {
     // TODO: implement set
     throw UnimplementedError();
   }

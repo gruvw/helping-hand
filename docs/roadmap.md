@@ -37,8 +37,9 @@
     - [x] HTTP and web security exploration
     - [x] Basic local DB
     - [x] HTTP security testing and mDNS queries from Android & IOS & desktop
-    - [ ] Basic new button setup interface
-    - [ ] Basic button pressing interface
+    - [x] New remote registration interface
+    - [x] Basic new button setup interface
+    - [x] Basic button pressing interface
 - [ ] Documentation
     - [ ] GitHub release
 
