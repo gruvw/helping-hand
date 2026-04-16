@@ -21,7 +21,6 @@ class Application extends StatelessWidget {
         primaryColor: Styles.colorPrimary,
         cardColor: Styles.colorSecondary,
         iconTheme: const IconThemeData(
-          weight: Styles.iconWeight,
           color: Styles.colorPrimary,
         ),
       ),
