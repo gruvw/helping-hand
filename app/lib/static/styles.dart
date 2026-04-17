@@ -36,13 +36,16 @@ abstract class Styles {
   static const iconError = Icons.error;
   static const iconOffline = Icons.cloud_off;
   static const iconFavorite = Icons.star_outline;
+  static const iconFolder = Icons.folder_open_outlined;
+  static const iconRemote = Icons.settings_remote_outlined;
+  static const iconButton = Icons.ads_click_outlined;
   static const iconLeft = Icons.keyboard_arrow_left;
   static const iconRight = Icons.keyboard_arrow_right;
   static const iconUp = Icons.keyboard_arrow_up;
   static const iconDoubleUp = Icons.keyboard_double_arrow_up;
   static const iconDown = Icons.keyboard_arrow_down;
   static const iconDoubleDown = Icons.keyboard_double_arrow_down;
-  static const iconLabel = Icons.label;
+  static const iconLabel = Icons.label_outline;
   static const iconNext = Icons.arrow_forward;
   static const iconPrevious = Icons.arrow_back;
 }

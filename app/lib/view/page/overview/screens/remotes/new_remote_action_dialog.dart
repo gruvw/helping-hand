@@ -204,8 +204,14 @@ class NewRemoteActionDialog extends HookConsumerWidget {
                     color: Styles.colorPrimary,
                   ),
                 ),
-                ActionState.success => Icon(Styles.iconSuccess),
-                ActionState.error => Icon(Styles.iconError),
+                ActionState.success => Icon(
+                  Styles.iconSuccess,
+                  color: Styles.colorSuccess,
+                ),
+                ActionState.error => Icon(
+                  Styles.iconError,
+                  color: Styles.colorDanger,
+                ),
               },
             ),
           ],

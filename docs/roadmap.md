@@ -32,7 +32,7 @@
     - [x] Option to run Wi-Fi as AP mode
     - [x] Wi-Fi reconnection system
     - [x] Persisted config store on device + get endpoint
-- [ ] Software
+- [x] Software
     - [x] GitHub CI
     - [x] HTTP and web security exploration
     - [x] Basic local DB
@@ -40,8 +40,9 @@
     - [x] New remote registration interface
     - [x] Basic new button setup interface
     - [x] Basic button pressing interface
-- [ ] Documentation
-    - [ ] GitHub release
+- [x] Documentation
+    - [x] GitHub release
+    - [x] Demo video
 
 ## Version 1.0.0
 
@@ -50,16 +51,15 @@
     - [ ] Electronics enclosure with servo ports
     - [ ] Use square nuts designs (at least for rails)
     - [ ] Might want to use O rings for bolts (avoid plastic deformation)
-    - [ ] Square bottom angle on servo attachment
+    - [x] Square bottom angle on servo attachment
 - [ ] Firmware
-    - [ ] Button long press interface
     - [ ] Refined communication protocol with main application
 - [ ] Software
     - [ ] Remove and rename remote action interface
     - [ ] Folder and tiles system
     - [ ] Application logo
-    - [ ] New device interface
-    - [ ] Full set up procedure to configure new buttons/servos
+    - [x] New remote device interface
+    - [x] Full set up procedure to configure new buttons/servos
     - [ ] Persisted buttons config from app
     - [ ] Full application with accessible mode design to control multiple devices
         - [ ] Auto cycling mode
@@ -92,6 +92,7 @@
     - [ ] Button double press interface
     - [ ] More complex button systems, like press sequences
 - [ ] Software
+    - [ ] Button long press interface
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
     - [ ] i18n
