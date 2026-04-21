@@ -1,5 +1,9 @@
+import "package:drift/drift.dart";
 import "package:helping_hand/model/config/remote.dart";
+import "package:helping_hand/model/data/folder.dart";
+import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/persistence/database/core/database.dart";
+import "package:helping_hand/utils/language.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 final dbProvider = Provider<Database>(
@@ -16,7 +20,10 @@ final remoteIdsProvider = StreamProvider<List<String>>((ref) {
       .distinct();
 });
 
-final remoteProvider = StreamProvider.family<Remote?, String>((ref, remoteId) {
+final localRemoteProvider = StreamProvider.family<Remote?, String>((
+  ref,
+  remoteId,
+) {
   final db = ref.watch(dbProvider);
 
   return (db.select(
@@ -24,36 +31,37 @@ final remoteProvider = StreamProvider.family<Remote?, String>((ref, remoteId) {
   )..where((r) => r.id.equals(remoteId))).watchSingle().distinct();
 });
 
-// final highScoreForTrainingLengthProvider =
-//     StreamProvider.family<Score?, GameSetting>(
-//       (ref, gameSetting) {
-//         final db = ref.watch(dbProvider);
+final folderProvider = StreamProvider.family<Folder?, String>((
+  ref,
+  folderId,
+) {
+  final db = ref.watch(dbProvider);
 
-//         final query = db.select(db.highScoreTable)
-//           ..where(
-//             (t) =>
-//                 t.gameId.equals(gameSetting.gameId) &
-//                 t.length.equals(gameSetting.length),
-//           );
+  return (db.select(
+    db.folderTable,
+  )..where((f) => f.id.equals(folderId))).watchSingle();
+});
 
-//         return query.watchSingleOrNull();
-//       },
-//     );
+final tilesProvider = StreamProvider.family<List<TileData>, String?>((
+  ref,
+  folderId,
+) {
+  final db = ref.watch(dbProvider);
 
-// final highScoreSelectedTrainingLengthProvider =
-//     FutureProvider.family<Score?, GameId>(
-//       (ref, gameId) {
-//         final selectedTrainingLength = ref
-//             .watch(kvsTrainingLengthProvider)
-//             .requireValue;
+  return (db.select(db.tileTable)
+        ..where(
+          (t) =>
+              folderId?.nmap((folderId) => t.parentId.equals(folderId)) ??
+              t.parentId.isNull(),
+        )
+        ..orderBy([(t) => OrderingTerm.asc(t.position)]))
+      .watch();
+});
 
-//         return ref
-//             .watch(
-//               highScoreForTrainingLengthProvider((
-//                 gameId: gameId,
-//                 length: selectedTrainingLength,
-//               )),
-//             )
-//             .requireValue;
-//       },
-//     );
+final tileProvider = StreamProvider.family<TileData?, String>((ref, tileId) {
+  final db = ref.watch(dbProvider);
+
+  return (db.select(
+    db.tileTable,
+  )..where((t) => t.id.equals(tileId))).watchSingle();
+});

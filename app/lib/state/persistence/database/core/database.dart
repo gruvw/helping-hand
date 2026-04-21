@@ -2,6 +2,7 @@ import "package:drift/drift.dart";
 import "package:drift_flutter/drift_flutter.dart";
 import "package:helping_hand/state/persistence/database/core/database.drift.dart";
 import "package:helping_hand/state/persistence/database/queries/queries.dart";
+import "package:helping_hand/state/persistence/database/tables/folder_table.dart";
 import "package:helping_hand/state/persistence/database/tables/kvs_table.dart";
 import "package:helping_hand/state/persistence/database/tables/remote_table.dart";
 import "package:helping_hand/state/persistence/database/tables/tile_table.dart";
@@ -10,9 +11,10 @@ import "package:helping_hand/static/values.dart";
 
 @DriftDatabase(
   tables: [
-    TileTable,
     KvsTable,
     RemoteTable,
+    FolderTable,
+    TileTable,
   ],
 )
 class Database extends $Database {

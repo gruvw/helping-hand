@@ -16,7 +16,9 @@ class RemoteNotifier extends AsyncNotifier<Remote> {
   @override
   Future<Remote> build() async {
     final db = ref.watch(dbProvider);
-    final offlineRemote = ref.watch(remoteProvider(remoteId)).requireValue!;
+    final offlineRemote = ref
+        .watch(localRemoteProvider(remoteId))
+        .requireValue!;
 
     // preload value with offline remote
     state = AsyncData(offlineRemote);

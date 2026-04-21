@@ -1,21 +1,15 @@
 import "package:drift/drift.dart";
+import "package:helping_hand/model/data/tile_data.dart";
 
-// TODO tile modeling
-// @UseRowClass(Score, constructor: "fromData")
+@UseRowClass(TileData, constructor: "fromData")
 class TileTable extends Table {
   @override
   String get tableName => "tile";
 
   @override
-  Set<Column> get primaryKey => {key};
+  Set<Column> get primaryKey => {parentId, id};
 
-  TextColumn get key => text()();
-
-  // @override
-  // Set<Column> get primaryKey => {gameId, length};
-
-  // TextColumn get gameId => text()();
-  // IntColumn get length => integer()();
-
-  // IntColumn get durationMs => integer()();
+  TextColumn get parentId => text().nullable()();
+  TextColumn get id => text()();
+  IntColumn get position => integer()();
 }
