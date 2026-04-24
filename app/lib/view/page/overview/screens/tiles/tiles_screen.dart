@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_reorderable_grid_view/widgets/widgets.dart";
 import "package:helping_hand/state/persistence/providers.dart";
+import "package:helping_hand/state/providers.dart";
 import "package:helping_hand/static/styles.dart";
-import "package:helping_hand/view/page/overview/screens/tiles/tile.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class TilesScreen extends HookConsumerWidget {
@@ -11,11 +11,17 @@ class TilesScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentFolderId = ref.watch(currentFolderIdProvider);
-    final tiles = ref.watch(tilesProvider(currentFolderId)).value;
+    final currentTileId = ref.watch(currentTileIdProvider);
+    final folderTiles = ref.watch(folderTilesProvider(currentTileId)).value;
     final scrollController = useScrollController();
 
-    if (tiles == null) {
+    final remote = ref.watch(remoteNotifierProvider(tileId)).value;
+    final actions = remote?.actionConfigs;
+    if (remote != null) {}
+
+    // TODO back button if the current tile is not null
+
+    if (folderTiles == null) {
       return Center(
         child: CircularProgressIndicator(
           color: Styles.colorPrimary,
@@ -41,8 +47,8 @@ class TilesScreen extends HookConsumerWidget {
           children: children,
         );
       },
-      children: tiles.map((t) {
-        return Tile(
+      children: folderTiles.map((t) {
+        return TileFromId(
           key: UniqueKey(),
           tileId: t.id,
         );

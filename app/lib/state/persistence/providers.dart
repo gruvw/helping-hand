@@ -42,7 +42,7 @@ final folderProvider = StreamProvider.family<Folder?, String>((
   )..where((f) => f.id.equals(folderId))).watchSingle();
 });
 
-final tilesProvider = StreamProvider.family<List<TileData>, String?>((
+final folderTilesProvider = StreamProvider.family<List<TileData>, String?>((
   ref,
   folderId,
 ) {

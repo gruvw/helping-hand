@@ -47,11 +47,12 @@
 ## Version 1.0.0
 
 - [ ] Mechanical design
-    - [ ] Wider base
-    - [ ] Electronics enclosure with servo ports
-    - [ ] Use square nuts designs (at least for rails)
+    - [x] Wider base
+    - [x] Electronics enclosure with servo ports
+    - [x] Use square nuts designs (at least for rails)
     - [ ] Might want to use O rings for bolts (avoid plastic deformation)
     - [x] Square bottom angle on servo attachment
+    - [ ] Small user fillets
 - [ ] Firmware
     - [ ] Refined communication protocol with main application
 - [ ] Software
@@ -82,6 +83,8 @@
     - [ ] Release downloads with custom tolerances
     - [ ] Try PETG for arms bending
     - [ ] Test Prusa printing at the end
+    - [ ] Smaller area under for electronics, might require custom PCB
+    - [ ] Two sizes variants (currently one size fits all, so large)
 - [ ] Electronics + Firmware
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED

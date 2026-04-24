@@ -10,6 +10,11 @@ abstract class Styles {
   static const colorSuccess = Colors.green;
   static const colorIgnored = Colors.grey;
 
+  static const colorFolder = Colors.purple;
+  static const colorRemote = Colors.blue;
+  static const colorButton = Colors.green;
+  static const colorOffline = Colors.grey;
+
   static const disabledOpacity = 0.4;
 
   static const fontFamily = "Noto Sans";

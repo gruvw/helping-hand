@@ -1,3 +1,4 @@
 import "package:hooks_riverpod/legacy.dart";
 
-final currentFolderIdProvider = StateProvider<String?>((ref) => null);
+/// Can be a remote id or a folder id, if null it is the root folder.
+final currentTileIdProvider = StateProvider<String?>((ref) => null);
