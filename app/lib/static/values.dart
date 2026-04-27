@@ -4,7 +4,7 @@ abstract class Values {
 
   static const remoteRequestTimeout = Duration(seconds: 10);
 
-  static const maxChannel = 8;
+  static const maxChannel = 7;
   static const allChannels = 20;
 
   static const minPositionAngle = 100;

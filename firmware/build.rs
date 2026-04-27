@@ -2,11 +2,17 @@ use std::{env, fs, path::PathBuf};
 
 use rcgen::{BasicConstraints, CertificateParams, DistinguishedName, DnType, IsCa, KeyPair};
 
+// .env file can contain the following
+// DEVICE_ID="0001"
+// NET_SSID="ssid"
+// NET_PWD="pwd"
+
+// defaults if not in enviroment (.env)
 const NET_SSID: &str = "ssid"; // AP mode if empty
 const NET_PWD: &str = "pwd";
+const DEVICE_ID: &str = "0001";
 
 const NET_AP_PWD: &str = "Helping-HAND";
-const DEVICE_ID: &str = "0001";
 
 fn main() {
     embuild::espidf::sysenv::output();
@@ -17,21 +23,22 @@ fn main() {
 
     let net_ssid = env::var("NET_SSID").unwrap_or(NET_SSID.to_string());
     let net_pwd = env::var("NET_PWD").unwrap_or(NET_PWD.to_string());
+    let device_id = env::var("DEVICE_ID").unwrap_or(DEVICE_ID.to_string());
 
     println!("cargo:rustc-env=NET_SSID={}", net_ssid);
     println!("cargo:rustc-env=NET_PWD={}", net_pwd);
 
-    let device_name = format!("hh-{}", DEVICE_ID);
+    let device_name = format!("hh-{}", device_id);
 
     println!("cargo:rustc-env=NET_AP_PWD={}", NET_AP_PWD);
-    println!("cargo:rustc-env=DEVICE_ID={}", DEVICE_ID);
+    println!("cargo:rustc-env=DEVICE_ID={}", device_id);
     println!("cargo:rustc-env=DEVICE_NAME={}", device_name);
 
     let cert_dir = PathBuf::from("certs");
     fs::create_dir_all(&cert_dir).unwrap();
 
-    let cert_path = cert_dir.join(format!("server-{}.crt", DEVICE_ID));
-    let key_path = cert_dir.join(format!("server-{}.key", DEVICE_ID));
+    let cert_path = cert_dir.join(format!("server-{}.crt", device_id));
+    let key_path = cert_dir.join(format!("server-{}.key", device_id));
 
     if !cert_path.exists() || !key_path.exists() {
         let domain = format!("{}.local", device_name);

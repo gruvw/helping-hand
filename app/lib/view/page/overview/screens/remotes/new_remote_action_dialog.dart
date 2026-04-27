@@ -39,7 +39,7 @@ class NewRemoteActionDialog extends HookConsumerWidget {
     final nameController = useTextEditingController();
     final nameError = useState<ValidationResult?>(null);
 
-    final channel = useState(0);
+    final port = useState(1);
     final positionAngle = useState(Values.minPositionAngle);
     final pressAngleDelta = useState(Values.minPressAngleDelta);
     final maxPressAngleDelta =
@@ -78,7 +78,7 @@ class NewRemoteActionDialog extends HookConsumerWidget {
 
       return remoteRequestService
           .set(
-            channel: channel.value,
+            channel: port.value,
             angle: positionAngle.value,
           )
           .then<bool>(
@@ -101,7 +101,7 @@ class NewRemoteActionDialog extends HookConsumerWidget {
           .perform(
             ClickConfig(
               name: nameController.text,
-              channel: channel.value,
+              channel: port.value,
               angle: positionAngle.value + pressAngleDelta.value,
               durationMs: clickDurationMs,
             ),
@@ -173,20 +173,20 @@ class NewRemoteActionDialog extends HookConsumerWidget {
             ),
             Spacer(),
             OutlinedButtonPrimary(
-              enabled: sendEnabled && channel.value != 0,
+              enabled: sendEnabled && port.value != 0,
               onPressed: () {
-                channel.value = max(0, channel.value - 1);
+                port.value = max(1, port.value - 1);
                 reset();
               },
               child: Icon(Styles.iconLeft),
             ),
             Gap(6),
-            Text(channel.value.toString()),
+            Text(port.value.toString()),
             Gap(6),
             OutlinedButtonPrimary(
-              enabled: sendEnabled && channel.value != Values.maxChannel,
+              enabled: sendEnabled && port.value != Values.maxChannel,
               onPressed: () {
-                channel.value = min(Values.maxChannel, channel.value + 1);
+                port.value = min(Values.maxChannel, port.value + 1);
                 reset();
               },
               child: Icon(Styles.iconRight),
@@ -365,7 +365,7 @@ class NewRemoteActionDialog extends HookConsumerWidget {
             .addAction(
               ClickConfig(
                 name: nameController.text,
-                channel: channel.value,
+                channel: port.value,
                 angle: positionAngle.value + pressAngleDelta.value,
                 durationMs: clickDurationMs,
               ),

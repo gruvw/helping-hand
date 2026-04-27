@@ -16,14 +16,14 @@ const LOG_TAG: &str = "logic";
 
 fn map_channel(nb: u8) -> Option<Channel> {
     match nb {
-        0 => Some(Channel::C0),
-        1 => Some(Channel::C1),
-        2 => Some(Channel::C2),
-        3 => Some(Channel::C3),
-        4 => Some(Channel::C4),
-        5 => Some(Channel::C5),
-        6 => Some(Channel::C6),
-        7 => Some(Channel::C7),
+        0 => Some(Channel::C7),
+        1 => Some(Channel::C8),
+        2 => Some(Channel::C9),
+        3 => Some(Channel::C10),
+        4 => Some(Channel::C11),
+        5 => Some(Channel::C12),
+        6 => Some(Channel::C13),
+        7 => Some(Channel::C14),
         20 => Some(Channel::All),
         _ => None,
     }

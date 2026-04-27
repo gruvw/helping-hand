@@ -50,24 +50,27 @@
     - [x] Wider base
     - [x] Electronics enclosure with servo ports
     - [x] Use square nuts designs (at least for rails)
-    - [ ] Might want to use O rings for bolts (avoid plastic deformation)
     - [x] Square bottom angle on servo attachment
-    - [ ] Small user fillets
-- [ ] Firmware
-    - [ ] Refined communication protocol with main application
+    - [x] Small user fillets
+- [x] Electronics
+    - [x] Full system soldering
+    - [x] Servo one way attachements
+- [x] Firmware
+    - [x] Refined communication protocol with main application
 - [ ] Software
     - [ ] Remove and rename remote action interface
     - [ ] Folder and tiles system
     - [ ] Application logo
     - [x] New remote device interface
     - [x] Full set up procedure to configure new buttons/servos
-    - [ ] Persisted buttons config from app
+    - [x] Persisted buttons config from app
     - [ ] Full application with accessible mode design to control multiple devices
         - [ ] Auto cycling mode
         - [ ] Press for next mode
     - [ ] Settings page for configuration
 - [ ] Evaluation
     - [ ] Stress test the system with long endurance testing for multiple days (find a way to record pressing intention and pressing success)
+    - [ ] Endurance test (50 clicks per day, for a full week)
     - [ ] Evaluation of mechanical design for multiple remote types
     - [ ] Interface evaluation for ease of manipulation
     - [ ] Real world integration testing with measurements
@@ -85,6 +88,7 @@
     - [ ] Test Prusa printing at the end
     - [ ] Smaller area under for electronics, might require custom PCB
     - [ ] Two sizes variants (currently one size fits all, so large)
+    - [ ] New type of arms (bendable, ...)
 - [ ] Electronics + Firmware
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED

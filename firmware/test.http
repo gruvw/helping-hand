@@ -15,3 +15,7 @@ GET http://hh-0001.local/config
 
 POST http://hh-0001.local/config
 Content-Type: text/plain
+
+### Click angle
+
+POST http://hh-0001.local/click?angle=121&channel=5&duration=100

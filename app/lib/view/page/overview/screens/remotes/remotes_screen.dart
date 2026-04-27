@@ -26,6 +26,7 @@ class RemotesScreen extends ConsumerWidget {
       title: Text("Register New Remote"),
       onTap: () {
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => AsyncTextDialog(
             title: "Register New Remote",

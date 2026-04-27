@@ -83,6 +83,7 @@ class RemoteLine extends ConsumerWidget {
               PopupMenuItem(
                 onTap: () {
                   showDialog(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) {
                       return AsyncTextDialog(
@@ -130,6 +131,7 @@ class RemoteLine extends ConsumerWidget {
               PopupMenuItem(
                 onTap: () {
                   showDialog(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) {
                       return DeletionDialog(
@@ -176,6 +178,7 @@ class RemoteLine extends ConsumerWidget {
             title: Text("Register New Action"),
             onTap: () {
               showDialog(
+                barrierDismissible: false,
                 context: context,
                 builder: (context) => NewRemoteActionDialog(
                   remoteId: remoteId,
