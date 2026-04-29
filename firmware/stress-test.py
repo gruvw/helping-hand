@@ -2,10 +2,12 @@ import requests
 import time
 
 
+DEVICE_ID = "hh-0004"
+CHANNEL = 20
 TIMEOUT = 10
 
 # target
-url = "http://hh-0001.local/click?angle=121&channel=1&duration=100"
+url = f"http://{DEVICE_ID}.local/click?angle=121&channel={CHANNEL}&duration=100"
 
 
 def start_clicking():

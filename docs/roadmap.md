@@ -108,5 +108,12 @@
     - [ ] Custom tiles ordering
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
+- [ ] System
+    - [ ] Improve overal set up procedure
+        - [ ] Wi-Fi network setup
+        - [ ] Servo port detection
+        - [ ] Remote action setup
+        - [ ] Servo arms (fixed-in screws)
+        - [ ] Won't be performed by a user with disabilities, but goal is that even a non technical person could set up the device (like a caregiver)
 
 - [ ] IR replayer compatible module

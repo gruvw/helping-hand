@@ -53,6 +53,10 @@ class NewRemoteActionDialog extends HookConsumerWidget {
 
     Future<void> reset() {
       if (context.mounted) {
+        positionAngle.value = Values.minPositionAngle;
+        pressAngleDelta.value = Values.minPressAngleDelta;
+
+        actionState.value = ActionState.nothing;
         setSuccess.value = false;
         clickSuccess.value = false;
       }
