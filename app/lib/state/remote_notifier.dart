@@ -8,17 +8,19 @@ import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-class RemoteNotifier extends AsyncNotifier<Remote> {
+class RemoteNotifier extends AsyncNotifier<Remote?> {
   final String remoteId;
 
   RemoteNotifier(this.remoteId);
 
   @override
-  Future<Remote> build() async {
+  Future<Remote?> build() async {
     final db = ref.watch(dbProvider);
-    final offlineRemote = ref
-        .watch(localRemoteProvider(remoteId))
-        .requireValue!;
+    final offlineRemote = ref.watch(localRemoteProvider(remoteId)).requireValue;
+
+    if (offlineRemote == null) {
+      return null;
+    }
 
     // preload value with offline remote
     state = AsyncData(offlineRemote);
@@ -38,6 +40,8 @@ class RemoteNotifier extends AsyncNotifier<Remote> {
             ),
           );
     }
+
+    // TODO handle externally removed actions (from tiles)
 
     return remote;
   }
@@ -72,6 +76,11 @@ class RemoteNotifier extends AsyncNotifier<Remote> {
     final actionConfigs = remote?.actionConfigs;
     if (remote == null || actionConfigs == null) return false;
 
+    // check action name is unique
+    if (actionConfigs.map((a) => a.name).contains(newActionConfig.name)) {
+      return false;
+    }
+
     final newRemote = Remote(
       name: remote.name,
       id: remote.id,
@@ -97,7 +106,7 @@ class RemoteNotifier extends AsyncNotifier<Remote> {
 }
 
 final remoteNotifierProvider =
-    AsyncNotifierProvider.family<RemoteNotifier, Remote, String>(
+    AsyncNotifierProvider.family<RemoteNotifier, Remote?, String>(
       RemoteNotifier.new,
       isAutoDispose: false,
     );

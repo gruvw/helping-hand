@@ -39,7 +39,7 @@ final folderProvider = StreamProvider.family<Folder?, String>((
 
   return (db.select(
     db.folderTable,
-  )..where((f) => f.id.equals(folderId))).watchSingle();
+  )..where((f) => f.id.equals(folderId))).watchSingleOrNull();
 });
 
 final folderTilesProvider = StreamProvider.family<List<TileData>, String?>((

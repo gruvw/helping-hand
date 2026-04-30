@@ -46,12 +46,13 @@
 
 ## Version 1.0.0
 
-- [ ] Mechanical design
+- [x] Mechanical design
     - [x] Wider base
     - [x] Electronics enclosure with servo ports
     - [x] Use square nuts designs (at least for rails)
     - [x] Square bottom angle on servo attachment
     - [x] Small user fillets
+    - [x] Production of 4 modules
 - [x] Electronics
     - [x] Full system soldering
     - [x] Servo one way attachements
@@ -64,12 +65,12 @@
     - [x] New remote device interface
     - [x] Full set up procedure to configure new buttons/servos
     - [x] Persisted buttons config from app
+    - [ ] Settings page for configuration
     - [ ] Full application with accessible mode design to control multiple devices
         - [ ] Auto cycling mode
         - [ ] Press for next mode
-    - [ ] Settings page for configuration
 - [ ] Evaluation
-    - [ ] Stress test the system with long endurance testing for multiple days (find a way to record pressing intention and pressing success)
+    - [x] Stress test the system with 10'000 clicks, one per second
     - [ ] Endurance test (50 clicks per day, for a full week)
     - [ ] Evaluation of mechanical design for multiple remote types
     - [ ] Interface evaluation for ease of manipulation

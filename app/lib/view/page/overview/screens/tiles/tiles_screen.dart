@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_reorderable_grid_view/widgets/widgets.dart";
-import "package:helping_hand/state/persistence/providers.dart";
+import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/providers.dart";
 import "package:helping_hand/static/styles.dart";
+import "package:helping_hand/view/page/overview/screens/tiles/tiles.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class TilesScreen extends HookConsumerWidget {
@@ -11,17 +12,11 @@ class TilesScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentTileId = ref.watch(currentTileIdProvider);
-    final folderTiles = ref.watch(folderTilesProvider(currentTileId)).value;
+    // final currentTileId = ref.watch(currentTileIdProvider);
+    final tiles = ref.watch(tilesProvider).value;
     final scrollController = useScrollController();
 
-    final remote = ref.watch(remoteNotifierProvider(tileId)).value;
-    final actions = remote?.actionConfigs;
-    if (remote != null) {}
-
-    // TODO back button if the current tile is not null
-
-    if (folderTiles == null) {
+    if (tiles == null) {
       return Center(
         child: CircularProgressIndicator(
           color: Styles.colorPrimary,
@@ -29,7 +24,13 @@ class TilesScreen extends HookConsumerWidget {
       );
     }
 
-    // TODO empty case
+    // TODO back button if the current tile is not null
+
+    if (tiles.isEmpty) {
+      return Center(
+        child: Text("No tiles.\nAdd new tiles using the context menu."),
+      );
+    }
 
     return ReorderableBuilder(
       scrollController: scrollController,
@@ -47,11 +48,12 @@ class TilesScreen extends HookConsumerWidget {
           children: children,
         );
       },
-      children: folderTiles.map((t) {
-        return TileFromId(
-          key: UniqueKey(),
-          tileId: t.id,
-        );
+      children: tiles.map((t) {
+        return switch (t.id) {
+          FolderTileId id => FolderTile(id: id),
+          RemoteTileId id => RemoteTile(id: id),
+          RemoteActionTileId id => RemoteActionTile(id: id),
+        };
       }).toList(),
     );
   }

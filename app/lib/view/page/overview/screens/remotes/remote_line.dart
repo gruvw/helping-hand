@@ -6,6 +6,7 @@ import "package:helping_hand/state/remote_notifier.dart";
 import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/language.dart";
+import "package:helping_hand/utils/riverpod.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
 import "package:helping_hand/view/component/dialog/deletion_dialog.dart";
 import "package:helping_hand/view/page/overview/screens/remotes/new_remote_action_dialog.dart";
@@ -21,7 +22,7 @@ class RemoteLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final remote = ref.watch(remoteNotifierProvider(remoteId));
+    final remote = ref.watch(remoteNotifierProvider(remoteId).whereNotNull());
 
     final remoteName = remote.value?.name;
     final remoteFullName =

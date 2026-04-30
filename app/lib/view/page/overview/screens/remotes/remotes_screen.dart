@@ -68,6 +68,12 @@ class RemotesScreen extends ConsumerWidget {
 
     return TitleScreen(
       title: "Remotes",
+      onRefresh: () async {
+        return ref.invalidate(
+          remoteConfigProvider,
+          asReload: true,
+        );
+      },
       child: remoteIds.maybeWhen(
         data: (remoteIds) {
           return ListView.separated(

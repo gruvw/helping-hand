@@ -6,16 +6,19 @@ class TitleScreen extends StatelessWidget {
   // final IconData icon;
   final String title;
   final Widget? child;
+  final Future<void> Function()? onRefresh;
 
   const TitleScreen({
     super.key,
     required this.title,
     required this.child,
+    this.onRefresh,
   });
 
   @override
   Widget build(BuildContext context) {
     final child = this.child;
+    final onRefresh = this.onRefresh;
 
     return Column(
       children: [
@@ -38,7 +41,16 @@ class TitleScreen extends StatelessWidget {
             ],
           ),
         ),
-        if (child != null) Expanded(child: child),
+
+        if (child != null)
+          Expanded(
+            child: onRefresh != null
+                ? RefreshIndicator(
+                    onRefresh: onRefresh,
+                    child: child,
+                  )
+                : child,
+          ),
       ],
     );
   }

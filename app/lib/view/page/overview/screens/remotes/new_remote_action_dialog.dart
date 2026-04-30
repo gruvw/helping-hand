@@ -228,9 +228,13 @@ class NewRemoteActionDialog extends HookConsumerWidget {
           errorText: nameError.value?.errorMessage,
           onChanged: (value) {
             final matches = nameRegex.hasMatch(value);
-            nameError.value = matches
-                ? ValidResult()
-                : InvalidResult(errorMessage: "Invalid name.");
+
+            if (!matches) {
+              nameError.value = InvalidResult(errorMessage: "Invalid name.");
+              return;
+            }
+
+            nameError.value = ValidResult();
           },
         ),
         itemsSpacing,
@@ -363,6 +367,22 @@ class NewRemoteActionDialog extends HookConsumerWidget {
           (nameError.value?.isValid ?? false),
       onConfirm: () async {
         actionState.value = ActionState.pending;
+
+        final remote = ref.read(remoteNotifierProvider(remoteId)).value;
+        final actions = remote?.actionConfigs;
+        if (actions == null) {
+          actionState.value = ActionState.error;
+          nameError.value = InvalidResult(errorMessage: "Cannot reach remote.");
+          return false;
+        }
+
+        if (actions.map((a) => a.name).contains(nameController.text)) {
+          actionState.value = ActionState.error;
+          nameError.value = InvalidResult(
+            errorMessage: "An action with that name already exists.",
+          );
+          return false;
+        }
 
         final success = await ref
             .read(remoteNotifierProvider(remoteId).notifier)

@@ -1,6 +1,8 @@
 // not persisted on the app but on the remote,
 // aquired by the remote config
 
+import "package:collection/collection.dart";
+
 const namePattern = "[a-zA-Z0-9_\\- ]{1,30}";
 final nameRegex = RegExp("^$namePattern\$");
 
