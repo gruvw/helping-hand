@@ -61,6 +61,7 @@
 - [ ] Software
     - [ ] Remove and rename remote action interface
     - [ ] Folder and tiles system
+    - [ ] Tiles reordering
     - [ ] Application logo
     - [x] New remote device interface
     - [x] Full set up procedure to configure new buttons/servos

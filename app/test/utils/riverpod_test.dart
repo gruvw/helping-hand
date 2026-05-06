@@ -11,7 +11,7 @@ void main() {
       final source = StateProvider<AsyncValue<int>>(
         (ref) => const AsyncData(10),
       );
-      final filtered = source.filterAsync((n) => n % 2 == 0);
+      final filtered = source.whereAsync((n) => n % 2 == 0);
 
       final sub = container.listen(filtered, (_, _) {});
 
@@ -69,7 +69,7 @@ void main() {
   test("forwards errors regardless of filter", () {
     final container = ProviderContainer();
     final source = StateProvider<AsyncValue<int>>((ref) => const AsyncData(10));
-    final filtered = source.filterAsync((n) => n > 100);
+    final filtered = source.whereAsync((n) => n > 100);
 
     final sub = container.listen(filtered, (_, _) {});
 
@@ -82,6 +82,27 @@ void main() {
     );
 
     expect(sub.read().error, exception);
+
+    sub.close();
+  });
+
+  test("async provider behavior", () async {
+    final container = ProviderContainer();
+    final source = StreamProvider((ref) async* {
+      await Future.delayed(Duration(milliseconds: 500));
+      yield 1;
+      await Future.delayed(Duration(milliseconds: 500));
+      yield 2;
+    });
+    final filtered = source.whereAsync((n) => n == 1);
+
+    final sub = container.listen(filtered, (_, _) {});
+
+    expect(sub.read(), isA<AsyncLoading<int>>());
+    await Future.delayed(Duration(milliseconds: 700));
+    expect(sub.read().value, 1);
+    await Future.delayed(Duration(milliseconds: 700));
+    expect(sub.read().value, 1);
 
     sub.close();
   });

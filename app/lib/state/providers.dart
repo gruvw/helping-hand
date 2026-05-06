@@ -1,5 +1,3 @@
-import "dart:async";
-
 import "package:collection/collection.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/persistence/providers.dart";
@@ -12,7 +10,7 @@ final currentTileIdProvider = StateProvider<TileId>(
   (ref) => TileId.parse(null),
 );
 
-final tilesProvider = FutureProvider<List<TileData>>((ref) async {
+final tilesProvider = FutureProvider<List<TileData>?>((ref) async {
   final currentTileId = ref.watch(currentTileIdProvider);
 
   switch (currentTileId) {
@@ -26,12 +24,8 @@ final tilesProvider = FutureProvider<List<TileData>>((ref) async {
           .requireValue
           .actionConfigs;
 
-      if (actions == null) {
-        return await Completer().future;
-      }
-
       return actions
-          .sortedBy((action) => action.name)
+          ?.sortedBy((action) => action.name)
           .mapIndexed(
             (i, action) => TileData(
               id: RemoteActionTileId(
