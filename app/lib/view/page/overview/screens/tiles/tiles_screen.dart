@@ -12,7 +12,6 @@ class TilesScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final currentTileId = ref.watch(currentTileIdProvider);
     final tiles = ref.watch(tilesProvider).value;
     final scrollController = useScrollController();
 
@@ -24,11 +23,13 @@ class TilesScreen extends HookConsumerWidget {
       );
     }
 
-    // TODO back button if the current tile is not null
+    // TODO back button if the current tile is not null and in accessible mode
 
     if (tiles.isEmpty) {
       return Center(
-        child: Text("No tiles.\nAdd new tiles using the context menu."),
+        child: Text(
+          "No tiles.\nAdd new tiles using the top right context menu.",
+        ),
       );
     }
 
@@ -49,10 +50,12 @@ class TilesScreen extends HookConsumerWidget {
         );
       },
       children: tiles.map((t) {
-        return switch (t.id) {
-          FolderTileId id => FolderTile(id: id),
-          RemoteTileId id => RemoteTile(id: id),
-          RemoteActionTileId id => RemoteActionTile(id: id),
+        final tileId = t.id;
+
+        return switch (tileId) {
+          FolderTileId() => FolderTile(id: tileId),
+          RemoteTileId() => RemoteTile(id: tileId),
+          RemoteActionTileId() => RemoteActionTile(id: tileId),
         };
       }).toList(),
     );

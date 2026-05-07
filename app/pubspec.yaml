@@ -54,7 +54,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
 
   # command to set the application name:
-  # `dart run change_app_package_name:main com.gruvw.helping_hand`
+  # `dart run change_app_package_name:main com.gruvw.hh`
   change_app_package_name: ^1.5.0
   freezed: ^3.2.3
 

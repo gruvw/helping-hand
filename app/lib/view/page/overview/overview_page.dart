@@ -74,6 +74,8 @@ class OverviewPage extends StatelessWidget {
                   title: Text("New Folder"),
                 ),
               ),
+              // TODO delete tile context menu (if currentTile is not root)
+              // Are you sure you want to delete this folder with all the tiles it contains?
             ],
           ),
       ],
