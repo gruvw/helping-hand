@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/model/config/action.dart";
+import "package:helping_hand/model/data/tile_data.dart";
+import "package:helping_hand/state/current_tile_id_path_notifier.dart";
 import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
 import "package:helping_hand/state/remote_request.dart";
@@ -22,6 +25,9 @@ class RemoteLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final db = ref.watch(dbProvider);
+    final currentTileId = ref.watch(currentTileIdProvider);
+
     final remote = ref.watch(remoteNotifierProvider(remoteId).whereNotNull());
 
     final remoteName = remote.value?.name;
@@ -65,8 +71,12 @@ class RemoteLine extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            onPressed: () {
-              // TODO add remote tile
+            onPressed: () async {
+              await db.queries.createTile(
+                id: remoteId,
+                parentFolderId: currentTileId.parentId,
+              );
+              if (context.mounted) context.pop();
             },
             icon: Icon(
               Styles.iconAddTile,
@@ -197,11 +207,12 @@ class RemoteLine extends ConsumerWidget {
                   color: Styles.colorPrimary,
                 ),
                 trailing: IconButton(
-                  onPressed: () {
-                    // TODO add button tile
-                    ref
-                        .read(remoteRequestServiceProvider(remoteId))
-                        .perform(actionConfig);
+                  onPressed: () async {
+                    await db.queries.createTile(
+                      id: remoteId + TileId.actionSeparator + actionConfig.name,
+                      parentFolderId: currentTileId.parentId,
+                    );
+                    if (context.mounted) context.pop();
                   },
                   icon: Icon(
                     Styles.iconAddTile,

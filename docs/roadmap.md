@@ -62,6 +62,13 @@
     - [ ] Remove and rename remote action interface
     - [ ] Folder and tiles system
     - [ ] Tiles reordering
+    - [ ] Create a remote tile
+    - [ ] Create a remote action tile
+    - [ ] Folder creation
+    - [ ] Rename folder tile
+    - [ ] Pop for back navigation
+    - [ ] Tile deletion
+    - [ ] Externally removed remote action should remove all tiles with that action
     - [x] Application logo
     - [x] Application splash screen
     - [x] New remote device interface

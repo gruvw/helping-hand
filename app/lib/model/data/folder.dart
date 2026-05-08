@@ -2,7 +2,7 @@ class Folder {
   final String id;
   final String name;
 
-  // TODO (late) perisisted icons list and serialization
+  // FIXME (later) perisisted icons list and serialization
   // final String icon;
 
   Folder({

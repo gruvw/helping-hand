@@ -1,9 +1,15 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_reorderable_grid_view/widgets/widgets.dart";
+import "package:go_router/go_router.dart";
 import "package:helping_hand/model/data/tile_data.dart";
+import "package:helping_hand/state/current_tile_id_path_notifier.dart";
+import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/providers.dart";
-import "package:helping_hand/static/styles.dart";
+import "package:helping_hand/state/remote_notifier.dart";
+import "package:helping_hand/utils/language.dart";
+import "package:helping_hand/view/component/structure/title_bar.dart";
+import "package:helping_hand/view/page/overview/screens/tiles/tile_content.dart";
 import "package:helping_hand/view/page/overview/screens/tiles/tiles.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -12,28 +18,47 @@ class TilesScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentTileId = ref.watch(currentTileIdProvider);
     final tiles = ref.watch(tilesProvider).value;
     final scrollController = useScrollController();
 
-    if (tiles == null) {
-      return Center(
-        child: CircularProgressIndicator(
-          color: Styles.colorPrimary,
+    final title = currentTileId.id?.nmap(
+      (_) => switch (currentTileId) {
+        FolderTileId id => ref.watch(folderProvider(id.folderId!)).value?.name,
+        RemoteTileId id =>
+          ref.watch(remoteNotifierProvider(id.remoteId)).value?.name,
+        RemoteActionTileId() => throw StateError(
+          "should never have a remote action as title",
         ),
-      );
-    }
+      },
+    );
 
-    // TODO back button if the current tile is not null and in accessible mode
+    final List<Widget> tilesDisplay =
+        tiles?.map<Widget>((t) {
+          final tileId = t.tileId;
+          final key = ValueKey(tileId.id);
 
-    if (tiles.isEmpty) {
-      return Center(
-        child: Text(
-          "No tiles.\nAdd new tiles using the top right context menu.",
-        ),
-      );
-    }
+          return switch (tileId) {
+            FolderTileId() => FolderTile(key: key, id: tileId),
+            RemoteTileId() => RemoteTile(key: key, id: tileId),
+            RemoteActionTileId() => RemoteActionTile(key: key, id: tileId),
+          };
+        }).toList() ??
+        [];
 
-    return ReorderableBuilder(
+    tilesDisplay.add(
+      TileContent(
+        key: ValueKey("ABC"),
+        title: "back",
+        color: Colors.green,
+        child: Icon(Icons.backup),
+        onClick: () {
+          context.pop();
+        },
+      ),
+    );
+
+    final tilesGrid = ReorderableBuilder(
       scrollController: scrollController,
       onReorder: (ReorderedListFunction r) {
         // TODO grid reorder
@@ -42,22 +67,36 @@ class TilesScreen extends HookConsumerWidget {
         return GridView(
           controller: scrollController,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 100,
+            maxCrossAxisExtent: 200,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
           ),
           children: children,
         );
       },
-      children: tiles.map((t) {
-        final tileId = t.id;
-
-        return switch (tileId) {
-          FolderTileId() => FolderTile(id: tileId),
-          RemoteTileId() => RemoteTile(id: tileId),
-          RemoteActionTileId() => RemoteActionTile(id: tileId),
-        };
-      }).toList(),
+      children: tilesDisplay,
     );
+
+    // final content = ;
+
+    if (currentTileId.isRootFolder) {
+      return tilesGrid;
+    }
+
+    return TitleScreen(
+      title: title ?? "",
+      child: tilesGrid,
+    );
+
+    // TODO (now) back button if the current tile is not null and in accessible mode
+
+    // TODO (now) empty tiles indicator
+    // if (tiles.isEmpty) {
+    //   return Center(
+    //     child: Text(
+    //       "No tiles.\nAdd new tiles using the top right context menu.",
+    //     ),
+    //   );
+    // }
   }
 }

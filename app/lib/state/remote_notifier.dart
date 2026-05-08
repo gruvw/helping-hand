@@ -41,7 +41,16 @@ class RemoteNotifier extends AsyncNotifier<Remote?> {
           );
     }
 
-    // TODO handle externally removed actions (from tiles)
+    // handle externally removed actions (from tiles)
+    final remoteActions = remote.actionConfigs;
+    if (remoteActions != null) {
+      final remoteActionNames = remoteActions.map((a) => a.name).toSet();
+
+      db.queries.removeStaleActionsFor(
+        remoteId: remoteId,
+        remoteActionNames: remoteActionNames,
+      );
+    }
 
     return remote;
   }

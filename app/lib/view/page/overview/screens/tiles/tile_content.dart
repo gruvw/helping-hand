@@ -43,11 +43,36 @@ class TileContent extends StatelessWidget {
     );
   }
 
+  static const borderRadius = 12.0;
+
   @override
   Widget build(BuildContext context) {
-    // TODO tile content
-    return Container(
-      child: null,
+    return InkWell(
+      onTap: onClick,
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: Card(
+        color: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          side: BorderSide(
+            color: Colors.blue.shade700,
+            width: 3,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+              ),
+              child,
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

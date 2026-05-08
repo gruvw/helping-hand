@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:helping_hand/model/data/tile_data.dart";
+import "package:helping_hand/state/current_tile_id_path_notifier.dart";
 import "package:helping_hand/state/persistence/providers.dart";
-import "package:helping_hand/state/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
 import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/static/styles.dart";
@@ -28,7 +28,7 @@ class FolderTile extends ConsumerWidget {
         iconData: Styles.iconFolder,
         color: Styles.colorFolder,
         onClick: () {
-          ref.read(currentTileIdProvider.notifier).state = id;
+          ref.read(currentTileIdPathProvider.notifier).add(id);
         },
       ),
       orElse: () => TileContent.loading(title: "Loading..."),
@@ -58,7 +58,7 @@ class RemoteTile extends ConsumerWidget {
             iconData: Styles.iconRemote,
             color: Styles.colorRemote,
             onClick: () {
-              ref.read(currentTileIdProvider.notifier).state = id;
+              ref.read(currentTileIdPathProvider.notifier).add(id);
             },
           );
         }

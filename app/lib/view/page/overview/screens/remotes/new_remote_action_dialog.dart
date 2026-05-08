@@ -44,7 +44,7 @@ class NewRemoteActionDialog extends HookConsumerWidget {
     final pressAngleDelta = useState(Values.minPressAngleDelta);
     final maxPressAngleDelta =
         Values.maxPressAngle - positionAngle.value - Values.minPressAngleDelta;
-    // FIXME (later) fixed for now, could be user customizable later
+    // FIXME (later) constant for now, could be user customizable later
     const clickDurationMs = 100;
 
     final setSuccess = useState(false);
