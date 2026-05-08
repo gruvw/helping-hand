@@ -1,15 +1,10 @@
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:helping_hand/view/navigation/routes.dart";
-import "package:helping_hand/view/page/overview/overview_page.dart";
-import "package:helping_hand/view/page/overview/screens/remotes/remotes_screen.dart";
-import "package:helping_hand/view/page/overview/screens/tiles/tiles_screen.dart";
-
-final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+import "package:helping_hand/view/page/remotes/remotes_page.dart";
+import "package:helping_hand/view/page/tiles/tiles_page.dart";
 
 final router = GoRouter(
-  navigatorKey: rootNavigatorKey,
   initialLocation: AppRoutes.initial.path,
   errorBuilder: (context, state) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -23,49 +18,29 @@ final router = GoRouter(
     );
   },
   routes: [
-    StatefulShellRoute(
-      navigatorContainerBuilder: (context, navigationShell, children) {
-        return children[navigationShell.currentIndex];
+    GoRoute(
+      path: AppRoutes.tiles.path,
+      builder: (context, state) {
+        return TilesPage();
       },
-      builder: (context, state, navigationShell) {
-        return OverviewPage(
-          navigationShell: navigationShell,
-        );
-      },
-      branches: _overviewNavigationBranches.toList(),
+      routes: [
+        GoRoute(
+          path: AppRoutes.remotes.relativePath,
+          builder: (context, state) {
+            return RemotesPage();
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.settings.relativePath,
+          builder: (context, state) {
+            // TODO settings page
+            throw UnimplementedError();
+          },
+        ),
+      ],
     ),
   ],
 );
-
-final overviewNavigatorKeys = AppRoutes.overviewRoutes
-    .map((_) => GlobalKey<NavigatorState>())
-    .toList();
-
-final _overviewNavigationBranches = AppRoutes.overviewRoutes.mapIndexed((
-  index,
-  route,
-) {
-  return StatefulShellBranch(
-    initialLocation: route.path,
-    navigatorKey: overviewNavigatorKeys[index],
-    routes: [
-      switch (route) {
-        OverviewRoute.tiles => GoRoute(
-          path: route.path,
-          builder: (context, state) {
-            return TilesScreen();
-          },
-        ),
-        OverviewRoute.remotes => GoRoute(
-          path: route.path,
-          builder: (context, state) {
-            return RemotesScreen();
-          },
-        ),
-      },
-    ],
-  );
-});
 
 // CustomTransitionPage<dynamic> _slidingSubroute({
 //   required GoRouterState state,

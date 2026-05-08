@@ -89,9 +89,11 @@ class AsyncTextDialog extends HookWidget {
 
       final result = await onSubmit.call(text);
 
-      validationResultState.value = result;
-      isSubmitValidatedState.value = true;
-      isSubmitValidatingState.value = false;
+      if (context.mounted) {
+        validationResultState.value = result;
+        isSubmitValidatedState.value = true;
+        isSubmitValidatingState.value = false;
+      }
 
       return result.isValid;
     }

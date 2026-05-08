@@ -7,7 +7,7 @@ import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:helping_hand/utils/riverpod.dart";
-import "package:helping_hand/view/page/overview/screens/tiles/tile_content.dart";
+import "package:helping_hand/view/page/tiles/tile_content.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class FolderTile extends ConsumerWidget {

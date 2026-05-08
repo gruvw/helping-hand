@@ -12,7 +12,7 @@ import "package:helping_hand/utils/language.dart";
 import "package:helping_hand/utils/riverpod.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
 import "package:helping_hand/view/component/dialog/deletion_dialog.dart";
-import "package:helping_hand/view/page/overview/screens/remotes/new_remote_action_dialog.dart";
+import "package:helping_hand/view/page/remotes/new_remote_action_dialog.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class RemoteLine extends ConsumerWidget {

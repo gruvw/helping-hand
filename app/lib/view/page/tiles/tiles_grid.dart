@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_reorderable_grid_view/widgets/widgets.dart";
-import "package:go_router/go_router.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/current_tile_id_path_notifier.dart";
 import "package:helping_hand/state/persistence/providers.dart";
@@ -9,12 +8,11 @@ import "package:helping_hand/state/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:helping_hand/view/component/structure/title_bar.dart";
-import "package:helping_hand/view/page/overview/screens/tiles/tile_content.dart";
-import "package:helping_hand/view/page/overview/screens/tiles/tiles.dart";
+import "package:helping_hand/view/page/tiles/tiles.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-class TilesScreen extends HookConsumerWidget {
-  const TilesScreen({super.key});
+class TilesGrid extends HookConsumerWidget {
+  const TilesGrid({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,17 +44,17 @@ class TilesScreen extends HookConsumerWidget {
         }).toList() ??
         [];
 
-    tilesDisplay.add(
-      TileContent(
-        key: ValueKey("ABC"),
-        title: "back",
-        color: Colors.green,
-        child: Icon(Icons.backup),
-        onClick: () {
-          context.pop();
-        },
-      ),
-    );
+    // tilesDisplay.add(
+    //   TileContent(
+    //     key: ValueKey("ABC"),
+    //     title: "back",
+    //     color: Colors.green,
+    //     child: Icon(Icons.backup),
+    //     onClick: () {
+    //       ref.read(currentTileIdPathProvider.notifier).pop();
+    //     },
+    //   ),
+    // );
 
     final tilesGrid = ReorderableBuilder(
       scrollController: scrollController,

@@ -6,12 +6,11 @@ import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/remote_request.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
-import "package:helping_hand/view/component/structure/title_bar.dart";
-import "package:helping_hand/view/page/overview/screens/remotes/remote_line.dart";
+import "package:helping_hand/view/page/remotes/remote_line.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-class RemotesScreen extends ConsumerWidget {
-  const RemotesScreen({super.key});
+class RemotesPage extends ConsumerWidget {
+  const RemotesPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,36 +65,36 @@ class RemotesScreen extends ConsumerWidget {
       },
     );
 
-    return TitleScreen(
-      title: "Remotes",
-      onRefresh: () async {
-        return ref.invalidate(
-          remoteConfigProvider,
-          asReload: true,
+    final content = remoteIds.maybeWhen(
+      data: (remoteIds) {
+        return ListView.separated(
+          itemCount: remoteIds.length + 1,
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+          itemBuilder: (context, index) {
+            if (index == remoteIds.length) {
+              return newRemoteItem;
+            }
+
+            return RemoteLine(remoteId: remoteIds[index]);
+          },
         );
       },
-      child: remoteIds.maybeWhen(
-        data: (remoteIds) {
-          return ListView.separated(
-            itemCount: remoteIds.length + 1,
-            separatorBuilder: (context, index) {
-              return Divider();
-            },
-            itemBuilder: (context, index) {
-              if (index == remoteIds.length) {
-                return newRemoteItem;
-              }
-
-              return RemoteLine(remoteId: remoteIds[index]);
-            },
-          );
-        },
-        orElse: () => Center(
-          child: CircularProgressIndicator(
-            color: Styles.colorPrimary,
-          ),
+      orElse: () => Center(
+        child: CircularProgressIndicator(
+          color: Styles.colorPrimary,
         ),
       ),
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Styles.colorPrimary,
+        foregroundColor: Styles.colorSecondary,
+        title: Text("Manage Remotes"),
+      ),
+      body: content,
     );
   }
 }
