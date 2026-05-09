@@ -78,7 +78,9 @@ class NewRemoteActionDialog extends HookConsumerWidget {
     }
 
     Future<bool> set() {
-      actionState.value = ActionState.pending;
+      if (context.mounted) {
+        actionState.value = ActionState.pending;
+      }
 
       return remoteRequestService
           .set(
@@ -87,19 +89,25 @@ class NewRemoteActionDialog extends HookConsumerWidget {
           )
           .then<bool>(
             (_) {
-              actionState.value = ActionState.success;
-              setSuccess.value = true;
+              if (context.mounted) {
+                actionState.value = ActionState.success;
+                setSuccess.value = true;
+              }
               return true;
             },
             onError: (_) {
-              actionState.value = ActionState.error;
+              if (context.mounted) {
+                actionState.value = ActionState.error;
+              }
               return false;
             },
           );
     }
 
     Future<bool> click() {
-      actionState.value = ActionState.pending;
+      if (context.mounted) {
+        actionState.value = ActionState.pending;
+      }
 
       return remoteRequestService
           .perform(
@@ -112,12 +120,16 @@ class NewRemoteActionDialog extends HookConsumerWidget {
           )
           .then<bool>(
             (_) {
-              actionState.value = ActionState.success;
-              clickSuccess.value = true;
+              if (context.mounted) {
+                actionState.value = ActionState.success;
+                clickSuccess.value = true;
+              }
               return true;
             },
             onError: (_) {
-              actionState.value = ActionState.error;
+              if (context.mounted) {
+                actionState.value = ActionState.error;
+              }
               return false;
             },
           );
@@ -134,7 +146,9 @@ class NewRemoteActionDialog extends HookConsumerWidget {
 
       final success = await set();
       if (!success) {
-        positionAngle.value = previousPositionAngle;
+        if (context.mounted) {
+          positionAngle.value = previousPositionAngle;
+        }
       }
     }
 
@@ -148,7 +162,9 @@ class NewRemoteActionDialog extends HookConsumerWidget {
 
       final success = await click();
       if (!success) {
-        pressAngleDelta.value = previousPressAngleDelta;
+        if (context.mounted) {
+          pressAngleDelta.value = previousPressAngleDelta;
+        }
       }
     }
 
@@ -395,9 +411,11 @@ class NewRemoteActionDialog extends HookConsumerWidget {
               ),
             )
             .then<bool>((success) {
-              actionState.value = success
-                  ? ActionState.success
-                  : ActionState.error;
+              if (context.mounted) {
+                actionState.value = success
+                    ? ActionState.success
+                    : ActionState.error;
+              }
               return success;
             });
 

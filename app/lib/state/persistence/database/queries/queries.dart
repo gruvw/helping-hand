@@ -26,7 +26,7 @@ class Queries {
       )..where((r) => r.id.equals(remoteId))).get();
 
       for (final remoteTile in remoteTiles) {
-        await deleteTile(
+        await removeTile(
           parentId: remoteTile.parentId,
           tileId: remoteTile.tileId.id!,
         );
@@ -74,7 +74,7 @@ class Queries {
     });
   }
 
-  Future<void> deleteTile({
+  Future<void> removeTile({
     required String? parentId,
     required String tileId,
   }) {
@@ -85,7 +85,7 @@ class Queries {
 
       // recursively delete children
       for (final child in children) {
-        await deleteTile(parentId: tileId, tileId: child.tileId.id!);
+        await removeTile(parentId: tileId, tileId: child.tileId.id!);
       }
 
       await (_db.delete(_db.tileTable)..where(
@@ -108,7 +108,7 @@ class Queries {
         final localRemoteActionName =
             (localRemoteActionTile.tileId as RemoteActionTileId).actionName;
         if (!remoteActionNames.contains(localRemoteActionName)) {
-          await deleteTile(
+          await removeTile(
             parentId: localRemoteActionTile.parentId,
             tileId: localRemoteActionTile.tileId.id!,
           );

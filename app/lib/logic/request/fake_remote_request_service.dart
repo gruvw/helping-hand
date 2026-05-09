@@ -7,9 +7,13 @@ import "package:helping_hand/utils/language.dart";
 
 class FakeRemoteRequestService implements RemoteRequestService {
   static final List<String> _connectedRemotes = ["hh-0001", "hh-0002"];
+  static final Map<String, String> _configs = {
+    _connectedRemotes[0]:
+        "My Remote 1\nclick:my first button,1,102,100\nclick:my other button,1,102,100",
+    _connectedRemotes[1]: "Kitchen remote",
+  };
 
   final Random _random = Random();
-  String _config = "alex";
 
   final String remoteId;
   final Duration requestTime;
@@ -38,13 +42,13 @@ class FakeRemoteRequestService implements RemoteRequestService {
   @override
   Future<String> getConfig() async {
     await _fakeRequest("get config");
-    return _config;
+    return _configs[remoteId]!;
   }
 
   @override
   Future<void> storeConfig({required String config}) async {
     await _fakeRequest("store config:\n$config\n");
-    _config = config;
+    _configs[remoteId] = config;
   }
 
   @override

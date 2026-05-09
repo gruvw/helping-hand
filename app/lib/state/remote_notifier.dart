@@ -23,8 +23,12 @@ class RemoteNotifier extends AsyncNotifier<Remote?> {
     }
 
     // preload value with offline remote
-    state = AsyncData(offlineRemote);
-    state = AsyncValue.loading();
+    // ignore: invalid_use_of_internal_member
+    state = AsyncValue<Remote?>.loading().copyWithPrevious(
+      AsyncData(offlineRemote),
+    );
+    // state = AsyncData(offlineRemote);
+    // state = AsyncLoading<Remote?>();
 
     final remoteConfig = await ref.watch(remoteConfigProvider(remoteId).future);
     final remote = remoteConfig?.nmap(offlineRemote.parse) ?? offlineRemote;
@@ -97,6 +101,80 @@ class RemoteNotifier extends AsyncNotifier<Remote?> {
         ...actionConfigs,
         newActionConfig,
       ],
+    );
+
+    return await ref
+        .read(remoteRequestServiceProvider(remoteId))
+        .storeConfig(config: newRemote.serialize())
+        .then(
+          (_) {
+            ref.invalidate(remoteConfigProvider(remoteId));
+            return true;
+          },
+          onError: (_) {
+            return false;
+          },
+        );
+  }
+
+  Future<bool> renameAction(
+    String previousActionName,
+    String newActionName,
+  ) async {
+    // FIXME (later) currently renaming an action will remove all tiles that were referencing that action because they are using the action name as part of their id, we could remap the tiles locally but that would not work externally, might need to give an id to actions
+    final remote = state.value;
+    final actionConfigs = remote?.actionConfigs;
+    if (remote == null || actionConfigs == null) return false;
+
+    // check new action name is unique
+    if (actionConfigs.map((a) => a.name).contains(newActionName)) {
+      return false;
+    }
+
+    final newRemote = Remote(
+      name: remote.name,
+      id: remote.id,
+      actionConfigs: actionConfigs
+          .map(
+            (actionConfig) =>
+                actionConfig.name == previousActionName &&
+                    actionConfig is ClickConfig
+                ? ClickConfig(
+                    name: newActionName,
+                    channel: actionConfig.channel,
+                    angle: actionConfig.angle,
+                    durationMs: actionConfig.durationMs,
+                  )
+                : actionConfig,
+          )
+          .toList(),
+    );
+
+    return await ref
+        .read(remoteRequestServiceProvider(remoteId))
+        .storeConfig(config: newRemote.serialize())
+        .then(
+          (_) {
+            ref.invalidate(remoteConfigProvider(remoteId));
+            return true;
+          },
+          onError: (_) {
+            return false;
+          },
+        );
+  }
+
+  Future<bool> removeAction(ActionConfig actionConfig) async {
+    final remote = state.value;
+    final actionConfigs = remote?.actionConfigs;
+    if (remote == null || actionConfigs == null) return false;
+
+    final newRemote = Remote(
+      name: remote.name,
+      id: remote.id,
+      actionConfigs: actionConfigs
+          .where((a) => a.name != actionConfig.name)
+          .toList(),
     );
 
     return await ref

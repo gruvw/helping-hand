@@ -67,6 +67,8 @@ class TileContent extends StatelessWidget {
               Text(
                 title,
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                maxLines: 3,
               ),
               child,
             ],

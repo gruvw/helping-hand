@@ -85,7 +85,9 @@ class AsyncTextDialog extends HookWidget {
         return false;
       }
 
-      isSubmitValidatingState.value = true;
+      if (context.mounted) {
+        isSubmitValidatingState.value = true;
+      }
 
       final result = await onSubmit.call(text);
 
@@ -124,15 +126,18 @@ class AsyncTextDialog extends HookWidget {
               capitalization: capitalization,
               onSubmitted: (_) async {
                 final shouldPop = await submit();
+                await Future.delayed(Duration(milliseconds: 600));
                 if (shouldPop && context.mounted) {
                   context.pop();
                 }
               },
               onChanged: (_) {
-                isSubmitValidatedState.value = false;
-                validationResultState.value = validation?.call(
-                  textController.text,
-                );
+                if (context.mounted) {
+                  isSubmitValidatedState.value = false;
+                  validationResultState.value = validation?.call(
+                    textController.text,
+                  );
+                }
               },
             ),
           ),

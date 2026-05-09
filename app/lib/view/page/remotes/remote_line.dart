@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/model/config/action.dart";
+import "package:helping_hand/model/config/remote.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/current_tile_id_path_notifier.dart";
 import "package:helping_hand/state/persistence/providers.dart";
@@ -25,12 +26,16 @@ class RemoteLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final db = ref.watch(dbProvider);
     final currentTileId = ref.watch(currentTileIdProvider);
-
     final remote = ref.watch(remoteNotifierProvider(remoteId).whereNotNull());
+    final onFolderTile = currentTileId is FolderTileId;
 
-    final remoteName = remote.value?.name;
+    final remoteName = remote.maybeWhen(
+      data: (r) => r.name,
+      orElse: () => null,
+      skipLoadingOnReload: true,
+    );
+
     final remoteFullName =
         remoteName?.nmap(
           (name) => name != remoteId ? "$name ($remoteId)" : remoteId,
@@ -38,7 +43,7 @@ class RemoteLine extends ConsumerWidget {
         remoteId;
 
     final isOnline = remote.maybeWhen(
-      data: (remote) => remote.isOnline ? true : false,
+      data: (r) => r.isOnline,
       orElse: () => false,
     );
 
@@ -49,11 +54,11 @@ class RemoteLine extends ConsumerWidget {
       textColor: Styles.colorPrimary,
       title: Text(
         remoteFullName,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       controlAffinity: ListTileControlAffinity.leading,
-      leading: remote.maybeWhen(
-        data: (remote) => remote.isOnline
+      leading: remote.unwrapPrevious().maybeWhen(
+        data: (r) => r.isOnline
             ? null
             : Icon(
                 Styles.iconOffline,
@@ -70,158 +75,65 @@ class RemoteLine extends ConsumerWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(
-            onPressed: () async {
-              await db.queries.createTile(
-                id: remoteId,
-                parentFolderId: currentTileId.parentId,
-              );
-              if (context.mounted) context.pop();
-            },
-            icon: Icon(
-              Styles.iconAddTile,
-              color: Styles.colorPrimary,
-            ),
-          ),
-          PopupMenuButton(
-            tooltip: "Options",
-            color: Styles.colorSecondary,
-            icon: Icon(
-              Styles.iconMore,
-              color: Styles.colorPrimary,
-            ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: () {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AsyncTextDialog(
-                        title: "Rename Remote",
-                        inputLabel: "Remote name",
-                        placeholder: remoteName,
-                        submitText: "Rename",
-                        validation: (remoteName) {
-                          final match = nameRegex.firstMatch(remoteName);
-
-                          if (match == null) {
-                            return InvalidResult(
-                              errorMessage: "Invalid remote name.",
-                            );
-                          }
-
-                          return ValidResult();
-                        },
-                        onSubmit: (remoteName) async {
-                          final success = await ref
-                              .read(remoteNotifierProvider(remoteId).notifier)
-                              .rename(remoteName);
-
-                          if (!success) {
-                            return InvalidResult(
-                              errorMessage: "Could not rename the remote.",
-                            );
-                          }
-
-                          return ValidResult();
-                        },
-                      );
-                    },
-                  );
-                },
-                enabled: isOnline,
-                child: ListTile(
-                  leading: Icon(
-                    Styles.iconEdit,
-                    color: Styles.colorPrimary,
-                  ),
-                  title: Text("Rename"),
-                ),
+          if (onFolderTile)
+            IconButton(
+              onPressed: () async {
+                await ref
+                    .read(dbProvider)
+                    .queries
+                    .createTile(
+                      id: remoteId,
+                      parentFolderId: currentTileId.id,
+                    );
+                if (context.mounted) context.pop();
+              },
+              icon: Icon(
+                Styles.iconAddTile,
+                color: Styles.colorPrimary,
               ),
-              PopupMenuItem(
-                onTap: () {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return DeletionDialog(
-                        title: "Remove Remote",
-                        content:
-                            "Do you really want to remove the following remote?\nAll associated local configuration will be lost.",
-                        target: remoteFullName,
-                        onDelete: () async {
-                          await ref
-                              .read(dbProvider)
-                              .queries
-                              .removeRemote(remoteId);
-
-                          return true;
-                        },
-                      );
-                    },
-                  );
-                },
-                child: ListTile(
-                  leading: Icon(
-                    Styles.iconDelete,
-                    color: Styles.colorDanger,
-                  ),
-                  title: Text(
-                    "Remove",
-                    style: TextStyle(color: Styles.colorDanger),
-                  ),
-                ),
-              ),
-            ],
+            ),
+          _RemoteOptionsMenu(
+            remoteId: remoteId,
+            remoteName: remoteName,
+            remoteFullName: remoteFullName,
+            isOnline: isOnline,
           ),
         ],
       ),
       enabled: isOnline,
       shape: const Border(),
-      children: remote.maybeWhen(
+      children: remote.unwrapPrevious().maybeWhen(
         data: (remote) {
-          final newActionItem = ListTile(
-            leading: Icon(
-              Styles.iconAdd,
-              color: Styles.colorPrimary,
-            ),
-            title: Text("Register New Action"),
-            onTap: () {
-              showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) => NewRemoteActionDialog(
+          final actionTiles =
+              remote.actionConfigs?.map(
+                (actionConfig) => _ActionTile(
+                  remote: remote,
                   remoteId: remoteId,
+                  actionConfig: actionConfig,
+                  onFolderTile: onFolderTile,
+                  currentTileId: currentTileId,
+                  isOnline: isOnline,
                 ),
-              );
-            },
-          );
+              ) ??
+              [];
 
           return [
-            ...?remote.actionConfigs?.map(
-              (actionConfig) => ListTile(
-                title: Text(actionConfig.name),
+            ...actionTiles,
+            if (remote.isOnline)
+              ListTile(
                 leading: Icon(
-                  Styles.iconLabel,
+                  Styles.iconAdd,
                   color: Styles.colorPrimary,
                 ),
-                trailing: IconButton(
-                  onPressed: () async {
-                    await db.queries.createTile(
-                      id: remoteId + TileId.actionSeparator + actionConfig.name,
-                      parentFolderId: currentTileId.parentId,
-                    );
-                    if (context.mounted) context.pop();
-                  },
-                  icon: Icon(
-                    Styles.iconAddTile,
-                    color: Styles.colorPrimary,
+                title: const Text("Register New Action"),
+                onTap: () => showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) => NewRemoteActionDialog(
+                    remoteId: remoteId,
                   ),
                 ),
               ),
-            ),
-            if (remote.isOnline) newActionItem,
           ];
         },
         orElse: () => [],
@@ -239,5 +151,289 @@ class RemoteLine extends ConsumerWidget {
             },
             child: item,
           );
+  }
+}
+
+class _RemoteOptionsMenu extends ConsumerWidget {
+  final String remoteId;
+  final String? remoteName;
+  final String remoteFullName;
+  final bool isOnline;
+
+  const _RemoteOptionsMenu({
+    required this.remoteId,
+    required this.remoteName,
+    required this.remoteFullName,
+    required this.isOnline,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PopupMenuButton(
+      tooltip: "Options",
+      color: Styles.colorSecondary,
+      icon: Icon(
+        Styles.iconMore,
+        color: Styles.colorPrimary,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          enabled: isOnline,
+          onTap: () => _showRenameDialog(context, ref),
+          child: ListTile(
+            leading: Icon(
+              Styles.iconEdit,
+              color: Styles.colorPrimary,
+            ),
+            title: const Text("Rename"),
+          ),
+        ),
+        PopupMenuItem(
+          onTap: () => _showDeleteDialog(context, ref),
+          child: ListTile(
+            leading: Icon(
+              Styles.iconDelete,
+              color: Styles.colorDanger,
+            ),
+            title: Text(
+              "Remove",
+              style: TextStyle(color: Styles.colorDanger),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showRenameDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AsyncTextDialog(
+          title: "Rename Remote",
+          inputLabel: "Remote name",
+          placeholder: remoteName,
+          submitText: "Rename",
+          validation: (newName) {
+            final match = nameRegex.firstMatch(newName);
+            if (match == null) {
+              return InvalidResult(errorMessage: "Invalid remote name.");
+            }
+            return ValidResult();
+          },
+          onSubmit: (newName) async {
+            final success = await ref
+                .read(remoteNotifierProvider(remoteId).notifier)
+                .rename(newName);
+
+            if (!success) {
+              return InvalidResult(
+                errorMessage: "Could not rename the remote.",
+              );
+            }
+            return ValidResult();
+          },
+        );
+      },
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return DeletionDialog(
+          title: "Remove Remote",
+          content:
+              "Do you really want to remove the following remote?\nAll associated local configuration will be lost.",
+          target: remoteFullName,
+          onDelete: () async {
+            await ref.read(dbProvider).queries.removeRemote(remoteId);
+            return true;
+          },
+        );
+      },
+    );
+  }
+}
+
+class _ActionTile extends ConsumerWidget {
+  final Remote remote;
+  final String remoteId;
+  final ActionConfig actionConfig;
+  final bool onFolderTile;
+  final TileId currentTileId;
+  final bool isOnline;
+
+  const _ActionTile({
+    required this.remote,
+    required this.remoteId,
+    required this.actionConfig,
+    required this.onFolderTile,
+    required this.currentTileId,
+    required this.isOnline,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(actionConfig.name),
+      leading: Icon(
+        Styles.iconLabel,
+        color: Styles.colorPrimary,
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (onFolderTile)
+            IconButton(
+              onPressed: () async {
+                await ref
+                    .read(dbProvider)
+                    .queries
+                    .createTile(
+                      id: remoteId + TileId.actionSeparator + actionConfig.name,
+                      parentFolderId: currentTileId.id,
+                    );
+                if (context.mounted) context.pop();
+              },
+              icon: Icon(
+                Styles.iconAddTile,
+                color: Styles.colorPrimary,
+              ),
+            ),
+          _ActionOptionsMenu(
+            remote: remote,
+            remoteId: remoteId,
+            actionConfig: actionConfig,
+            isOnline: isOnline,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionOptionsMenu extends ConsumerWidget {
+  final Remote remote;
+  final String remoteId;
+  final ActionConfig actionConfig;
+  final bool isOnline;
+
+  const _ActionOptionsMenu({
+    required this.remote,
+    required this.remoteId,
+    required this.actionConfig,
+    required this.isOnline,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PopupMenuButton(
+      tooltip: "Options",
+      color: Styles.colorSecondary,
+      icon: Icon(
+        Styles.iconMore,
+        color: Styles.colorPrimary,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          enabled: isOnline,
+          onTap: () => _showRenameDialog(context, ref),
+          child: ListTile(
+            leading: Icon(
+              Styles.iconEdit,
+              color: Styles.colorPrimary,
+            ),
+            title: const Text("Rename"),
+          ),
+        ),
+        PopupMenuItem(
+          onTap: () => _showDeleteDialog(context, ref),
+          child: ListTile(
+            leading: Icon(
+              Styles.iconDelete,
+              color: Styles.colorDanger,
+            ),
+            title: Text(
+              "Remove",
+              style: TextStyle(color: Styles.colorDanger),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showRenameDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AsyncTextDialog(
+          title: "Rename Action",
+          inputLabel: "Action name",
+          placeholder: actionConfig.name,
+          submitText: "Rename",
+          validation: (actionName) {
+            final match = nameRegex.firstMatch(actionName);
+            if (match == null) {
+              return InvalidResult(errorMessage: "Invalid action name.");
+            }
+            return ValidResult();
+          },
+          onSubmit: (actionNewName) async {
+            final actions = remote.actionConfigs;
+            if (actions == null) {
+              return InvalidResult(errorMessage: "Cannot reach remote.");
+            }
+
+            if (actions.map((a) => a.name).contains(actionNewName)) {
+              return InvalidResult(
+                errorMessage: "An action with that name already exists.",
+              );
+            }
+
+            final success = await ref
+                .read(
+                  remoteNotifierProvider(remoteId).notifier,
+                )
+                .renameAction(
+                  actionConfig.name,
+                  actionNewName,
+                );
+
+            if (!success) {
+              return InvalidResult(
+                errorMessage: "Could not rename the action.",
+              );
+            }
+            return ValidResult();
+          },
+        );
+      },
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return DeletionDialog(
+          title: "Remove Action",
+          content: "Do you really want to remove the following action?",
+          target: actionConfig.name,
+          onDelete: () async {
+            await ref
+                .read(remoteNotifierProvider(remoteId).notifier)
+                .removeAction(actionConfig);
+            return true;
+          },
+        );
+      },
+    );
   }
 }

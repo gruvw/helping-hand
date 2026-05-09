@@ -50,7 +50,7 @@ class RemoteTile extends ConsumerWidget {
       remoteNotifierProvider(id.remoteId).whereNotNull(),
     );
 
-    return remote.maybeWhen(
+    return remote.unwrapPrevious().maybeWhen(
       data: (remote) {
         if (remote.isOnline) {
           return TileContent.icon(
@@ -95,9 +95,9 @@ class RemoteActionTile extends ConsumerWidget {
       remoteNotifierProvider(id.remoteId).whereNotNull(),
     );
 
-    final title = "${remote.value ?? 'Loading...'}\n${id.actionName}";
+    final title = "${remote.value?.name ?? 'Loading...'}\n${id.actionName}";
 
-    return remote.maybeWhen(
+    return remote.unwrapPrevious().maybeWhen(
       data: (remote) {
         final remoteButtonActions = remote.actionConfigs;
         if (remoteButtonActions == null) {

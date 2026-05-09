@@ -113,6 +113,13 @@ class TilesPage extends ConsumerWidget {
                     builder: (context) {
                       return AsyncTextDialog(
                         title: "Rename Folder",
+                        inputLabel: "Folder name",
+                        placeholder: ref
+                            .read(
+                              folderProvider(currentTileIdValue),
+                            )
+                            .value
+                            ?.name,
                         onSubmit: alwaysValid((newFolderName) async {
                           await db
                               .into(db.folderTable)
@@ -145,7 +152,7 @@ class TilesPage extends ConsumerWidget {
                         title: "Delete Tile",
                         content: "Do you really want to delete this tile?",
                         onDelete: () async {
-                          await db.queries.deleteTile(
+                          await db.queries.removeTile(
                             parentId: currentTileId.parentId,
                             tileId: currentTileIdValue,
                           );

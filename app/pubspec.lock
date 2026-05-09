@@ -330,10 +330,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_riverpod
-      sha256: "9e2d6907f12cc7d23a846847615941bddee8709bf2bfd274acdf5e80bcf22fde"
+      sha256: be3aa640f053064e2238f8a308baa5be7270645e8b53b08484fd305bd5c1eb5d
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+    version: "3.3.2-dev.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -411,12 +411,11 @@ packages:
   hooks_riverpod:
     dependency: "direct main"
     description:
-      path: "packages/hooks_riverpod"
-      ref: "0eb7d77"
-      resolved-ref: "0eb7d77aee007925cc1ec2776814dd7539fb38ae"
-      url: "https://github.com/rrousselGit/riverpod"
-    source: git
-    version: "3.0.3"
+      name: hooks_riverpod
+      sha256: a217bbfaf32e43f925a545ba48470e59de4e7f21cc92920bc7944e4b450c1aba
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.2-dev.2"
   html:
     dependency: transitive
     description:
@@ -733,10 +732,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: c406de02bff19d920b832bddfb8283548bfa05ce41c59afba57ce643e116aa59
+      sha256: da7233961958420e9d80edf4b7a735d5b6b732fe2381d2a12a388562e2042b3f
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+    version: "3.3.2-dev.2"
   shelf:
     dependency: transitive
     description:
@@ -926,6 +925,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "1fef9e8e11e2991bb773070d4656b7bd5d850967a2456cfc83cf47925ba79489"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.5.3"
   vector_math:
     dependency: transitive
     description:

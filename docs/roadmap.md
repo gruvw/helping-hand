@@ -59,16 +59,15 @@
 - [x] Firmware
     - [x] Refined communication protocol with main application
 - [ ] Software
-    - [ ] Remove and rename remote action interface
-    - [ ] Folder and tiles system
+    - [x] Remove and rename remote action interface
+    - [x] Folder and tiles system
     - [ ] Tiles reordering
-    - [ ] Create a remote tile
-    - [ ] Create a remote action tile
-    - [ ] Folder creation
-    - [ ] Rename folder tile
-    - [ ] Pop for back navigation
-    - [ ] Tile deletion
-    - [ ] Externally removed remote action should remove all tiles with that action
+    - [x] Create a remote tile
+    - [x] Create a remote action tile
+    - [x] Folder creation
+    - [x] Rename folder tile
+    - [x] Tile deletion
+    - [x] Externally removed remote action should remove all tiles with that action
     - [x] Application logo
     - [x] Application splash screen
     - [x] New remote device interface
@@ -109,6 +108,7 @@
     - [ ] Button double press interface
     - [ ] More complex button systems, like press sequences
 - [ ] Software
+    - [ ] Pop for tiles back navigation
     - [ ] Button long press interface
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints

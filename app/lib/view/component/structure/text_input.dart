@@ -62,7 +62,9 @@ class TextInput extends HookWidget {
 
     final visibilityButton = IconButton(
       onPressed: () {
-        isHidden.value = isHidden.value?.nmap((v) => !v);
+        if (context.mounted) {
+          isHidden.value = isHidden.value?.nmap((v) => !v);
+        }
       },
       color: Styles.colorPrimary,
       icon: Icon(shouldHideText ? Styles.iconHidden : Styles.iconVisible),

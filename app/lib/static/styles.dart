@@ -10,6 +10,7 @@ abstract class Styles {
   static const colorSuccess = Colors.green;
   static const colorIgnored = Colors.grey;
 
+  // TODO set colors
   static const colorFolder = Colors.purple;
   static const colorRemote = Colors.blue;
   static const colorButton = Colors.green;

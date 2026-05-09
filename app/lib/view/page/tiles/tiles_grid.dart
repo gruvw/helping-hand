@@ -6,6 +6,7 @@ import "package:helping_hand/state/current_tile_id_path_notifier.dart";
 import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
+import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:helping_hand/view/component/structure/title_bar.dart";
 import "package:helping_hand/view/page/tiles/tiles.dart";
@@ -26,15 +27,24 @@ class TilesGrid extends HookConsumerWidget {
         RemoteTileId id =>
           ref.watch(remoteNotifierProvider(id.remoteId)).value?.name,
         RemoteActionTileId() => throw StateError(
-          "should never have a remote action as title",
+          "should never have a remote action parent tile",
         ),
       },
     );
+    final emptyMessage = switch (currentTileId) {
+      FolderTileId() =>
+        "There are currently no tiles on this page.\nAdd new tiles using the top right context menu.",
+      RemoteTileId() =>
+        "There are currently no action for this remote.\nConfigure a new action using the remote manager.",
+      RemoteActionTileId() => throw StateError(
+        "should never have a remote action parent tile",
+      ),
+    };
 
     final List<Widget> tilesDisplay =
         tiles?.map<Widget>((t) {
           final tileId = t.tileId;
-          final key = ValueKey(tileId.id);
+          final key = ValueKey("p=${tileId.parentId};t=${tileId.id}");
 
           return switch (tileId) {
             FolderTileId() => FolderTile(key: key, id: tileId),
@@ -44,6 +54,7 @@ class TilesGrid extends HookConsumerWidget {
         }).toList() ??
         [];
 
+    // TODO (now) back button if the current tile is not null and in accessible mode
     // tilesDisplay.add(
     //   TileContent(
     //     key: ValueKey("ABC"),
@@ -61,6 +72,7 @@ class TilesGrid extends HookConsumerWidget {
       onReorder: (ReorderedListFunction r) {
         // TODO grid reorder
       },
+      lockedIndices: [0],
       builder: (children) {
         return GridView(
           controller: scrollController,
@@ -75,26 +87,35 @@ class TilesGrid extends HookConsumerWidget {
       children: tilesDisplay,
     );
 
-    // final content = ;
+    final content =
+        tiles?.nmap(
+          (tiles) => tiles.isEmpty
+              ? Stack(
+                  children: [
+                    tilesGrid,
+                    Center(
+                      child: Text(
+                        emptyMessage,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                )
+              : tilesGrid,
+        ) ??
+        Center(
+          child: CircularProgressIndicator(
+            color: Styles.colorPrimary,
+          ),
+        );
 
     if (currentTileId.isRootFolder) {
-      return tilesGrid;
+      return content;
     }
 
     return TitleScreen(
       title: title ?? "",
-      child: tilesGrid,
+      child: content,
     );
-
-    // TODO (now) back button if the current tile is not null and in accessible mode
-
-    // TODO (now) empty tiles indicator
-    // if (tiles.isEmpty) {
-    //   return Center(
-    //     child: Text(
-    //       "No tiles.\nAdd new tiles using the top right context menu.",
-    //     ),
-    //   );
-    // }
   }
 }
