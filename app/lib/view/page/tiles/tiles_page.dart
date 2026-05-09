@@ -65,7 +65,8 @@ class TilesPage extends ConsumerWidget {
                     context: context,
                     builder: (context) {
                       return AsyncTextDialog(
-                        title: "New Folder Name",
+                        title: "New Folder",
+                        inputLabel: "Folder name",
                         validation: (folderName) {
                           if (folderName.isEmpty) {
                             return InvalidResult(
@@ -73,7 +74,7 @@ class TilesPage extends ConsumerWidget {
                             );
                           }
 
-                          if (folderName.contains(TileId.folderPrefix) ||
+                          if (folderName.contains(TileId.folderIdPrefix) ||
                               folderName.contains(
                                 TileId.folderPathSeparator,
                               )) {

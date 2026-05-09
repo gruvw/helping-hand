@@ -29,7 +29,6 @@ final tilesProvider = FutureProvider<List<TileData>?>((ref) async {
                 remoteId: currentTileId.remoteId,
                 actionName: action.name,
               ),
-              parentId: currentTileId.remoteId,
               position: i,
             ),
           )

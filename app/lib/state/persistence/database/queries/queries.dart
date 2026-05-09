@@ -27,7 +27,7 @@ class Queries {
 
       for (final remoteTile in remoteTiles) {
         await removeTile(
-          parentId: remoteTile.parentId,
+          parentId: remoteTile.tileId.parentId,
           tileId: remoteTile.tileId.id!,
         );
       }
@@ -35,8 +35,8 @@ class Queries {
   }
 
   Future<void> createTile({
-    required String id,
     required String? parentFolderId,
+    required String id,
   }) {
     return _db.transaction(() async {
       final nextPosition = (await (_db.select(
@@ -47,7 +47,7 @@ class Queries {
           .into(_db.tileTable)
           .insert(
             TileTableCompanion.insert(
-              parentId: Value.absentIfNull(parentFolderId),
+              parentId: parentFolderId ?? TileId.rootFolderId,
               id: id,
               position: nextPosition,
             ),
@@ -61,7 +61,7 @@ class Queries {
     required String? parentFolderId,
   }) {
     return _db.transaction(() async {
-      final id = TileId.folderPrefix + nanoid();
+      final id = TileId.folderIdPrefix + nanoid();
 
       await _db
           .into(_db.folderTable)
@@ -109,7 +109,7 @@ class Queries {
             (localRemoteActionTile.tileId as RemoteActionTileId).actionName;
         if (!remoteActionNames.contains(localRemoteActionName)) {
           await removeTile(
-            parentId: localRemoteActionTile.parentId,
+            parentId: localRemoteActionTile.tileId.parentId,
             tileId: localRemoteActionTile.tileId.id!,
           );
         }

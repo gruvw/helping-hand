@@ -9,7 +9,7 @@ class TileTable extends Table {
   @override
   Set<Column> get primaryKey => {parentId, id};
 
-  TextColumn get parentId => text().nullable()();
+  TextColumn get parentId => text()();
   TextColumn get id => text()();
   IntColumn get position => integer()();
 }

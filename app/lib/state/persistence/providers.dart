@@ -3,7 +3,6 @@ import "package:helping_hand/model/config/remote.dart";
 import "package:helping_hand/model/data/folder.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/persistence/database/core/database.dart";
-import "package:helping_hand/utils/language.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 final dbProvider = Provider<Database>(
@@ -50,9 +49,7 @@ final folderTilesProvider = StreamProvider.family<List<TileData>, String?>((
 
   return (db.select(db.tileTable)
         ..where(
-          (t) =>
-              folderId?.nmap((folderId) => t.parentId.equals(folderId)) ??
-              t.parentId.isNull(),
+          (t) => t.parentId.equals(folderId ?? TileId.rootFolderId),
         )
         ..orderBy([(t) => OrderingTerm.asc(t.position)]))
       .watch();

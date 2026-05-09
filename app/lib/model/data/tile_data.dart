@@ -1,32 +1,35 @@
 import "package:helping_hand/utils/language.dart";
 
 class TileData {
-  final String? parentId;
   final TileId tileId;
   final int position;
 
   TileData({
-    required this.parentId,
     required this.tileId,
     required this.position,
   });
 
   TileData.fromData({
-    required this.parentId,
+    required String parentId,
     required String id,
     required this.position,
   }) : tileId = TileId.parse(parentId, id);
 }
 
 sealed class TileId {
-  static final rootFolder = TileId.parse(null, null);
-
-  static final folderPrefix = "\$";
+  static final folderIdPrefix = "\$";
   static final folderPathSeparator = "/";
   static final actionSeparator = ":";
 
-  static TileId parse(String? parentId, String? id) {
-    if (id == null || id.startsWith(folderPrefix)) {
+  static final rootFolderId = "${folderIdPrefix}root";
+  static final rootFolder = FolderTileId(parentId: null, folderId: null);
+
+  static TileId parse(String parentId, String id) {
+    if (id == rootFolderId) {
+      return rootFolder;
+    }
+
+    if (id.startsWith(folderIdPrefix)) {
       return FolderTileId(parentId: parentId, folderId: id);
     }
 

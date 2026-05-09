@@ -20,9 +20,9 @@ class $TileTableTable extends i3.TileTable
   late final i0.GeneratedColumn<String> parentId = i0.GeneratedColumn<String>(
     'parent_id',
     aliasedName,
-    true,
+    false,
     type: i0.DriftSqlType.string,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
   );
   static const i0.VerificationMeta _idMeta = const i0.VerificationMeta('id');
   @override
@@ -63,6 +63,8 @@ class $TileTableTable extends i3.TileTable
         _parentIdMeta,
         parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta),
       );
+    } else if (isInserting) {
+      context.missing(_parentIdMeta);
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -89,7 +91,7 @@ class $TileTableTable extends i3.TileTable
       parentId: attachedDatabase.typeMapping.read(
         i0.DriftSqlType.string,
         data['${effectivePrefix}parent_id'],
-      ),
+      )!,
       id: attachedDatabase.typeMapping.read(
         i0.DriftSqlType.string,
         data['${effectivePrefix}id'],
@@ -108,7 +110,7 @@ class $TileTableTable extends i3.TileTable
 }
 
 class TileTableCompanion extends i0.UpdateCompanion<i1.TileData> {
-  final i0.Value<String?> parentId;
+  final i0.Value<String> parentId;
   final i0.Value<String> id;
   final i0.Value<int> position;
   final i0.Value<int> rowid;
@@ -119,11 +121,12 @@ class TileTableCompanion extends i0.UpdateCompanion<i1.TileData> {
     this.rowid = const i0.Value.absent(),
   });
   TileTableCompanion.insert({
-    this.parentId = const i0.Value.absent(),
+    required String parentId,
     required String id,
     required int position,
     this.rowid = const i0.Value.absent(),
-  }) : id = i0.Value(id),
+  }) : parentId = i0.Value(parentId),
+       id = i0.Value(id),
        position = i0.Value(position);
   static i0.Insertable<i1.TileData> custom({
     i0.Expression<String>? parentId,
@@ -140,7 +143,7 @@ class TileTableCompanion extends i0.UpdateCompanion<i1.TileData> {
   }
 
   i2.TileTableCompanion copyWith({
-    i0.Value<String?>? parentId,
+    i0.Value<String>? parentId,
     i0.Value<String>? id,
     i0.Value<int>? position,
     i0.Value<int>? rowid,
