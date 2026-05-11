@@ -126,7 +126,6 @@ class AsyncTextDialog extends HookWidget {
               capitalization: capitalization,
               onSubmitted: (_) async {
                 final shouldPop = await submit();
-                await Future.delayed(Duration(milliseconds: 600));
                 if (shouldPop && context.mounted) {
                   context.pop();
                 }

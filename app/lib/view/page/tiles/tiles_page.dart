@@ -32,6 +32,7 @@ class TilesPage extends ConsumerWidget {
                 context.push(AppRoutes.settings.path);
               },
               icon: Icon(Styles.iconSettings),
+              tooltip: "Settings",
             )
           : IconButton(
               onPressed: () {
@@ -41,6 +42,7 @@ class TilesPage extends ConsumerWidget {
                 Styles.iconPrevious,
                 color: Styles.colorSecondary,
               ),
+              tooltip: "Back",
             ),
       actions: [
         PopupMenuButton(

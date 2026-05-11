@@ -52,6 +52,9 @@ sealed class TileId {
   String? get id;
 
   bool get isRootFolder => id == null;
+
+  @override
+  String toString() => "p=$parentId;t=$id";
 }
 
 class FolderTileId extends TileId {

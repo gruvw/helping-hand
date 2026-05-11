@@ -25,7 +25,7 @@ final tilesProvider = FutureProvider<List<TileData>?>((ref) async {
           .mapIndexed(
             (i, action) => TileData(
               tileId: RemoteActionTileId(
-                parentId: currentTileId.parentId,
+                parentId: currentTileId.remoteId,
                 remoteId: currentTileId.remoteId,
                 actionName: action.name,
               ),

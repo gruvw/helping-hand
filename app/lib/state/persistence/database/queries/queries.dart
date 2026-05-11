@@ -39,9 +39,16 @@ class Queries {
     required String id,
   }) {
     return _db.transaction(() async {
-      final nextPosition = (await (_db.select(
-        _db.tileTable,
-      )..where((r) => r.parentId.equalsNullable(parentFolderId))).get()).length;
+      final nextPosition =
+          (await (_db.select(
+                    _db.tileTable,
+                  )..where(
+                    (r) => r.parentId.equals(
+                      parentFolderId ?? TileId.rootFolderId,
+                    ),
+                  ))
+                  .get())
+              .length;
 
       await _db
           .into(_db.tileTable)
@@ -89,7 +96,9 @@ class Queries {
       }
 
       await (_db.delete(_db.tileTable)..where(
-            (r) => r.parentId.equalsNullable(parentId) & r.id.equals(tileId),
+            (r) =>
+                r.parentId.equals(parentId ?? TileId.rootFolderId) &
+                r.id.equals(tileId),
           ))
           .go();
     });

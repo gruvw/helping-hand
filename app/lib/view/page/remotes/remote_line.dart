@@ -93,6 +93,7 @@ class RemoteLine extends ConsumerWidget {
               ),
             ),
           _RemoteOptionsMenu(
+            currentTileId: currentTileId,
             remoteId: remoteId,
             remoteName: remoteName,
             remoteFullName: remoteFullName,
@@ -155,12 +156,14 @@ class RemoteLine extends ConsumerWidget {
 }
 
 class _RemoteOptionsMenu extends ConsumerWidget {
+  final TileId currentTileId;
   final String remoteId;
   final String? remoteName;
   final String remoteFullName;
   final bool isOnline;
 
   const _RemoteOptionsMenu({
+    required this.currentTileId,
     required this.remoteId,
     required this.remoteName,
     required this.remoteFullName,
@@ -251,6 +254,10 @@ class _RemoteOptionsMenu extends ConsumerWidget {
           target: remoteFullName,
           onDelete: () async {
             await ref.read(dbProvider).queries.removeRemote(remoteId);
+            if (currentTileId.id == remoteId) {
+              ref.read(currentTileIdPathProvider.notifier).pop();
+            }
+
             return true;
           },
         );

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:flutter_reorderable_grid_view/entities/reorderable_animation_config.dart";
 import "package:flutter_reorderable_grid_view/widgets/widgets.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/current_tile_id_path_notifier.dart";
@@ -44,7 +45,7 @@ class TilesGrid extends HookConsumerWidget {
     final List<Widget> tilesDisplay =
         tiles?.map<Widget>((t) {
           final tileId = t.tileId;
-          final key = ValueKey("p=${tileId.parentId};t=${tileId.id}");
+          final key = ValueKey(tileId.toString());
 
           return switch (tileId) {
             FolderTileId() => FolderTile(key: key, id: tileId),
@@ -68,18 +69,24 @@ class TilesGrid extends HookConsumerWidget {
     // );
 
     final tilesGrid = ReorderableBuilder(
+      key: ValueKey(currentTileId.toString()),
+      animationConfig: ReorderableAnimationConfig(
+        fadeInDuration: Duration(milliseconds: 200),
+      ),
       scrollController: scrollController,
       onReorder: (ReorderedListFunction r) {
         // TODO grid reorder
       },
       lockedIndices: [0],
       builder: (children) {
+        const spacing = 4.0;
+
         return GridView(
           controller: scrollController,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
+            maxCrossAxisExtent: 150,
+            mainAxisSpacing: spacing,
+            crossAxisSpacing: spacing,
           ),
           children: children,
         );

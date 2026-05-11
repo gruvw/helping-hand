@@ -1,52 +1,120 @@
 import "package:flutter/material.dart";
 import "package:helping_hand/static/styles.dart";
+import "package:helping_hand/utils/language.dart";
 
 class TileContent extends StatelessWidget {
+  static const borderRadius = 12.0;
+  static const foregroundDarkenAmount = 0.75;
+  static const selectedBorderWidth = 6.0;
+
   final String title;
+  final String? subtitle;
   final Color color;
   final VoidCallback? onClick;
   final Widget child;
+  final bool selected;
 
   const TileContent({
     super.key,
     required this.title,
+    this.subtitle,
     required this.color,
     this.onClick,
     required this.child,
+    required this.selected,
   });
 
   factory TileContent.loading({
     required String title,
+    String? subtitle,
     VoidCallback? onClick,
+    Key? key,
+    bool selected = false,
   }) {
+    final color = Styles.colorOffline;
+
     return TileContent(
+      key: key,
       title: title,
-      color: Styles.colorOffline,
+      subtitle: subtitle,
+      color: color,
       onClick: onClick,
-      child: CircularProgressIndicator(
-        color: Styles.colorSecondary,
+      selected: selected,
+      child: Center(
+        child: SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            color: color.darken(foregroundDarkenAmount),
+          ),
+        ),
       ),
     );
   }
 
   factory TileContent.icon({
     required String title,
+    String? subtitle,
     required IconData iconData,
     required Color color,
     VoidCallback? onClick,
+    Key? key,
+    bool selected = false,
   }) {
     return TileContent(
+      key: key,
       title: title,
+      subtitle: subtitle,
       color: color,
       onClick: onClick,
-      child: Icon(iconData),
+      selected: selected,
+      child: Icon(
+        iconData,
+        color: color.darken(foregroundDarkenAmount),
+      ),
     );
   }
 
-  static const borderRadius = 12.0;
-
   @override
   Widget build(BuildContext context) {
+    final subtitle = this.subtitle;
+
+    final text = subtitle == null
+        ? Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: TextStyle(
+              color: color.darken(foregroundDarkenAmount),
+              fontWeight: FontWeight.w600,
+            ),
+          )
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: TextStyle(
+                  color: color.darken(foregroundDarkenAmount),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                subtitle,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: TextStyle(
+                  color: color.darken(foregroundDarkenAmount),
+                ),
+              ),
+            ],
+          );
+
     return InkWell(
       onTap: onClick,
       borderRadius: BorderRadius.circular(borderRadius),
@@ -54,23 +122,40 @@ class TileContent extends StatelessWidget {
         color: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
-          side: BorderSide(
-            color: Colors.blue.shade700,
-            width: 3,
-          ),
+          side: selected
+              ? BorderSide(
+                  color: Styles.colorOutline,
+                  width: selectedBorderWidth,
+                )
+              : BorderSide(
+                  color: color.darken(.2),
+                  width: 2,
+                ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(selectedBorderWidth),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 5,
             children: [
-              Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                maxLines: 3,
+              Expanded(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: text,
+                ),
               ),
-              child,
+              Expanded(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: child,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

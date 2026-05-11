@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
 import "package:flutter_native_splash/flutter_native_splash.dart";
 import "package:go_router/go_router.dart";
 import "package:helping_hand/view/application.dart";
@@ -12,6 +13,13 @@ void main() {
 
   // set browser URL when pushing routes
   GoRouter.optionURLReflectsImperativeAPIs = true;
+
+  // FlutterError.onError = (FlutterErrorDetails details) {
+  //   FlutterError.dumpErrorToConsole(details);
+  //   debugPrintStack(label: "FlutterError", stackTrace: details.stack);
+  // };
+  // debugPrintRebuildDirtyWidgets = true;
+  // debugPrintLayouts = true;
 
   runApp(
     ProviderScope(

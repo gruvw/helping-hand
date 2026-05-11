@@ -95,7 +95,8 @@ class RemoteActionTile extends ConsumerWidget {
       remoteNotifierProvider(id.remoteId).whereNotNull(),
     );
 
-    final title = "${remote.value?.name ?? 'Loading...'}\n${id.actionName}";
+    final title = remote.value?.name ?? "Loading...";
+    final subtitle = id.actionName;
 
     return remote.unwrapPrevious().maybeWhen(
       data: (remote) {
@@ -103,6 +104,7 @@ class RemoteActionTile extends ConsumerWidget {
         if (remoteButtonActions == null) {
           return TileContent.icon(
             title: title,
+            subtitle: subtitle,
             iconData: Styles.iconOffline,
             color: Styles.colorOffline,
             onClick: () {
@@ -116,7 +118,9 @@ class RemoteActionTile extends ConsumerWidget {
             .firstOrNull;
 
         return TileContent.icon(
+          key: key,
           title: title,
+          subtitle: subtitle,
           iconData: Styles.iconButton,
           color: Styles.colorButton,
           onClick: () {
@@ -132,6 +136,7 @@ class RemoteActionTile extends ConsumerWidget {
       orElse: () {
         return TileContent.loading(
           title: title,
+          subtitle: subtitle,
         );
       },
     );

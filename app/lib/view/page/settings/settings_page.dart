@@ -16,6 +16,7 @@ class SettingsPage extends ConsumerWidget {
         accessibleUiAsync.maybeWhen(
           data: (value) {
             return SwitchListTile(
+              activeThumbColor: Styles.colorSuccess,
               title: Text("Use Accessible UI"),
               value: value,
               onChanged: (newValue) {
@@ -32,6 +33,7 @@ class SettingsPage extends ConsumerWidget {
         useHttpsAsync.maybeWhen(
           data: (value) {
             return SwitchListTile(
+              activeThumbColor: Styles.colorSuccess,
               title: Text("Use HTTPs"),
               value: value,
               onChanged: (newValue) {
