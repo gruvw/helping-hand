@@ -14,6 +14,7 @@ abstract class Styles {
   static const colorRemote = Color(0xFF9FE1CB);
   static const colorButton = Color(0xFFCECBF6);
   static const colorOffline = Color(0xFFB4B2A9);
+  static const colorBack = Color(0xFFD1D1D1);
   static const colorOutline = Color(0xFF378ADD);
 
   static const disabledOpacity = 0.4;

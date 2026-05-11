@@ -4,12 +4,14 @@ import "package:flutter_reorderable_grid_view/entities/reorderable_animation_con
 import "package:flutter_reorderable_grid_view/widgets/widgets.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/current_tile_id_path_notifier.dart";
+import "package:helping_hand/state/persistence/kvs/providers.dart";
 import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:helping_hand/view/component/structure/title_bar.dart";
+import "package:helping_hand/view/page/tiles/tile_content.dart";
 import "package:helping_hand/view/page/tiles/tiles.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -19,8 +21,11 @@ class TilesGrid extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTileId = ref.watch(currentTileIdProvider);
-    final tiles = ref.watch(tilesProvider).value;
+    final tiles = ref.watch(tilesProvider).value ?? [];
+    final accessibleUi = ref.watch(kvsAccessibleUiProvider).value ?? false;
     final scrollController = useScrollController();
+
+    final displayBack = accessibleUi && !currentTileId.isRootFolder;
 
     final title = currentTileId.id?.nmap(
       (_) => switch (currentTileId) {
@@ -42,31 +47,37 @@ class TilesGrid extends HookConsumerWidget {
       ),
     };
 
-    final List<Widget> tilesDisplay =
-        tiles?.map<Widget>((t) {
-          final tileId = t.tileId;
-          final key = ValueKey(tileId.toString());
+    final totalTiles = tiles.length + (displayBack ? 1 : 0);
 
-          return switch (tileId) {
-            FolderTileId() => FolderTile(key: key, id: tileId),
-            RemoteTileId() => RemoteTile(key: key, id: tileId),
-            RemoteActionTileId() => RemoteActionTile(key: key, id: tileId),
-          };
-        }).toList() ??
-        [];
+    final tilesDisplay = List.generate(
+      totalTiles,
+      (index) {
+        if (index == 0 && displayBack) {
+          return TileContent.icon(
+            key: ValueKey("back$currentTileId"),
+            title: "Back",
+            color: Styles.colorBack,
+            selected: false,
+            iconData: Styles.iconPrevious,
+            onClick: () {
+              ref.read(currentTileIdPathProvider.notifier).pop();
+            },
+          );
+        }
 
-    // TODO (now) back button if the current tile is not null and in accessible mode
-    // tilesDisplay.add(
-    //   TileContent(
-    //     key: ValueKey("ABC"),
-    //     title: "back",
-    //     color: Colors.green,
-    //     child: Icon(Icons.backup),
-    //     onClick: () {
-    //       ref.read(currentTileIdPathProvider.notifier).pop();
-    //     },
-    //   ),
-    // );
+        final tileId = tiles[index + (displayBack ? -1 : 0)].tileId;
+        final key = ValueKey(tileId.toString());
+
+        return switch (tileId) {
+          FolderTileId() => FolderTile(key: key, id: tileId),
+          RemoteTileId() => RemoteTile(key: key, id: tileId),
+          RemoteActionTileId() => RemoteActionTile(key: key, id: tileId),
+        };
+      },
+      growable: false,
+    );
+
+    // TODO accessible mode tile select rotation
 
     final tilesGrid = ReorderableBuilder(
       key: ValueKey(currentTileId.toString()),
@@ -74,10 +85,11 @@ class TilesGrid extends HookConsumerWidget {
         fadeInDuration: Duration(milliseconds: 200),
       ),
       scrollController: scrollController,
-      onReorder: (ReorderedListFunction r) {
+      enableDraggable: true,
+      onReorderPositions: (newPositions) {
         // TODO grid reorder
       },
-      lockedIndices: [0],
+      lockedIndices: displayBack ? [0] : [],
       builder: (children) {
         const spacing = 4.0;
 
@@ -94,27 +106,19 @@ class TilesGrid extends HookConsumerWidget {
       children: tilesDisplay,
     );
 
-    final content =
-        tiles?.nmap(
-          (tiles) => tiles.isEmpty
-              ? Stack(
-                  children: [
-                    tilesGrid,
-                    Center(
-                      child: Text(
-                        emptyMessage,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                )
-              : tilesGrid,
-        ) ??
-        Center(
-          child: CircularProgressIndicator(
-            color: Styles.colorPrimary,
-          ),
-        );
+    final content = tiles.isEmpty
+        ? Stack(
+            children: [
+              tilesGrid,
+              Center(
+                child: Text(
+                  emptyMessage,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          )
+        : tilesGrid;
 
     if (currentTileId.isRootFolder) {
       return content;

@@ -61,7 +61,6 @@
 - [ ] Software
     - [x] Remove and rename remote action interface
     - [x] Folder and tiles system
-    - [ ] Tiles reordering
     - [x] Create a remote tile
     - [x] Create a remote action tile
     - [x] Folder creation
@@ -74,9 +73,11 @@
     - [x] Full set up procedure to configure new buttons/servos
     - [x] Persisted buttons config from app
     - [x] Settings page for configuration
-    - [ ] Full application with accessible mode design to control multiple devices
-        - [ ] Auto cycling mode
-        - [ ] Press for next mode
+    - [x] Tiles layout and style
+    - [x] Tile action feedback display
+    - [x] Virtual tile to go back on accessible mode
+    - [ ] Tiles reordering
+    - [ ] Tiles grid with accessible mode design to control multiple devices: auto cycling mode
 - [ ] Evaluation
     - [x] Stress test the system with 10'000 clicks, one per second
     - [ ] Endurance test (50 clicks per day, for a full week)
