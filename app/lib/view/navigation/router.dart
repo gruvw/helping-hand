@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:helping_hand/view/navigation/routes.dart";
 import "package:helping_hand/view/page/remotes/remotes_page.dart";
+import "package:helping_hand/view/page/settings/settings_page.dart";
 import "package:helping_hand/view/page/tiles/tiles_page.dart";
 
 final router = GoRouter(
@@ -33,8 +34,7 @@ final router = GoRouter(
         GoRoute(
           path: AppRoutes.settings.relativePath,
           builder: (context, state) {
-            // TODO settings page
-            throw UnimplementedError();
+            return SettingsPage();
           },
         ),
       ],

@@ -27,7 +27,12 @@ class TilesPage extends ConsumerWidget {
       backgroundColor: Styles.colorPrimary,
       foregroundColor: Styles.colorSecondary,
       leading: currentTileId.isRootFolder
-          ? null
+          ? IconButton(
+              onPressed: () {
+                context.push(AppRoutes.settings.path);
+              },
+              icon: Icon(Styles.iconSettings),
+            )
           : IconButton(
               onPressed: () {
                 ref.read(currentTileIdPathProvider.notifier).pop();

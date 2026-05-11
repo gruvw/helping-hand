@@ -73,7 +73,7 @@
     - [x] New remote device interface
     - [x] Full set up procedure to configure new buttons/servos
     - [x] Persisted buttons config from app
-    - [ ] Settings page for configuration
+    - [x] Settings page for configuration
     - [ ] Full application with accessible mode design to control multiple devices
         - [ ] Auto cycling mode
         - [ ] Press for next mode

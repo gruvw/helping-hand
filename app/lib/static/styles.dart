@@ -52,6 +52,7 @@ abstract class Styles {
   static const iconDown = Icons.keyboard_arrow_down;
   static const iconDoubleDown = Icons.keyboard_double_arrow_down;
   static const iconLabel = Icons.label_outline;
+  static const iconSettings = Icons.settings;
   static const iconNext = Icons.arrow_forward;
   static const iconPrevious = Icons.arrow_back;
 }
