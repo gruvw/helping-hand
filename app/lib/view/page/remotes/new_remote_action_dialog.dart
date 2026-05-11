@@ -3,6 +3,7 @@ import "dart:math";
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:gap/gap.dart";
+import "package:helping_hand/logic/action_state.dart";
 import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/state/remote_notifier.dart";
@@ -14,13 +15,6 @@ import "package:helping_hand/view/component/button/solid.dart";
 import "package:helping_hand/view/component/dialog/cancel_dialog.dart";
 import "package:helping_hand/view/component/structure/text_input.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-
-enum ActionState {
-  nothing,
-  pending,
-  success,
-  error,
-}
 
 class NewRemoteActionDialog extends HookConsumerWidget {
   final String remoteId;

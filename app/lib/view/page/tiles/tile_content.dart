@@ -26,13 +26,12 @@ class TileContent extends StatelessWidget {
 
   factory TileContent.loading({
     required String title,
+    required Color color,
     String? subtitle,
     VoidCallback? onClick,
     Key? key,
     bool selected = false,
   }) {
-    final color = Styles.colorOffline;
-
     return TileContent(
       key: key,
       title: title,
@@ -68,9 +67,13 @@ class TileContent extends StatelessWidget {
       color: color,
       onClick: onClick,
       selected: selected,
-      child: Icon(
-        iconData,
-        color: color.darken(foregroundDarkenAmount),
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: Icon(
+          key: ValueKey(iconData),
+          iconData,
+          color: color.darken(foregroundDarkenAmount),
+        ),
       ),
     );
   }
