@@ -32,6 +32,7 @@ class RemotesPage extends ConsumerWidget {
             inputLabel: "Remote name",
             placeholder: "hh-0001",
             submitText: "Register",
+            allowAsyncRetry: true,
             onSubmit: (remoteId) async {
               final result = await ref
                   .read(remoteRequestServiceProvider(remoteId))

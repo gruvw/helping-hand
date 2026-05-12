@@ -4,6 +4,9 @@ abstract class Values {
 
   static const remoteRequestTimeout = Duration(seconds: 10);
 
+  // FIXME (later) could be user configurable from the settings page
+  static const tileAccessibleCycleTime = Duration(milliseconds: 1000);
+
   static const maxChannel = 7;
   static const allChannels = 20;
 

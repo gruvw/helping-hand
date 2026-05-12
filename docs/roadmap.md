@@ -76,6 +76,8 @@
     - [x] Tiles layout and style
     - [x] Tile action feedback display
     - [x] Virtual tile to go back on accessible mode
+    - [x] Automatic scroll when moving tiles below screen
+    - [ ] Phone UI check for scrolls and overflows
     - [ ] Tiles reordering
     - [ ] Tiles grid with accessible mode design to control multiple devices: auto cycling mode
 - [ ] Evaluation
@@ -117,6 +119,7 @@
     - [ ] Multiple application profiles if you go to your friend's house for eample
     - [ ] Recently used tile
     - [ ] Custom tiles ordering
+    - [ ] Import / Export tiles config
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
 - [ ] System

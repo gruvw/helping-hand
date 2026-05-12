@@ -55,6 +55,16 @@ sealed class TileId {
 
   @override
   String toString() => "p=$parentId;t=$id";
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TileId) return false;
+    return id == other.id && parentId == other.parentId;
+  }
+
+  @override
+  int get hashCode => Object.hash(id, parentId);
 }
 
 class FolderTileId extends TileId {

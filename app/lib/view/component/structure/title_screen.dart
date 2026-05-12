@@ -2,8 +2,6 @@ import "package:flutter/material.dart";
 import "package:helping_hand/static/styles.dart";
 
 class TitleScreen extends StatelessWidget {
-  // final Color color;
-  // final IconData icon;
   final String title;
   final Widget? child;
   final Future<void> Function()? onRefresh;
@@ -28,12 +26,18 @@ class TitleScreen extends StatelessWidget {
         ),
         Container(
           color: Styles.colorPrimary,
-          padding: EdgeInsets.symmetric(vertical: 5),
+          padding: EdgeInsets.symmetric(
+            vertical: 7,
+            horizontal: 10,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: Styles.textTitle.apply(
                   color: Styles.colorSecondary,
                 ),

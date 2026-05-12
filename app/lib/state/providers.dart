@@ -16,12 +16,15 @@ final tilesProvider = FutureProvider<List<TileData>?>((ref) async {
           .requireValue;
     case RemoteTileId():
       final actions = ref
-          .watch(remoteNotifierProvider(currentTileId.remoteId).whereNotNull())
-          .requireValue
-          .actionConfigs;
+          .watch(
+            remoteNotifierProvider(
+              currentTileId.remoteId,
+            ).select((r) => r.whenData((r) => r?.actionConfigs)).whereNotNull(),
+          )
+          .requireValue;
 
       return actions
-          ?.sortedBy((action) => action.name)
+          .sortedBy((action) => action.name)
           .mapIndexed(
             (i, action) => TileData(
               tileId: RemoteActionTileId(

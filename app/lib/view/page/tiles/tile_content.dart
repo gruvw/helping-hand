@@ -10,7 +10,7 @@ class TileContent extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Color color;
-  final VoidCallback? onClick;
+  final VoidCallback? onTap;
   final Widget child;
   final bool selected;
 
@@ -19,7 +19,7 @@ class TileContent extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.color,
-    this.onClick,
+    this.onTap,
     required this.child,
     required this.selected,
   });
@@ -28,7 +28,7 @@ class TileContent extends StatelessWidget {
     required String title,
     required Color color,
     String? subtitle,
-    VoidCallback? onClick,
+    VoidCallback? onTap,
     Key? key,
     bool selected = false,
   }) {
@@ -37,7 +37,7 @@ class TileContent extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       color: color,
-      onClick: onClick,
+      onTap: onTap,
       selected: selected,
       child: Center(
         child: SizedBox(
@@ -56,7 +56,7 @@ class TileContent extends StatelessWidget {
     String? subtitle,
     required IconData iconData,
     required Color color,
-    VoidCallback? onClick,
+    VoidCallback? onTap,
     Key? key,
     bool selected = false,
   }) {
@@ -65,7 +65,7 @@ class TileContent extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       color: color,
-      onClick: onClick,
+      onTap: onTap,
       selected: selected,
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 200),
@@ -119,9 +119,11 @@ class TileContent extends StatelessWidget {
           );
 
     return InkWell(
-      onTap: onClick,
+      onTap: onTap,
       borderRadius: BorderRadius.circular(borderRadius),
-      child: Card(
+      child: Material(
+        type: MaterialType.card,
+        animationDuration: const Duration(milliseconds: 100),
         color: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),

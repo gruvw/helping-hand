@@ -1,17 +1,19 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:flutter_reorderable_grid_view/entities/reorderable_animation_config.dart";
 import "package:flutter_reorderable_grid_view/widgets/widgets.dart";
+import "package:helping_hand/logic/event_notifier.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/current_tile_id_path_notifier.dart";
 import "package:helping_hand/state/persistence/kvs/providers.dart";
 import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
-import "package:helping_hand/static/styles.dart";
+import "package:helping_hand/static/values.dart";
 import "package:helping_hand/utils/language.dart";
-import "package:helping_hand/view/component/structure/title_bar.dart";
-import "package:helping_hand/view/page/tiles/tile_content.dart";
+import "package:helping_hand/view/component/structure/title_screen.dart";
 import "package:helping_hand/view/page/tiles/tiles.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -24,8 +26,31 @@ class TilesGrid extends HookConsumerWidget {
     final tiles = ref.watch(tilesProvider).value ?? [];
     final accessibleUi = ref.watch(kvsAccessibleUiProvider).value ?? false;
     final scrollController = useScrollController();
+    final accessibleEvent = useMemoized(() => EventNotifier());
+    final gridKey = useMemoized(() => GlobalKey());
 
     final displayBack = accessibleUi && !currentTileId.isRootFolder;
+    final totalTiles = tiles.length + (displayBack ? 1 : 0);
+
+    final selectedTileIndex = useState(0);
+
+    useEffect(() {
+      if (!accessibleUi) return null;
+
+      if (context.mounted) {
+        selectedTileIndex.value = 0;
+      }
+
+      final timer = Timer.periodic(Values.tileAccessibleCycleTime, (_) {
+        if (context.mounted) {
+          selectedTileIndex.value =
+              (selectedTileIndex.value + 1) %
+              (totalTiles == 0 ? 1 : totalTiles);
+        }
+      });
+
+      return timer.cancel;
+    }, [accessibleUi, currentTileId, totalTiles]);
 
     final title = currentTileId.id?.nmap(
       (_) => switch (currentTileId) {
@@ -47,21 +72,14 @@ class TilesGrid extends HookConsumerWidget {
       ),
     };
 
-    final totalTiles = tiles.length + (displayBack ? 1 : 0);
-
     final tilesDisplay = List.generate(
       totalTiles,
       (index) {
         if (index == 0 && displayBack) {
-          return TileContent.icon(
+          return BackTile(
             key: ValueKey("back$currentTileId"),
-            title: "Back",
-            color: Styles.colorBack,
-            selected: false,
-            iconData: Styles.iconPrevious,
-            onClick: () {
-              ref.read(currentTileIdPathProvider.notifier).pop();
-            },
+            selected: accessibleUi && index == selectedTileIndex.value,
+            accessibleEvent: accessibleEvent,
           );
         }
 
@@ -69,15 +87,32 @@ class TilesGrid extends HookConsumerWidget {
         final key = ValueKey(tileId.toString());
 
         return switch (tileId) {
-          FolderTileId() => FolderTile(key: key, id: tileId),
-          RemoteTileId() => RemoteTile(key: key, id: tileId),
-          RemoteActionTileId() => RemoteActionTile(key: key, id: tileId),
+          FolderTileId() => FolderTile(
+            key: key,
+            id: tileId,
+            selected: accessibleUi && index == selectedTileIndex.value,
+            accessibleEvent: accessibleEvent,
+          ),
+          RemoteTileId() => RemoteTile(
+            key: key,
+            id: tileId,
+            selected: accessibleUi && index == selectedTileIndex.value,
+            accessibleEvent: accessibleEvent,
+          ),
+          RemoteActionTileId() => RemoteActionTile(
+            key: key,
+            id: tileId,
+            selected: accessibleUi && index == selectedTileIndex.value,
+            accessibleEvent: accessibleEvent,
+          ),
         };
       },
       growable: false,
     );
 
-    // TODO accessible mode tile select rotation
+    // TODO spinner when no tiles yet?
+
+    // TODO automatic scroll to selected tile in accessible mode?
 
     final tilesGrid = ReorderableBuilder(
       key: ValueKey(currentTileId.toString()),
@@ -89,11 +124,12 @@ class TilesGrid extends HookConsumerWidget {
       onReorderPositions: (newPositions) {
         // TODO grid reorder
       },
-      lockedIndices: displayBack ? [0] : [],
+      // lockedIndices: displayBack ? [0] : [],
       builder: (children) {
-        const spacing = 4.0;
+        const spacing = 6.0;
 
         return GridView(
+          key: gridKey,
           controller: scrollController,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 150,
@@ -120,13 +156,28 @@ class TilesGrid extends HookConsumerWidget {
           )
         : tilesGrid;
 
+    final accessibleContent = Padding(
+      padding: EdgeInsetsGeometry.all(6),
+      child: accessibleUi
+          ? GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                accessibleEvent.fire();
+              },
+              child: AbsorbPointer(
+                child: content,
+              ),
+            )
+          : content,
+    );
+
     if (currentTileId.isRootFolder) {
-      return content;
+      return accessibleContent;
     }
 
     return TitleScreen(
       title: title ?? "",
-      child: content,
+      child: accessibleContent,
     );
   }
 }

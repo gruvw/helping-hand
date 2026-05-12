@@ -81,10 +81,7 @@ class TilesPage extends ConsumerWidget {
                             );
                           }
 
-                          if (folderName.contains(TileId.folderIdPrefix) ||
-                              folderName.contains(
-                                TileId.folderPathSeparator,
-                              )) {
+                          if (folderName.contains(TileId.folderPathSeparator)) {
                             return InvalidResult(
                               errorMessage: "Invalid folder name.",
                             );

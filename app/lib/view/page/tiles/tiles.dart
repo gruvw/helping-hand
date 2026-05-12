@@ -13,41 +13,96 @@ import "package:helping_hand/utils/riverpod.dart";
 import "package:helping_hand/view/page/tiles/tile_content.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-class FolderTile extends ConsumerWidget {
+class BackTile extends HookConsumerWidget {
+  final bool selected;
+  final Listenable accessibleEvent;
+
+  const BackTile({
+    super.key,
+    required this.selected,
+    required this.accessibleEvent,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    void onTap() {
+      ref.read(currentTileIdPathProvider.notifier).pop();
+    }
+
+    useOnListenableChange(accessibleEvent, () {
+      if (selected) {
+        onTap();
+      }
+    });
+
+    return TileContent.icon(
+      title: "Back",
+      color: Styles.colorBack,
+      selected: selected,
+      iconData: Styles.iconPrevious,
+      onTap: onTap,
+    );
+  }
+}
+
+class FolderTile extends HookConsumerWidget {
   final FolderTileId id;
+  final bool selected;
+  final Listenable accessibleEvent;
 
   const FolderTile({
     super.key,
     required this.id,
+    required this.selected,
+    required this.accessibleEvent,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final folder = ref.watch(folderProvider(id.folderId!).whereNotNull());
 
+    void onTap() {
+      folder.maybeWhen(
+        data: (_) {
+          ref.read(currentTileIdPathProvider.notifier).add(id);
+        },
+        orElse: () {},
+      );
+    }
+
+    useOnListenableChange(accessibleEvent, () {
+      if (selected) {
+        onTap();
+      }
+    });
+
     return folder.maybeWhen(
       data: (folder) => TileContent.icon(
         title: folder.name,
         iconData: Styles.iconFolder,
         color: Styles.colorFolder,
-        onClick: () {
-          ref.read(currentTileIdPathProvider.notifier).add(id);
-        },
+        selected: selected,
+        onTap: onTap,
       ),
       orElse: () => TileContent.loading(
         title: "Loading...",
-        color: Styles.colorOffline,
+        color: Styles.colorFolder,
+        selected: selected,
       ),
     );
   }
 }
 
-class RemoteTile extends ConsumerWidget {
+class RemoteTile extends HookConsumerWidget {
   final RemoteTileId id;
+  final bool selected;
+  final Listenable accessibleEvent;
 
   const RemoteTile({
     super.key,
     required this.id,
+    required this.selected,
+    required this.accessibleEvent,
   });
 
   @override
@@ -56,6 +111,26 @@ class RemoteTile extends ConsumerWidget {
       remoteNotifierProvider(id.remoteId).whereNotNull(),
     );
 
+    void onTap() {
+      remote.unwrapPrevious().maybeWhen(
+        data: (remote) {
+          if (remote.isOnline) {
+            ref.read(currentTileIdPathProvider.notifier).add(id);
+            return;
+          }
+
+          ref.invalidate(remoteConfigProvider(remote.id));
+        },
+        orElse: () {},
+      );
+    }
+
+    useOnListenableChange(accessibleEvent, () {
+      if (selected) {
+        onTap();
+      }
+    });
+
     return remote.unwrapPrevious().maybeWhen(
       data: (remote) {
         if (remote.isOnline) {
@@ -63,9 +138,8 @@ class RemoteTile extends ConsumerWidget {
             title: remote.name,
             iconData: Styles.iconRemote,
             color: Styles.colorRemote,
-            onClick: () {
-              ref.read(currentTileIdPathProvider.notifier).add(id);
-            },
+            selected: selected,
+            onTap: onTap,
           );
         }
 
@@ -73,15 +147,15 @@ class RemoteTile extends ConsumerWidget {
           title: remote.name,
           iconData: Styles.iconOffline,
           color: Styles.colorOffline,
-          onClick: () {
-            ref.invalidate(remoteConfigProvider(remote.id));
-          },
+          selected: selected,
+          onTap: onTap,
         );
       },
       orElse: () {
         return TileContent.loading(
           title: remote.value?.name ?? "Loading...",
           color: Styles.colorOffline,
+          selected: selected,
         );
       },
     );
@@ -90,10 +164,14 @@ class RemoteTile extends ConsumerWidget {
 
 class RemoteActionTile extends HookConsumerWidget {
   final RemoteActionTileId id;
+  final bool selected;
+  final Listenable accessibleEvent;
 
   const RemoteActionTile({
     super.key,
     required this.id,
+    required this.selected,
+    required this.accessibleEvent,
   });
 
   @override
@@ -107,56 +185,76 @@ class RemoteActionTile extends HookConsumerWidget {
     final title = remote.value?.name ?? "Loading...";
     final subtitle = id.actionName;
 
-    final offlineAction = TileContent.icon(
-      title: title,
-      subtitle: subtitle,
-      iconData: Styles.iconOffline,
-      color: Styles.colorOffline,
-      onClick: () {
-        ref.invalidate(remoteConfigProvider(id.remoteId));
-      },
-    );
+    void onTap() {
+      remote.unwrapPrevious().maybeWhen(
+        data: (remote) {
+          final remoteButtonActions = remote.actionConfigs;
+          if (remoteButtonActions == null) {
+            ref.invalidate(remoteConfigProvider(id.remoteId));
+            return;
+          }
+
+          final action = remoteButtonActions
+              .where((a) => a.name == id.actionName)
+              .firstOrNull;
+
+          Future<void> performAction() async {
+            if (action == null) return;
+
+            resetTimer.value?.cancel();
+            performState.value = ActionState.pending;
+
+            await ref
+                .read(remoteRequestServiceProvider(remote.id))
+                .perform(action)
+                .then(
+                  (_) {
+                    if (context.mounted) {
+                      performState.value = ActionState.success;
+                    }
+                  },
+                  onError: (_, _) {
+                    if (context.mounted) {
+                      performState.value = ActionState.error;
+                    }
+                  },
+                );
+
+            if (context.mounted) {
+              resetTimer.value = Timer(const Duration(milliseconds: 1500), () {
+                if (context.mounted) {
+                  performState.value = ActionState.nothing;
+                }
+              });
+            }
+          }
+
+          if (performState.value != ActionState.pending) {
+            performAction();
+          }
+        },
+        orElse: () {},
+      );
+    }
+
+    useOnListenableChange(accessibleEvent, () {
+      if (selected) {
+        onTap();
+      }
+    });
 
     return remote.unwrapPrevious().maybeWhen(
       data: (remote) {
         final remoteButtonActions = remote.actionConfigs;
         if (remoteButtonActions == null) {
-          return offlineAction;
-        }
-
-        final action = remoteButtonActions
-            .where((a) => a.name == id.actionName)
-            .firstOrNull;
-
-        Future<void> performAction() async {
-          if (action == null) return;
-
-          resetTimer.value?.cancel();
-          performState.value = ActionState.pending;
-
-          await ref
-              .read(remoteRequestServiceProvider(remote.id))
-              .perform(action)
-              .then(
-                (_) {
-                  if (context.mounted) {
-                    performState.value = ActionState.success;
-                  }
-                },
-                onError: (_, _) {
-                  if (context.mounted) {
-                    performState.value = ActionState.error;
-                  }
-                },
-              );
-
-          if (context.mounted) {
-            resetTimer.value = Timer(const Duration(milliseconds: 1500), () {
-              if (context.mounted) {
-                performState.value = ActionState.nothing;
-              }
-            });
-          }
+          return TileContent.icon(
+            title: title,
+            subtitle: subtitle,
+            iconData: Styles.iconOffline,
+            color: Styles.colorOffline,
+            selected: selected,
+            onTap: onTap,
+          );
         }
 
         if (performState.value == ActionState.pending) {
@@ -165,6 +263,7 @@ class RemoteActionTile extends HookConsumerWidget {
             title: title,
             subtitle: subtitle,
             color: Styles.colorButton,
+            selected: selected,
           );
         }
 
@@ -181,9 +280,8 @@ class RemoteActionTile extends HookConsumerWidget {
             ),
           },
           color: Styles.colorButton,
-          onClick: performState.value != ActionState.pending
-              ? performAction
-              : null,
+          selected: selected,
+          onTap: onTap,
         );
       },
       orElse: () {
@@ -191,6 +289,7 @@ class RemoteActionTile extends HookConsumerWidget {
           title: title,
           subtitle: subtitle,
           color: Styles.colorOffline,
+          selected: selected,
         );
       },
     );

@@ -20,6 +20,7 @@ class AsyncTextDialog extends HookWidget {
   final String? cancelText;
   final TextCapitalization? capitalization;
   final bool wrap;
+  final bool allowAsyncRetry;
 
   const AsyncTextDialog({
     super.key,
@@ -34,6 +35,7 @@ class AsyncTextDialog extends HookWidget {
     this.cancelText,
     this.capitalization,
     this.wrap = false,
+    this.allowAsyncRetry = false,
   });
 
   @override
@@ -81,7 +83,8 @@ class AsyncTextDialog extends HookWidget {
       final text = textController.text;
       if (text.isEmpty ||
           isSubmitValidatingState.value ||
-          !validationResult.isValid) {
+          !(validationResult.isValid ||
+              (isSubmitValidatedState.value && allowAsyncRetry))) {
         return false;
       }
 
@@ -106,9 +109,11 @@ class AsyncTextDialog extends HookWidget {
       confirmedText: submitText,
       confirmEnabled:
           textController.text.isNotEmpty &&
-          validationResult.isValid &&
           !isSubmitValidatingState.value &&
-          !isSubmitValidatedState.value,
+          (validationResult.isValid ||
+              (isSubmitValidatedState.value && allowAsyncRetry)) &&
+          (!isSubmitValidatedState.value ||
+              (!validationResult.isValid && allowAsyncRetry)),
       onCancel: onCancel,
       onConfirm: submit,
       body: Row(
