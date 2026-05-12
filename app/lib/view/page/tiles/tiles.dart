@@ -13,6 +13,24 @@ import "package:helping_hand/utils/riverpod.dart";
 import "package:helping_hand/view/page/tiles/tile_content.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
+void useScrollToVisibleWhenSelected(BuildContext context, bool selected) {
+  useEffect(() {
+    if (selected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          Scrollable.ensureVisible(
+            context,
+            alignment: 0.5,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+    return null;
+  }, [selected]);
+}
+
 class BackTile extends HookConsumerWidget {
   final bool selected;
   final Listenable accessibleEvent;
@@ -34,6 +52,8 @@ class BackTile extends HookConsumerWidget {
         onTap();
       }
     });
+
+    useScrollToVisibleWhenSelected(context, selected);
 
     return TileContent.icon(
       title: "Back",
@@ -75,6 +95,8 @@ class FolderTile extends HookConsumerWidget {
         onTap();
       }
     });
+
+    useScrollToVisibleWhenSelected(context, selected);
 
     return folder.maybeWhen(
       data: (folder) => TileContent.icon(
@@ -130,6 +152,8 @@ class RemoteTile extends HookConsumerWidget {
         onTap();
       }
     });
+
+    useScrollToVisibleWhenSelected(context, selected);
 
     return remote.unwrapPrevious().maybeWhen(
       data: (remote) {
@@ -242,6 +266,8 @@ class RemoteActionTile extends HookConsumerWidget {
         onTap();
       }
     });
+
+    useScrollToVisibleWhenSelected(context, selected);
 
     return remote.unwrapPrevious().maybeWhen(
       data: (remote) {

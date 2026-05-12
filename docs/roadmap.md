@@ -77,6 +77,7 @@
     - [x] Tile action feedback display
     - [x] Virtual tile to go back on accessible mode
     - [x] Automatic scroll when moving tiles below screen
+    - [x] Automatic scroll when selected goes to tiles off screen in accessible mode
     - [ ] Phone UI check for scrolls and overflows
     - [ ] Tiles reordering
     - [ ] Tiles grid with accessible mode design to control multiple devices: auto cycling mode

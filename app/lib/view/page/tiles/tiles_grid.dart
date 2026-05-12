@@ -112,8 +112,6 @@ class TilesGrid extends HookConsumerWidget {
 
     // TODO spinner when no tiles yet?
 
-    // TODO automatic scroll to selected tile in accessible mode?
-
     final tilesGrid = ReorderableBuilder(
       key: ValueKey(currentTileId.toString()),
       animationConfig: ReorderableAnimationConfig(
