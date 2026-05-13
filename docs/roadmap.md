@@ -75,12 +75,14 @@
     - [x] Settings page for configuration
     - [x] Tiles layout and style
     - [x] Tile action feedback display
-    - [x] Virtual tile to go back on accessible mode
+    - [x] Virtual tile to go back to previous screen on accessible mode
+    - [x] Tiles grid with accessible mode design to control multiple devices: auto cycling mode
     - [x] Automatic scroll when moving tiles below screen
     - [x] Automatic scroll when selected goes to tiles off screen in accessible mode
-    - [ ] Phone UI check for scrolls and overflows
+    - [x] Move folder
     - [ ] Tiles reordering
-    - [ ] Tiles grid with accessible mode design to control multiple devices: auto cycling mode
+    - [ ] Phone UI check for sizes, scrolls and overflows
+    - [ ] Full system test
 - [ ] Evaluation
     - [x] Stress test the system with 10'000 clicks, one per second
     - [ ] Endurance test (50 clicks per day, for a full week)

@@ -46,29 +46,30 @@ class CancelDialog extends StatelessWidget {
               style: Styles.textNormal,
             ),
           ),
-          if (danger)
-            PlainSolidButton(
-              onPressed: popModalOnPressed(context, onConfirm),
-              foregroundColor: Styles.colorSecondary,
-              backgroundColor: Styles.colorDanger,
-              child: Text(
-                confirmedText ?? confirmDefault,
-                style: Styles.textNormal.apply(
-                  color: Styles.colorSecondary,
+          if (onConfirm != null)
+            if (danger)
+              PlainSolidButton(
+                onPressed: popModalOnPressed(context, onConfirm),
+                foregroundColor: Styles.colorSecondary,
+                backgroundColor: Styles.colorDanger,
+                child: Text(
+                  confirmedText ?? confirmDefault,
+                  style: Styles.textNormal.apply(
+                    color: Styles.colorSecondary,
+                  ),
+                ),
+              )
+            else
+              SolidButtonPrimary(
+                onPressed: popModalOnPressed(context, onConfirm),
+                enabled: confirmEnabled,
+                child: Text(
+                  confirmedText ?? confirmDefault,
+                  style: Styles.textNormal.apply(
+                    color: Styles.colorSecondary,
+                  ),
                 ),
               ),
-            )
-          else
-            SolidButtonPrimary(
-              onPressed: popModalOnPressed(context, onConfirm),
-              enabled: confirmEnabled,
-              child: Text(
-                confirmedText ?? confirmDefault,
-                style: Styles.textNormal.apply(
-                  color: Styles.colorSecondary,
-                ),
-              ),
-            ),
         ],
       ),
     );

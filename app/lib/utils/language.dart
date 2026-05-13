@@ -72,3 +72,10 @@ extension SplitOnce on String {
     return (firstPart, remainder);
   }
 }
+
+extension ColumnSeparator on List<Widget> {
+  List<Widget> separateWith(Widget separator) {
+    if (isEmpty) return [];
+    return expand((widget) => [widget, separator]).toList()..removeLast();
+  }
+}

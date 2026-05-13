@@ -10,6 +10,7 @@ import "package:helping_hand/static/values.dart";
 import "package:helping_hand/view/component/dialog/async_text_dialog.dart";
 import "package:helping_hand/view/component/dialog/deletion_dialog.dart";
 import "package:helping_hand/view/navigation/routes.dart";
+import "package:helping_hand/view/page/tiles/move_folder_dialog.dart";
 import "package:helping_hand/view/page/tiles/tiles_grid.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -36,6 +37,7 @@ class TilesPage extends ConsumerWidget {
             )
           : IconButton(
               onPressed: () {
+                // FIXME (later) handle device based back navigation for tiles (like android back touch)
                 ref.read(currentTileIdPathProvider.notifier).pop();
               },
               icon: Icon(
@@ -107,7 +109,7 @@ class TilesPage extends ConsumerWidget {
                     Styles.iconAddFolder,
                     color: Styles.colorPrimary,
                   ),
-                  title: Text("New Folder"),
+                  title: Text("New folder"),
                 ),
               ),
             if (currentTileId is FolderTileId && currentTileIdValue != null)
@@ -144,7 +146,28 @@ class TilesPage extends ConsumerWidget {
                     Styles.iconEdit,
                     color: Styles.colorPrimary,
                   ),
-                  title: Text("Rename Folder"),
+                  title: Text("Rename folder"),
+                ),
+              ),
+            if (currentTileId is FolderTileId && currentTileIdValue != null)
+              PopupMenuItem(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return MoveFolderDialog(
+                        currentFolderId: currentTileIdValue,
+                        parentFolderId: currentTileId.parentId,
+                      );
+                    },
+                  );
+                },
+                child: ListTile(
+                  leading: Icon(
+                    Styles.iconMove,
+                    color: Styles.colorPrimary,
+                  ),
+                  title: Text("Move folder to"),
                 ),
               ),
             if (currentTileIdValue != null)
@@ -175,13 +198,10 @@ class TilesPage extends ConsumerWidget {
                   title: Text("Delete tile"),
                 ),
               ),
-            // TODO move folder tile context menu
           ],
         ),
       ],
     );
-
-    // FIXME (later) handle device based back navigation for tiles
 
     return Scaffold(
       appBar: appBar,

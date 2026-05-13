@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:drift/drift.dart";
 import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/persistence/database/core/database.dart";
@@ -123,6 +124,79 @@ class Queries {
           );
         }
       }
+    });
+  }
+
+  Future<List<(String? id, String path)>> getPaths(
+    String exceptId,
+    String? parentFolderId,
+  ) async {
+    final allTiles = await _db.select(_db.tileTable).get();
+    final allFolders = await _db.select(_db.folderTable).get();
+
+    final folderNamesById = {
+      for (final f in allFolders) f.id: f.name,
+    };
+    final parentById = {
+      for (final t in allTiles)
+        if (folderNamesById.containsKey(t.tileId.id))
+          t.tileId.id!: t.tileId.parentId,
+    };
+
+    String? buildPath(String folderId) {
+      final parentId = parentById[folderId];
+      final name = folderNamesById[folderId];
+
+      if (folderId == exceptId) return null;
+
+      if (parentId == null || parentId == TileId.rootFolderId) {
+        return "${TileId.folderPathSeparator}$name";
+      }
+
+      final parentPath = buildPath(parentId);
+
+      if (parentPath == null) {
+        return null;
+      }
+
+      return "$parentPath${TileId.folderPathSeparator}$name";
+    }
+
+    return [
+      (null, TileId.folderPathSeparator),
+      ...allFolders.map((folder) {
+        final path = buildPath(folder.id);
+        if (path == null) return null;
+        return (folder.id, path);
+      }).nonNulls,
+    ].where((a) => a.$1 != parentFolderId).sortedBy((a) => a.$2).toList();
+  }
+
+  Future<void> moveFolderTo({
+    required String folderId,
+    required String? newParentFolderId,
+  }) async {
+    return _db.transaction(() async {
+      final nextPosition =
+          (await (_db.select(
+                    _db.tileTable,
+                  )..where(
+                    (r) => r.parentId.equals(
+                      newParentFolderId ?? TileId.rootFolderId,
+                    ),
+                  ))
+                  .get())
+              .length;
+
+      await (_db.update(
+        _db.tileTable,
+      )..where((r) => r.id.equals(folderId))).write(
+        TileTableCompanion.insert(
+          parentId: newParentFolderId ?? TileId.rootFolderId,
+          id: folderId,
+          position: nextPosition,
+        ),
+      );
     });
   }
 }

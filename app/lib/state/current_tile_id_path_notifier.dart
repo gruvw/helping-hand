@@ -19,6 +19,10 @@ class CurrentTileIdPathNotifier extends Notifier<List<TileId>> {
   void add(TileId next) {
     state = [...state, next];
   }
+
+  void clear() {
+    state = [];
+  }
 }
 
 final currentTileIdPathProvider =

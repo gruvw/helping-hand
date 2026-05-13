@@ -23,7 +23,8 @@ class TilesGrid extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTileId = ref.watch(currentTileIdProvider);
-    final tiles = ref.watch(tilesProvider).value ?? [];
+    final tilesAsync = ref.watch(tilesProvider);
+    final tiles = tilesAsync.value ?? [];
     final accessibleUi = ref.watch(kvsAccessibleUiProvider).value ?? false;
     final scrollController = useScrollController();
     final accessibleEvent = useMemoized(() => EventNotifier());
@@ -110,8 +111,6 @@ class TilesGrid extends HookConsumerWidget {
       growable: false,
     );
 
-    // TODO spinner when no tiles yet?
-
     final tilesGrid = ReorderableBuilder(
       key: ValueKey(currentTileId.toString()),
       animationConfig: ReorderableAnimationConfig(
@@ -140,7 +139,7 @@ class TilesGrid extends HookConsumerWidget {
       children: tilesDisplay,
     );
 
-    final content = tiles.isEmpty
+    final content = tilesAsync.hasValue && tiles.isEmpty
         ? Stack(
             children: [
               tilesGrid,

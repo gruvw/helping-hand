@@ -7,7 +7,7 @@ import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/current_tile_id_path_notifier.dart";
 import "package:helping_hand/state/persistence/providers.dart";
 import "package:helping_hand/state/remote_notifier.dart";
-import "package:helping_hand/state/remote_request.dart";
+import "package:helping_hand/state/remote_request_provider.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/riverpod.dart";
 import "package:helping_hand/view/page/tiles/tile_content.dart";

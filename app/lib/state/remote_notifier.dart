@@ -4,7 +4,7 @@ import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/model/config/remote.dart";
 import "package:helping_hand/state/persistence/database/tables/remote_table.drift.dart";
 import "package:helping_hand/state/persistence/providers.dart";
-import "package:helping_hand/state/remote_request.dart";
+import "package:helping_hand/state/remote_request_provider.dart";
 import "package:helping_hand/utils/language.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 

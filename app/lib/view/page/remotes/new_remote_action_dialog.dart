@@ -7,7 +7,7 @@ import "package:helping_hand/logic/action_state.dart";
 import "package:helping_hand/logic/validation.dart";
 import "package:helping_hand/model/config/action.dart";
 import "package:helping_hand/state/remote_notifier.dart";
-import "package:helping_hand/state/remote_request.dart";
+import "package:helping_hand/state/remote_request_provider.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/static/values.dart";
 import "package:helping_hand/view/component/button/outlined.dart";
@@ -39,7 +39,7 @@ class NewRemoteActionDialog extends HookConsumerWidget {
     final maxPressAngleDelta =
         Values.maxPressAngle - positionAngle.value - Values.minPressAngleDelta;
     // FIXME (later) constant for now, could be user customizable later
-    const clickDurationMs = 100;
+    const clickDurationMs = 50;
 
     final setSuccess = useState(false);
     final clickSuccess = useState(false);

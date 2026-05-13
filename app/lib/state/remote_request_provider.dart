@@ -10,8 +10,8 @@ final remoteRequestServiceProvider =
     Provider.family<RemoteRequestService, String>((ref, remoteId) {
       if (BuildOptions.debugFakeRequests) {
         return FakeRemoteRequestService(
-          requestTime: Duration(seconds: 1),
-          failureRate: 0.4,
+          requestTime: Duration(milliseconds: 800),
+          failureRate: 0.3,
           remoteId: remoteId,
         );
       }

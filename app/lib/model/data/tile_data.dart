@@ -30,7 +30,10 @@ sealed class TileId {
     }
 
     if (id.startsWith(folderIdPrefix)) {
-      return FolderTileId(parentId: parentId, folderId: id);
+      return FolderTileId(
+        parentId: parentId == rootFolderId ? null : parentId,
+        folderId: id,
+      );
     }
 
     final (remoteId, actionName) = id.splitOnce(actionSeparator);

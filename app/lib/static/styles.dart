@@ -31,7 +31,8 @@ abstract class Styles {
   static const iconAdd = Icons.add_outlined;
   static const iconAddTile = Icons.add_box_outlined;
   static const iconAddFolder = Icons.create_new_folder_outlined;
-  static const iconEdit = Icons.edit;
+  static const iconEdit = Icons.edit_outlined;
+  static const iconMove = Icons.drive_file_move_outlined;
   static const iconDelete = Icons.delete;
   static const iconMore = Icons.more_vert;
   static const iconClear = Icons.clear;
