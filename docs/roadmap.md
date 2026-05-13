@@ -80,7 +80,7 @@
     - [x] Automatic scroll when moving tiles below screen
     - [x] Automatic scroll when selected goes to tiles off screen in accessible mode
     - [x] Move folder
-    - [ ] Tiles reordering
+    - [x] Tiles reordering
     - [ ] Phone UI check for sizes, scrolls and overflows
     - [ ] Full system test
 - [ ] Evaluation
@@ -119,14 +119,14 @@
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
     - [ ] i18n
-    - [ ] Multiple application profiles if you go to your friend's house for eample
+    - [ ] Multiple application profiles if you go to your friend's house for example
     - [ ] Recently used tile
-    - [ ] Custom tiles ordering
+    - [ ] Fix tiles reordering animation bug
     - [ ] Import / Export tiles config
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
 - [ ] System
-    - [ ] Improve overal set up procedure
+    - [ ] Improve overall set up procedure
         - [ ] Wi-Fi network setup
         - [ ] Servo port detection
         - [ ] Remote action setup

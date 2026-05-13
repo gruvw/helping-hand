@@ -117,11 +117,28 @@ class TilesGrid extends HookConsumerWidget {
         fadeInDuration: Duration(milliseconds: 200),
       ),
       scrollController: scrollController,
-      enableDraggable: true,
-      onReorderPositions: (newPositions) {
-        // TODO grid reorder
+      enableDraggable: !accessibleUi && (currentTileId is FolderTileId),
+      lockedIndices: displayBack ? [0] : [],
+      onReorder: (ReorderedListFunction<int> reoderFunction) async {
+        // won't have a back tile, as reorder is only possible when not in accessible UI mode
+
+        final newIndices = reoderFunction(
+          List.generate(tiles.length, (i) => i),
+        );
+
+        final idToNewPos = {
+          for (var i = 0; i < tiles.length; ++i)
+            tiles[i].tileId.id!: newIndices.indexOf(i),
+        };
+
+        await ref
+            .read(dbProvider)
+            .queries
+            .reorderTiles(
+              folderId: currentTileId.id,
+              idToNewPos: idToNewPos,
+            );
       },
-      // lockedIndices: displayBack ? [0] : [],
       builder: (children) {
         const spacing = 6.0;
 

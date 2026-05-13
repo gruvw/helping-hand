@@ -24,6 +24,7 @@ class DeletionDialog extends StatelessWidget {
       confirmedText: "Delete",
       danger: true,
       body: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(content, style: Styles.textNormal),
           if (target != null)

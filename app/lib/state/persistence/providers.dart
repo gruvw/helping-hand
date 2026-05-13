@@ -52,7 +52,8 @@ final folderTilesProvider = StreamProvider.family<List<TileData>, String?>((
           (t) => t.parentId.equals(folderId ?? TileId.rootFolderId),
         )
         ..orderBy([(t) => OrderingTerm.asc(t.position)]))
-      .watch();
+      .watch()
+      .distinct();
 });
 
 final tileProvider = StreamProvider.family<TileData?, String>((ref, tileId) {

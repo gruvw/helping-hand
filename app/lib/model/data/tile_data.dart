@@ -14,6 +14,17 @@ class TileData {
     required String id,
     required this.position,
   }) : tileId = TileId.parse(parentId, id);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TileData &&
+          runtimeType == other.runtimeType &&
+          tileId == other.tileId &&
+          position == other.position;
+
+  @override
+  int get hashCode => Object.hash(tileId, position);
 }
 
 sealed class TileId {

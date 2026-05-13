@@ -102,6 +102,12 @@ class Queries {
                 r.id.equals(tileId),
           ))
           .go();
+
+      // delete the folder if it is a folder
+      await (_db.delete(_db.folderTable)..where(
+            (r) => r.id.equals(tileId),
+          ))
+          .go();
     });
   }
 
@@ -197,6 +203,25 @@ class Queries {
           position: nextPosition,
         ),
       );
+    });
+  }
+
+  Future<void> reorderTiles({
+    required String? folderId,
+    required Map<String, int> idToNewPos,
+  }) async {
+    final parentId = folderId ?? TileId.rootFolderId;
+
+    return _db.batch((batch) {
+      for (final MapEntry(key: id, value: newPos) in idToNewPos.entries) {
+        batch.update(
+          _db.tileTable,
+          TileTableCompanion(
+            position: Value(newPos),
+          ),
+          where: (r) => r.parentId.equals(parentId) & r.id.equals(id),
+        );
+      }
     });
   }
 }
