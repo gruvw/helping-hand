@@ -82,7 +82,7 @@
     - [x] Move folder
     - [x] Tiles reordering
     - [ ] Phone UI check for sizes, scrolls and overflows
-    - [ ] Full system test
+    - [ ] Full system test and bug fixing
 - [ ] Evaluation
     - [x] Stress test the system with 10'000 clicks, one per second
     - [ ] Endurance test (50 clicks per day, for a full week)
@@ -90,8 +90,7 @@
     - [ ] Interface evaluation for ease of manipulation
     - [ ] Real world integration testing with measurements
 - [ ] Documentation
-    - [ ] Mechanical design modular parts schematics/drawings
-    - [ ] Full CAD downloads
+    - [x] Full CAD downloads
     - [ ] Project README
     - [ ] GitHub release
 
@@ -125,6 +124,7 @@
     - [ ] Import / Export tiles config
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
+    - [ ] Mechanical design modular parts schematics/drawings
 - [ ] System
     - [ ] Improve overall set up procedure
         - [ ] Wi-Fi network setup

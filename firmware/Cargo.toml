@@ -1,6 +1,6 @@
 [package]
 name = "helping-hand"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["gruvw <gruvw.dev@gmail.com>"]
 edition = "2024"
 resolver = "2"
