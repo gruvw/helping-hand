@@ -86,11 +86,12 @@
 - [ ] Evaluation
     - [x] Stress test the system with 10'000 clicks, one per second
     - [ ] Endurance test (50 clicks per day, for a full week)
-    - [ ] Evaluation of mechanical design for multiple remote types
+    - [x] Evaluation of mechanical design for multiple remote types
     - [ ] Interface evaluation for ease of manipulation
     - [ ] Real world integration testing with measurements
 - [ ] Documentation
     - [x] Full CAD downloads
+    - [x] System pictures
     - [ ] Project README
     - [ ] GitHub release
 
@@ -99,27 +100,29 @@
 - [ ] Mechanical design
     - [ ] Release downloads with custom tolerances
     - [ ] Try PETG for arms bending
-    - [ ] Test Prusa printing at the end
+    - [ ] Test Prusa printing
     - [ ] Smaller area under for electronics, might require custom PCB
-    - [ ] Two sizes variants (currently one size fits all, so large)
+    - [ ] Two sizes variants (currently one size fits all, too large for very small remotes, one smaller variant with less servos)
     - [ ] New type of arms (bendable, ...)
 - [ ] Electronics + Firmware
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED
     - [ ] Push button for hardware actions (setup or reset)
+    - [ ] Custom PCB
 - [ ] Firmware
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Captive portal for custom wifi setup
     - [ ] Button double press interface
-    - [ ] More complex button systems, like press sequences
+    - [ ] More complex button actions, like press sequences
 - [ ] Software
-    - [ ] Pop for tiles back navigation
+    - [ ] Device back navigation should pop tiles path
+    - [ ] Native application releases (iOS?)
     - [ ] Button long press interface
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
     - [ ] i18n
     - [ ] Multiple application profiles if you go to your friend's house for example
-    - [ ] Recently used tile
+    - [ ] Recently used actions tile
     - [ ] Fix tiles reordering animation bug
     - [ ] Import / Export tiles config
 - [ ] Documentation
