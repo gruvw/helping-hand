@@ -53,7 +53,6 @@ class PlainDialog extends StatelessWidget {
             child: Container(
               constraints: BoxConstraints(
                 maxWidth: constraints.maxWidth * 0.8,
-                maxHeight: constraints.maxHeight * 0.7,
               ),
               padding: const EdgeInsets.all(12),
               child: Column(

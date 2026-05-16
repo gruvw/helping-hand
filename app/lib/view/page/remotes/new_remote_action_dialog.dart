@@ -178,6 +178,7 @@ class NewRemoteActionDialog extends HookConsumerWidget {
     const actionSpacing = Gap(8);
 
     final body = Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: [

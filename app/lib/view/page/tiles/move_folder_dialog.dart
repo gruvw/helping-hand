@@ -93,7 +93,16 @@ class MoveFolderDialog extends HookConsumerWidget {
 
     return CancelDialog(
       title: "Move Folder To",
-      body: content,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            constraints: BoxConstraints(
+              maxHeight: constraints.maxHeight * 0.7,
+            ),
+            child: content,
+          );
+        },
+      ),
     );
   }
 }
