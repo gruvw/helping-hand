@@ -4,6 +4,7 @@ import "package:helping_hand/model/data/tile_data.dart";
 import "package:helping_hand/state/persistence/database/core/database.dart";
 import "package:helping_hand/state/persistence/database/tables/folder_table.drift.dart";
 import "package:helping_hand/state/persistence/database/tables/tile_table.drift.dart";
+import "package:helping_hand/utils/language.dart";
 import "package:nanoid/nanoid.dart";
 
 class Queries {
@@ -49,7 +50,10 @@ class Queries {
                     ),
                   ))
                   .get())
-              .length;
+              .map((r) => r.position)
+              .maxOrNull
+              ?.nmap((n) => n + 1) ??
+          0;
 
       await _db
           .into(_db.tileTable)
@@ -192,7 +196,10 @@ class Queries {
                     ),
                   ))
                   .get())
-              .length;
+              .map((r) => r.position)
+              .maxOrNull
+              ?.nmap((n) => n + 1) ??
+          0;
 
       await (_db.update(
         _db.tileTable,
