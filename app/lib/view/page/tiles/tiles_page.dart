@@ -48,7 +48,7 @@ class TilesPage extends ConsumerWidget {
             ),
       actions: [
         PopupMenuButton(
-          tooltip: "Edit",
+          tooltip: "Menu",
           icon: Icon(
             Styles.iconMore,
             color: Styles.colorSecondary,
@@ -174,6 +174,7 @@ class TilesPage extends ConsumerWidget {
               PopupMenuItem(
                 onTap: () {
                   showDialog(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) {
                       return DeletionDialog(

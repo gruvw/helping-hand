@@ -164,7 +164,7 @@ class RemoteNotifier extends AsyncNotifier<Remote?> {
         );
   }
 
-  Future<bool> removeAction(ActionConfig actionConfig) async {
+  Future<bool> removeAction(String actionName) async {
     final remote = state.value;
     final actionConfigs = remote?.actionConfigs;
     if (remote == null || actionConfigs == null) return false;
@@ -172,9 +172,7 @@ class RemoteNotifier extends AsyncNotifier<Remote?> {
     final newRemote = Remote(
       name: remote.name,
       id: remote.id,
-      actionConfigs: actionConfigs
-          .where((a) => a.name != actionConfig.name)
-          .toList(),
+      actionConfigs: actionConfigs.where((a) => a.name != actionName).toList(),
     );
 
     return await ref

@@ -436,7 +436,7 @@ class _ActionOptionsMenu extends ConsumerWidget {
           onDelete: () async {
             await ref
                 .read(remoteNotifierProvider(remoteId).notifier)
-                .removeAction(actionConfig);
+                .removeAction(actionConfig.name);
             return true;
           },
         );

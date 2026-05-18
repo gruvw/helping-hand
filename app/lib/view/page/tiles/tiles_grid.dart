@@ -90,19 +90,19 @@ class TilesGrid extends HookConsumerWidget {
         return switch (tileId) {
           FolderTileId() => FolderTile(
             key: key,
-            id: tileId,
+            tileId: tileId,
             selected: accessibleUi && index == selectedTileIndex.value,
             accessibleEvent: accessibleEvent,
           ),
           RemoteTileId() => RemoteTile(
             key: key,
-            id: tileId,
+            tileId: tileId,
             selected: accessibleUi && index == selectedTileIndex.value,
             accessibleEvent: accessibleEvent,
           ),
           RemoteActionTileId() => RemoteActionTile(
             key: key,
-            id: tileId,
+            tileId: tileId,
             selected: accessibleUi && index == selectedTileIndex.value,
             accessibleEvent: accessibleEvent,
           ),

@@ -11,6 +11,7 @@ class TileContent extends StatelessWidget {
   final String? subtitle;
   final Color color;
   final VoidCallback? onTap;
+  final VoidCallback? onDoubleTap;
   final Widget child;
   final bool selected;
 
@@ -20,6 +21,7 @@ class TileContent extends StatelessWidget {
     this.subtitle,
     required this.color,
     this.onTap,
+    this.onDoubleTap,
     required this.child,
     required this.selected,
   });
@@ -29,6 +31,7 @@ class TileContent extends StatelessWidget {
     required Color color,
     String? subtitle,
     VoidCallback? onTap,
+    VoidCallback? onDoubleTap,
     Key? key,
     bool selected = false,
   }) {
@@ -38,6 +41,7 @@ class TileContent extends StatelessWidget {
       subtitle: subtitle,
       color: color,
       onTap: onTap,
+      onDoubleTap: onDoubleTap,
       selected: selected,
       child: Center(
         child: SizedBox(
@@ -57,6 +61,7 @@ class TileContent extends StatelessWidget {
     required IconData iconData,
     required Color color,
     VoidCallback? onTap,
+    VoidCallback? onDoubleTap,
     Key? key,
     bool selected = false,
   }) {
@@ -66,6 +71,7 @@ class TileContent extends StatelessWidget {
       subtitle: subtitle,
       color: color,
       onTap: onTap,
+      onDoubleTap: onDoubleTap,
       selected: selected,
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 200),
@@ -120,6 +126,7 @@ class TileContent extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      onDoubleTap: onDoubleTap,
       borderRadius: BorderRadius.circular(borderRadius),
       child: Material(
         type: MaterialType.card,

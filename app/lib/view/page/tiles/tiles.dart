@@ -10,6 +10,7 @@ import "package:helping_hand/state/remote_notifier.dart";
 import "package:helping_hand/state/remote_request_provider.dart";
 import "package:helping_hand/static/styles.dart";
 import "package:helping_hand/utils/riverpod.dart";
+import "package:helping_hand/view/component/dialog/deletion_dialog.dart";
 import "package:helping_hand/view/page/tiles/tile_content.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -66,25 +67,25 @@ class BackTile extends HookConsumerWidget {
 }
 
 class FolderTile extends HookConsumerWidget {
-  final FolderTileId id;
+  final FolderTileId tileId;
   final bool selected;
   final Listenable accessibleEvent;
 
   const FolderTile({
     super.key,
-    required this.id,
+    required this.tileId,
     required this.selected,
     required this.accessibleEvent,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final folder = ref.watch(folderProvider(id.folderId!).whereNotNull());
+    final folder = ref.watch(folderProvider(tileId.folderId!).whereNotNull());
 
     void onTap() {
       folder.maybeWhen(
         data: (_) {
-          ref.read(currentTileIdPathProvider.notifier).add(id);
+          ref.read(currentTileIdPathProvider.notifier).add(tileId);
         },
         orElse: () {},
       );
@@ -116,13 +117,13 @@ class FolderTile extends HookConsumerWidget {
 }
 
 class RemoteTile extends HookConsumerWidget {
-  final RemoteTileId id;
+  final RemoteTileId tileId;
   final bool selected;
   final Listenable accessibleEvent;
 
   const RemoteTile({
     super.key,
-    required this.id,
+    required this.tileId,
     required this.selected,
     required this.accessibleEvent,
   });
@@ -130,14 +131,14 @@ class RemoteTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final remote = ref.watch(
-      remoteNotifierProvider(id.remoteId).whereNotNull(),
+      remoteNotifierProvider(tileId.remoteId).whereNotNull(),
     );
 
     void onTap() {
       remote.unwrapPrevious().maybeWhen(
         data: (remote) {
           if (remote.isOnline) {
-            ref.read(currentTileIdPathProvider.notifier).add(id);
+            ref.read(currentTileIdPathProvider.notifier).add(tileId);
             return;
           }
 
@@ -187,39 +188,41 @@ class RemoteTile extends HookConsumerWidget {
 }
 
 class RemoteActionTile extends HookConsumerWidget {
-  final RemoteActionTileId id;
+  final RemoteActionTileId tileId;
   final bool selected;
   final Listenable accessibleEvent;
 
   const RemoteActionTile({
     super.key,
-    required this.id,
+    required this.tileId,
     required this.selected,
     required this.accessibleEvent,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentTileId = ref.watch(currentTileIdProvider);
+
     final remote = ref.watch(
-      remoteNotifierProvider(id.remoteId).whereNotNull(),
+      remoteNotifierProvider(tileId.remoteId).whereNotNull(),
     );
     final performState = useState(ActionState.nothing);
     final resetTimer = useRef<Timer?>(null);
 
     final title = remote.value?.name ?? "Loading...";
-    final subtitle = id.actionName;
+    final subtitle = tileId.actionName;
 
     void onTap() {
       remote.unwrapPrevious().maybeWhen(
         data: (remote) {
           final remoteButtonActions = remote.actionConfigs;
           if (remoteButtonActions == null) {
-            ref.invalidate(remoteConfigProvider(id.remoteId));
+            ref.invalidate(remoteConfigProvider(tileId.remoteId));
             return;
           }
 
           final action = remoteButtonActions
-              .where((a) => a.name == id.actionName)
+              .where((a) => a.name == tileId.actionName)
               .firstOrNull;
 
           Future<void> performAction() async {
@@ -269,6 +272,33 @@ class RemoteActionTile extends HookConsumerWidget {
 
     useScrollToVisibleWhenSelected(context, selected);
 
+    void showRemoveTile() {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return DeletionDialog(
+            title: "Delete Tile",
+            content: "Do you really want to delete this tile?",
+            target: tileId.actionName,
+            onDelete: () async {
+              await ref
+                  .read(dbProvider)
+                  .queries
+                  .removeTile(
+                    parentId: currentTileId.id,
+                    tileId: tileId.id,
+                  );
+
+              return true;
+            },
+          );
+        },
+      );
+    }
+
+    final onDoubleTap = currentTileId is FolderTileId ? showRemoveTile : null;
+
     return remote.unwrapPrevious().maybeWhen(
       data: (remote) {
         final remoteButtonActions = remote.actionConfigs;
@@ -280,6 +310,7 @@ class RemoteActionTile extends HookConsumerWidget {
             color: Styles.colorOffline,
             selected: selected,
             onTap: onTap,
+            onDoubleTap: onDoubleTap,
           );
         }
 
@@ -308,6 +339,7 @@ class RemoteActionTile extends HookConsumerWidget {
           color: Styles.colorButton,
           selected: selected,
           onTap: onTap,
+          onDoubleTap: onDoubleTap,
         );
       },
       orElse: () {
