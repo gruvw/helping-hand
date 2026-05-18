@@ -81,8 +81,8 @@
     - [x] Automatic scroll when selected goes to tiles off screen in accessible mode
     - [x] Move folder
     - [x] Tiles reordering
-    - [ ] Phone UI check for sizes, scrolls and overflows
-    - [ ] Full system test and bug fixing
+    - [x] Phone UI check for sizes, scrolls and overflows
+    - [x] Full system test and bug fixing
 - [ ] Evaluation
     - [x] Stress test the system with 10'000 clicks, one per second
     - [x] Endurance test (50 clicks per day, for a full week)
