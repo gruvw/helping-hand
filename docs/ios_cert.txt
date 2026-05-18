@@ -37,3 +37,18 @@ Find the certificate you just installed and toggle the switch to the ON (green) 
 Tap Continue on the prompt confirming you want to trust the certificate.
 
 (If you are installing a certificate issued by a school or employer, they may use Mobile Device Management (MDM) to push the certificate to your phone automatically, in which case you won't need to do this manually.)
+
+=====
+
+How to Remove a Profile on iOS
+Open the Settings app on your iPhone or iPad.
+
+Tap on General.
+
+Scroll down and tap on VPN & Device Management (on older iOS versions, this may just be called Profiles or Profiles & Device Management).
+
+Under the Configuration Profile section, tap the name of the certificate you want to remove.
+
+Tap Remove Profile.
+
+Enter your device passcode if prompted, and confirm the removal.

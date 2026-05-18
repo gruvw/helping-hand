@@ -12,8 +12,7 @@ final dbProvider = Provider<Database>(
 final remoteIdsProvider = StreamProvider<List<String>>((ref) {
   final db = ref.watch(dbProvider);
 
-  return db
-      .select(db.remoteTable)
+  return (db.select(db.remoteTable)..orderBy([(r) => OrderingTerm.asc(r.id)]))
       .map((remote) => remote.id)
       .watch()
       .distinct();

@@ -85,7 +85,7 @@
     - [ ] Full system test and bug fixing
 - [ ] Evaluation
     - [x] Stress test the system with 10'000 clicks, one per second
-    - [ ] Endurance test (50 clicks per day, for a full week)
+    - [x] Endurance test (50 clicks per day, for a full week)
     - [x] Evaluation of mechanical design for multiple remote types
     - [ ] Interface evaluation for ease of manipulation
     - [ ] Real world integration testing with measurements
