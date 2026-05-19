@@ -4,10 +4,22 @@
 
 Trigger any button on any remote control using your digital devices.
 
-<p align="center">
-  <img width="600" src="./docs/images/finished_perspective.jpg">
-</p>
+<img width="600" src="./docs/images/finished_perspective.jpg">
 
 Turn your remote controls into a connected device.
 
 Take a look at the project's [roadmap](docs/roadmap.md) to see upcoming features (along with all the work accomplished).
+
+## Hardware
+
+## Firmware
+
+### Dev environment
+
+## Software
+
+### Dev environment
+
+### Browser Security
+
+#### Note on iOS devices
