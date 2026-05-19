@@ -1,6 +1,9 @@
+# iOS Certificate Install
+
 Installing a custom certificate on iOS is a three-part process: downloading it, installing the profile, and manually trusting it.
 
-Step 1: Download the Certificate
+**Step 1**: Download the Certificate
+
 Open Safari and navigate to the link or portal where your certificate is hosted.
 
 Tap the link to download the certificate file.
@@ -9,7 +12,8 @@ A pop-up will say, "This website is trying to download a configuration profile."
 
 A second pop-up will confirm the profile has downloaded. Tap Close.
 
-Step 2: Install the Profile
+**Step 2**: Install the Profile
+
 Open your iPhone's Settings app.
 
 Near the top (just under your Apple ID), tap Profile Downloaded.
@@ -22,7 +26,8 @@ You may see a warning screen. Tap Install in the top-right corner, and then tap 
 
 Tap Done.
 
-Step 3: Enable Full Trust (Crucial for Root Certificates)
+**Step 3**: Enable Full Trust (Crucial for Root Certificates)
+
 Note: iOS does not automatically trust manually installed root certificates for SSL/TLS connections. You must enable this manually.
 +1
 
@@ -38,17 +43,13 @@ Tap Continue on the prompt confirming you want to trust the certificate.
 
 (If you are installing a certificate issued by a school or employer, they may use Mobile Device Management (MDM) to push the certificate to your phone automatically, in which case you won't need to do this manually.)
 
-=====
+# Uninstall iOS Certificate
 
 How to Remove a Profile on iOS
-Open the Settings app on your iPhone or iPad.
 
-Tap on General.
-
-Scroll down and tap on VPN & Device Management (on older iOS versions, this may just be called Profiles or Profiles & Device Management).
-
-Under the Configuration Profile section, tap the name of the certificate you want to remove.
-
-Tap Remove Profile.
-
-Enter your device passcode if prompted, and confirm the removal.
+1. Open the Settings app on your iPhone or iPad.
+2. Tap on General.
+3. Scroll down and tap on VPN & Device Management (on older iOS versions, this may just be called Profiles or Profiles & Device Management).
+4. Under the Configuration Profile section, tap the name of the certificate you want to remove.
+5. Tap Remove Profile.
+6 Enter your device passcode if prompted, and confirm the removal.
