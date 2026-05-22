@@ -105,6 +105,8 @@
     - [ ] Smaller area under for electronics, might require custom PCB
     - [ ] Two sizes variants (currently one size fits all, too large for very small remotes, one smaller variant with less servos)
     - [ ] New type of arms (bendable, ...)
+    - [ ] Arm can hit the rail when retracting back depending on the orientation (have a slightly raised servo holder)
+    - [ ] Arm clips are currently a bit britter (try other 3D designs, or other materials like PETG)
 - [ ] Electronics + Firmware
     - [ ] Automatic servo port detection
     - [ ] Small OLED status screen or LED
@@ -126,6 +128,7 @@
     - [ ] Recently used actions tile
     - [ ] Fix tiles reordering animation bug
     - [ ] Import / Export tiles config
+    - [ ] Voice control interface
 - [ ] Documentation
     - [ ] Web generator application tool for CAD parts (custom tolerances)
     - [ ] Mechanical design modular parts schematics/drawings
