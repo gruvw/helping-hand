@@ -12,7 +12,7 @@ abstract class Values {
 
   static const minPositionAngle = 100;
   static const minPressAngleDelta = 2;
-  static const maxPressAngle = 180;
+  static const maxPressAngle = 220;
   static const minPressAngle = minPositionAngle + minPressAngleDelta;
   static const maxPositionAngle = maxPressAngle - minPressAngleDelta;
 }
