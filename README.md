@@ -36,7 +36,107 @@ These principles are fundamental to all parts of the project, whether it is Syst
 
 ## Hardware
 
-price
+The device itself is composed of 3D printed parts, and some easy to find electronics components.
+The image below shows the basic parts required to build a Helping-Hand device.
+
+<img width="600" src="./docs/images/module_components_required.jpg">
+
+### 3D Printing
+
+You can find all the CAD models used for this project under the `cad` directory.
+It is composed of three main parts.
+All the parts can be 3D printed without supports, at 15% infill, and using regular PLA filament.
+
+**1. The Device**
+
+<img width="500" src="./docs/images/device_cad.png">
+
+This is the body of the system.
+It has a main box compartement where goes the electronics.
+This is closed by placing the main vice rail on top of it, and they are held together my a regular M4 bolt and a square nut.
+The vice comes on the side of the rail and slides in.
+Then we can pass a 130mm M6 bolt inside into a pressure fit M6 square nut on the other end.
+Those are the only two screws of the main body.
+
+Then comes the two rails from the side of the device.
+They are pressure fit in place in the two corresponding holes.
+The servo modules can be screwed on those rails using a short M4 bolt and a square nut under the rail.
+
+**2. The Vicers Attachements**
+
+Most remotes will be held in place just fine using the regular inside of the vice's walls. 
+
+However, some remotes might require adding special attachement in order to be properly secured in place.
+
+<img width="500" src="./docs/images/vicers_cad.png">
+
+Here are a few, ready-to-print attachements that should cover most needs.
+There's one for small rounded remotes and another one for remotes with angled edges for example.
+Those attachements are simply slided into the main body using the small inner rails on the vice's walls.
+
+One of those attachements will require the use of a 2mm thick soft silicone sheet; it is used to have a better grip on some remotes.
+
+**3. The Arms**
+
+<img width="500" src="./docs/images/arms_cad.png">
+
+There are already three sizes of arms attachements available.
+They are built to clip directly inside a buckle, glued on a servo's plastic arm.
+
+<img width="300" src="./docs/images/servo_attachement_glue.jpg">
+
+Those are designed to be easily swapped if needed.
+
+In order to print everything required to build a Helping-Hand module with 4 servo attachement, it takes approximately **5 hours of print time and 200 grams of filament**, depending on your printer and your settings.
+
+The whole mechanical designed is really built with modularity in mind.
+There are a total of 4 points of interface:
+
+- The servo rails holes on the side can accommodate different rails if required.
+- The vicer attachement system can fit any kind of custom designed walls as long as they have the slit rails to be slidded onto the vice's inner walls.
+- The servo modules can be swapped to use different kinds of servo, or have some other form of orientation for example.
+- The servo buckle can be used with all sort of arms as long as they have the same base clip.
+
+Those are here for 3 main reasons:
+
+- If a part breaks, like an arm, a rail or a servo module, you only need to replace that part and not the whole device.
+- If a part does not fit your need, like if there's a really special remote, you can create your own and make it work with the rest of the device.
+- Only use the number of parts required for the application, like if you only need to access one button, you might only use a single rail and a single servo module.
+
+### Electronics
+
+<img width="600" src="./docs/images/full_electronics.jpg">
+
+The electronics required for building a module is the following:
+
+- A 5V 3A alimentation
+- An ESP-32 C6 microcontroller
+- A PCA9685 servo controller
+- Some MG90S servo motors
+- A DC plug
+- Electronics wires
+- (optionnaly) Some JR servo connectors
+
+The image below describes the wiring schematics for the system:
+
+<img width="500" src="./docs/images/electronics_schematic.jpg">
+
+Once you connect everything together it should look something like the following:
+
+<img width="500" src="./docs/images/electronics_wiring.jpg">
+
+You can then install the electronics inside the main body of the system.
+Regular hot glue can be used to fix the components and a stronger glue can be used to hold the cable connectors to the walls.
+
+<img width="500" src="./docs/images/module_inside.jpg">
+
+### Finished device
+
+A fully finished and assembled system looks like the following:
+
+<img width="600" src="./docs/images/module_components_finished.jpg">
+
+When accounting for all the materials necessary, the total cost for building a full device is approximately 46$, and it should take about 2 hours to fully assemble (not accounting for 3D printing time).
 
 ## Firmware
 
