@@ -6,25 +6,28 @@ Trigger any button on any remote control using your digital devices.
 
 <img width="600" src="./docs/images/finished_perspective.jpg">
 
-Turn your remote controls into a connected device.
-Comes with a cross-platform app
-
 This project started from a simple observation: many things already present in our homes are not "smart" or connected although they have a remote controller (blinds, garage doors, air conditionning, etc), and when they are they often each have their own separate mobile application.
-On top of that, those applications are often poorly designed, requiring you to craete an account to log in, they aren't cross-platform (meaning they are not accessible from a computer, or the web, or only available on iOS/Android), and are very rarely thought with accessibily in mind.
+On top of that, those applications are often poorly designed, requiring you to create an account to log in, they aren't cross-platform (meaning they are not accessible from a computer, or from a web browser, or only available on iOS/Android), and are very rarely thought with accessibily in mind.
 
 So instead of replacing a whole perfectly working home appliance to install a commertial "smart" one that comes with the flaws mentionned above, Helping-Hand is an inexpensive solution that adapts to your existing remote controllers.
+You can install a remote control inside the device, and configure a small servo motor module for each button that you want to control on it.
+The device turns your regular remote control into a connected appliance, controllable from a cross-platform application available on your smartphone, tablet and computer.
 
 You can checkout a short video demo of the system, with a focus on its accessibility features: <https://youtu.be/LdWC4-ZtAj0>.
 
 Take a look at the project's [roadmap](docs/roadmap.md) to see upcoming features (along with all the work accomplished).
 
+**Note**: currently the project's focus is to adapt radio based remote controls, which are significantly harder to recreate than infrared (IR) based ones because of security reasons.
+Although the current device can work for IR based remotes, it probably won't be the most appropriate solution.
+The goal is to later create another device that integrates into the same system, dedicated to IR remotes, that will be able to record and replay basic IR commands, meaning in won't even require the original remote itself or servo motors.
+
 ## Phylosophy
 
 The core principles of the project are the following:
 
+- **Simplicity**: keep every component as straightforward as possible, complexity is only introduced when strictly necessary; makes the system easier to understand, maintain, and debug.
 - **Modularity**: allows for using only what you need (nothing more), replacing just the parts that needs to be (repairability), faster development cycle (iterating only on parts of the system).
 - **Open-Source**: source code, schematics, and designs are fully available and free to inspect, modify, and distribute; this encourages community contributions, trust through transparency, and freedom from vendor lock-in.
-- **Simplicity**: keep every component as straightforward as possible, complexity is only introduced when strictly necessary; makes the system easier to understand, maintain, and debug.
 - **Accessibility**: being as inclusive as possible, empowering users with unique needs to control their environment and regain some autonomy.
 - **Efficiency**: keep the system responsive and lean, make actions fast by minimizing latency and loading states where possible.
 - **Extensibility**: designed to be extended, new remotes, arms, rails, components, transports, or platforms can be added without rearchitecting what already works.

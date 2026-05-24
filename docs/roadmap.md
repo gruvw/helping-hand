@@ -121,6 +121,8 @@
     - [ ] Device back navigation should pop tiles path
     - [ ] Native application releases (iOS?)
     - [ ] Button long press interface
+    - [ ] Button keep pressed interface
+    - [ ] User configurable tile rotation time in accessibility mode
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Upload custom external lua scripts to the remotes for state control and custom endpoints
     - [ ] i18n
