@@ -136,11 +136,42 @@ A fully finished and assembled system looks like the following:
 
 <img width="600" src="./docs/images/module_components_finished.jpg">
 
-When accounting for all the materials necessary, the total cost for building a full device is approximately 46$, and it should take about 2 hours to fully assemble (not accounting for 3D printing time).
+When accounting for all the materials necessary, the total cost for building a full device is approximately **46$**, and it should take about **2 hours** to fully assemble (not accounting for 3D printing time).
 
 ## Firmware
 
+The firmware code for the ESP-32 C6 microcontroller is built in [Rust](https://rust-lang.org/).
+The code is under the `firmware` directory.
+
+It uses a modularized architecture with 5 main parts:
+
+- The network part is responsible for connecting to the Wi-Fi router and runs a reconnection mechanism every 30 seconds in case the connection drops.
+- The server part is responsible for running an HTTP (and an HTTPs) server in order to recieve and dispatch requests.
+- The logic part is responsible for handling the requests.
+- The servo part exposes an API to control the servo motors through the PCA9685 running via I2C.
+- The filesystem part is used to persist the configuration of the device through reboots.
+
+The system is configured using a `.env` file containing the following information:
+
+```env
+# .env
+
+DEVICE_ID="0001"
+
+NET_SSID="Helping-Hand"
+NET_PWD="hh-test-net"
+```
+
 ### Dev environment
+
+In order to compile and flash the system you will need to install the required dependencies.
+
+This process is simplified by using a nix `flake.nix` file.
+
+You simply need to run `nix develop` inside the `firmware` directory to have everything ready to go.
+Learn more about nix flakes here: <https://wiki.nixos.org/wiki/Flakes>
+
+Once all the dependencies are installed, you can run `cargo build` to build the firmware, and `cargo run` to flash an ESP-32 C6 connected via USB.
 
 ## Software
 
@@ -168,6 +199,16 @@ This is voluntarily kept seprate from the user's tiles referencing those remotes
 
 #### Accessibily mode
 
+This mode is specifically designed for people with disabilities that might use other input systems to use the application.
+For them it might not be easy to point to the correct tile everytime, or it could induce strain and/or physical load.
+On the home screen, the user can access the settings to enable the accessibility mode by clicking on "Use Accessible UI".
+
+<img width="220" src="./docs/images/app/settings.jpg">
+
+When returning to the home screen, the system automatically cycles through the tiles, highlighting each with a blue border one after the other.
+Instead of needing to target a specific tile, the user can tap anywhere on the screen to select the currently highlighted option.
+This drastically increases the active input area and eliminates the need for precise clicking.
+
 In this mode, other main screen actions (like drag and drop to reorder) are not enabled to avoid involuntary actions resulting from harder to control input systems.
 The top application's bar however is still enabled as it is used to access settings to disable the accessibility mode.
 
@@ -186,8 +227,57 @@ The logo bears a dual meaning: first it represents a home laying on its side bec
 
 ### Dev environment
 
+## Security
+
+As with any digital system, the security of Helping-Hand is important to discuss.
+
+The main safe guard here is the access to your home Wi-Fi network.
+Basically, any device that is connected to the same Wi-Fi network as a Helping-Hand device is considered trusted to execute actions and re-configure the device.
+Devices outside that network will however have no direct access to the device.
+
+This security model therefore relies on having a strong and secure Wi-Fi password.
+It also improses a limitation on the system, which is that it cannot be controlled if you are not connected to your home Wi-Fi.
+It means that it's not possible to use the system to open and close the blinds when your are away for vacations for example.
+
+Although because the system is built with extensibility in mind, one could have a proxy device like a laptop or a small raspberry pi, connected to the internet and and execute internal requests based on external commands.
+Another solution could be to use a regular home VPN server.
+However this would increase the attack surface of the whole system and their security must be assured.
+
 ### Browser Security
+
+Although the Helping-Hand user interface is built with Flutter for cross-platform support, it currently only supports the web target.
+That means that it has to follow the browser security model and account for CSRF protection and mixed-content policies.
+
+The user interface web application has to be servered over HTTPs, not only because of security concerns, but also because it uses the web worker api and local storage features which both require the site to be served over a secured connection.
+It implies that any requests the website wants to make also has to conform to that HTTPs protocol, as per the mixed-content policy.
+However the ESP32 microcontrollers aren't full on computers and are a little bit on the low ends of performances of what's necessary in terms of memory and CPU to handle HTTPs connections.
+
+Luckly for the project, a modern browser feature called [Local Network Access](https://wicg.github.io/local-network-access/) (LNA) allows to make HTTP requests to local network devices, even from an HTTPs served website, therefore bypassing the mixed-content policy.
+It just asks for the user to confirm that a given website is indeed authorized to make such requests by showing a confirmation pop-up dialog once.
+The firmware is configured to adhere to the specification of LNA and has the correct request preflight headers setup properly to tell the browser that this feature is indeed supported.
+
+Additionnally, to prevent cross site request forgery, the ESP-32 must respond to any request by filling the allow origin headers.
+In debug mode it will allow any port of the `localhost` origin, and in release mode the firmware only allows requests from a hardcoded URL, defaulting to the official Helping-Hand website's URL.
 
 #### Note on iOS devices
 
-## Security
+Apple has strict rules when it comes to iOS browser, and notably that they must all use the WebKit engine.
+Unfortunately, to this day Apple still does not support the LNA browser feature for the WebKit engine, meaning any mixed-content request even when made on local network devices that correctly implement the preflight headers won't be allowed.
+
+That unfortunately forces the use of the HTTPs protocol to communicate locally to the microcontrollers for iOS devices, at least until Apple decides to implement the LNA feature.
+This is currently implemented in the project by having an HTTPs server running on the microcontroller, alongside the regular HTTP server with a common logic handling process.
+The microcontrollers are therefore using self-signed certificates for each device, created at compile time when flashing the chips.
+
+Of course, the iOS browsers won't accept these self-signed certificate by default so they first need to be downloaded on the iOS device by using the `http://hh-0001.local/cert` address (replacing `hh-0001` by the ID of the target Helping-Hand device).
+Then the user can follow the procedure explained in the `./docs/ios_cert.md` document to save and trust that certificate.
+
+To finally gain access to the Helping-Hand device from the user interface, they'll have to enable the HTTPs mode from the settings menu.
+
+**Limitations**
+
+This method currently has 2 major limitations:
+
+- The ESP32 C6 hardware can only support up to 3 simultaneous HTTPs connections.
+- The policy of Apple regarding self-signed certificates is that they can only be valid for a maximum of 1 year before automatically expiring. Therefore it requires opening up the Helping-Hand device to reflash a new certificate once per year.
+
+A real longer term solution would be to maintain and deploy a native iOS application (which isn't cheap), or that Apple eventually adds support for the LNA protocol to their web engine, or allow for other browser engines to be used on their mobile devices.
