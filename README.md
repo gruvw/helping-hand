@@ -175,6 +175,9 @@ Once all the dependencies are installed, you can run `cargo build` to build the 
 
 ## Software
 
+The software code for the Helping-Hand companion application is built in [Dart](https://dart.dev/) using the [Flutter](https://flutter.dev/) framework.
+The code is under the `app` directory.
+
 ### User interface
 
 The companion app that allows controlling over the Helping-Hand devices has the following user interface.
@@ -190,12 +193,38 @@ There are three types of tiles, each with a separate icon and color:
 - Remote tiles in green: access all the buttons configured on that remote.
 - Action tiles in purple: clicking on this type of tile will trigger a click on the corresponding button of that remote
 
-In a folder (or on the home page), the user can long press on tiles to reorder them to their liking.
+<img width="250" src="./docs/images/app/reorder.jpg">
+
+In a folder (or on the home page), the user can long press on tiles and then drag and drop to reorder them to their liking.
 Remote tiles only contains all of the actions configure on the corresponding remote, while folder tiles (and the home screen) can contain any type of tiles: folders, remotes, and action tiles directly. This allows for quick actions directly from the home screen for example, or creating a folder containing a subset of buttons from a given remote.
 
 A remote's configuration is directly stored on the Helping-Hand device itself, not locally on a user's application.
 Editing a remote's configuration (renaming it, adding or changing its actions, ...) is done on this page and will be directly available to any other user having this remote installed in their application.
 This is voluntarily kept seprate from the user's tiles referencing those remotes and actions, so that different users can organize their tiles to their liking, on each of their device.
+
+The user can use the following context menu to change things about the current view:
+
+<img width="250" src="./docs/images/app/context_menu.jpg">
+
+This allows for things like creating a new folder, renaming the current one or moving it to a different place for example.
+The user can also select the "Remotes" option to access the following screen:
+
+<img width="250" src="./docs/images/app/remotes.jpg">
+
+From here the user can click on the "+" icons to add a remote or quick-action tile to the folder they were coming from.
+It's also from here that the user can add and configure new remotes or buttons.
+
+<img width="250" src="./docs/images/app/register_new_action.jpg">
+
+The process to configure a new button is quite straightforward and follows the form's input from top to bottom.
+First connect a servo module to one of the available port on the device.
+Then select that port using the arrow keys at the top of the form.
+Type in the name of that new button, and click on the "set" button.
+This will bring down the arm connected to the selected servo module close to the remote.
+You can then use the up and down buttons to bring the servo closer in order to align it properly to the button that you want to control.
+Once it is aligned properly you can tighten the screw on the rail and proceed to the "click" test.
+You can then click on the lowering button as many times as necessary, until you actually see the remote registering the click.
+Then you can click on "Confirm" to save this new button.
 
 #### Accessibily mode
 
@@ -226,6 +255,17 @@ It's designs follows the minimalistic and efficient look of the app.
 The logo bears a dual meaning: first it represents a home laying on its side because this system is made for home automation, and it looks a bit like a "play" or "do it" button icon representing the act of performing an action like the button presses.
 
 ### Dev environment
+
+Flutter is required to build and deploy the application.
+You can follow the installation steps provided on the Flutter website for your system: <https://docs.flutter.dev/install>
+Make sure the `flutter doctor -v` command runs without errors after installation.
+
+In order to run the Helping-Hand application locally you can execute the `flutter run` command inside the `app` directory.
+
+Additionnally, two build flags are available to facilitate the development of the app:
+
+- `--dart-define=DEBUG_FAKE_REQUESTS=true`: this flag will enable a fake interface with two mocked devices `hh-0001` and `hh-0002`. All requests made will have a fake delay and a 30% failure rate to test how the UI handles those cases. (only has an effect when building for DEBUG mode)
+- `--dart-define=DEBUG_ERASE_DB=true`: this flag will earase the local database on every build. This can be useful to start from a clean app and make sure there was no residual state potentially causing problems. (only has an effect when building for DEBUG mode)
 
 ## Security
 
