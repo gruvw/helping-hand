@@ -58,7 +58,7 @@
     - [x] Servo one way attachements
 - [x] Firmware
     - [x] Refined communication protocol with main application
-- [ ] Software
+- [x] Software
     - [x] Remove and rename remote action interface
     - [x] Folder and tiles system
     - [x] Create a remote tile
@@ -84,17 +84,17 @@
     - [x] Phone UI check for sizes, scrolls and overflows
     - [x] Full system test and bug fixing
     - [x] Way to delete quick action tile (double tap)
-- [ ] Evaluation
+- [x] Evaluation
     - [x] Stress test the system with 10'000 clicks, one per second
     - [x] Endurance test (50 clicks per day, for a full week)
     - [x] Evaluation of mechanical design for multiple remote types
-    - [ ] Interface evaluation for ease of manipulation
-    - [ ] Real world integration testing with measurements
-- [ ] Documentation
+    - [x] Interface evaluation for ease of manipulation
+    - [x] Real world integration testing with measurements
+- [x] Documentation
     - [x] Full CAD downloads
     - [x] System pictures
-    - [ ] Project README
-    - [ ] GitHub release
+    - [x] Project README
+    - [x] GitHub release
 
 ## Version 2.0.0
 
@@ -116,7 +116,7 @@
     - [ ] Connection to Wi-Fi network from AP mode
     - [ ] Captive portal for custom wifi setup
     - [ ] Button double press interface
-    - [ ] More complex button actions, like press sequences
+    - [ ] More complex button actions, like press sequences, even across remotes
 - [ ] Software
     - [ ] Device back navigation should pop tiles path
     - [ ] Native application releases (iOS?)
