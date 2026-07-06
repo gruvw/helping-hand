@@ -8,8 +8,13 @@ import "package:helping_hand/utils/language.dart";
 class FakeRemoteRequestService implements RemoteRequestService {
   static final List<String> _connectedRemotes = ["hh-0001", "hh-0002"];
   static final Map<String, String> _configs = {
-    _connectedRemotes[0]:
-        "My Remote 1\nclick:my first button,1,102,100\nclick:my other button,1,102,100",
+    _connectedRemotes[0]: [
+      "My Remote 1",
+      "click:my first button,1,102,100",
+      "click:my other button,1,102,100",
+      "hold:0 hold second button,2,102",
+      "release:1 release second button,2",
+    ].join("\n"),
     _connectedRemotes[1]: "Kitchen remote",
   };
 
