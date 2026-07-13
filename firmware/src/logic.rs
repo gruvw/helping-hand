@@ -8,6 +8,7 @@ use pwm_pca9685::Channel;
 
 use crate::{
     fs::{get_config, store_config},
+    ir::IrManager,
     server::{HttpStatus, RequestExt},
     servo::ServoManager,
 };
@@ -193,6 +194,45 @@ pub fn handle_store_config(
     log::info!(target: LOG_TAG, "store-config handling");
 
     store_config(body);
+
+    req.into_cors_response(HttpStatus::NoContent, &[])?;
+
+    Ok(())
+}
+
+pub fn handle_record(
+    req: Request<&mut EspHttpConnection>,
+    ir: &Arc<Mutex<IrManager>>,
+) -> anyhow::Result<()> {
+    log::info!(target: LOG_TAG, "record handling");
+
+    let result = ir
+        .lock()
+        .expect("failed to acquire ir manager mutex")
+        .ir_receive();
+
+    let mut response = req.into_cors_response(HttpStatus::Ok, &[("Content-Type", "text/plain")])?;
+    response.write(result.as_bytes())?;
+
+    Ok(())
+}
+
+pub fn handle_play(
+    req: Request<&mut EspHttpConnection>,
+    ir: &Arc<Mutex<IrManager>>,
+    body: String,
+) -> anyhow::Result<()> {
+    log::info!(target: LOG_TAG, "play handling");
+
+    log::info!(
+        target: LOG_TAG,
+        "play parameters: body\n{}",
+        &body,
+    );
+
+    ir.lock()
+        .expect("failed to acquire ir manager mutex")
+        .ir_replay(&body);
 
     req.into_cors_response(HttpStatus::NoContent, &[])?;
 

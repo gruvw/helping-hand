@@ -33,8 +33,10 @@ esp-idf-svc = { version = "0.52.1", features = ["critical-section", "embassy-tim
 embassy-time = { version = "0.5", features = ["generic-queue-8"] }
 pwm-pca9685 = "1.0.0"
 esp-idf-hal = "0.46.2"
+esp-idf-sys = "0.37.1"
 embedded-hal = "1.0.0"
 const_format = "0.2"
+base64 = "0.22"
 
 [build-dependencies]
 dotenvy = "0.15"

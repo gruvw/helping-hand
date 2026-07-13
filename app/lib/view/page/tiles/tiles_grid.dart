@@ -36,6 +36,7 @@ class TilesGrid extends HookConsumerWidget {
     final selectedTileIndex = useState(0);
 
     useEffect(() {
+      // TODO stay on same tile after click (to allow for easy re-click)
       if (!accessibleUi) return null;
 
       if (context.mounted) {

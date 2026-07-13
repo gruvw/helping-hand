@@ -13,9 +13,12 @@ use esp_idf_svc::http::server::Request;
 use esp_idf_svc::http::server::Response;
 use esp_idf_svc::tls::X509;
 
+use crate::ir::IrManager;
 use crate::logic::handle_click;
 use crate::logic::handle_get_config;
 use crate::logic::handle_index;
+use crate::logic::handle_play;
+use crate::logic::handle_record;
 use crate::logic::handle_reset;
 use crate::logic::handle_set;
 use crate::logic::handle_store_config;
@@ -25,7 +28,7 @@ use crate::servo::ServoManager;
 const ALLOWED_ORIGIN_SUFFIX: &str = "://hh.gruvw.com";
 const ALLOWED_ORIGIN: &str = formatcp!("https{}", ALLOWED_ORIGIN_SUFFIX);
 
-const BODY_MAX_SIZE: usize = 4096;
+const BODY_MAX_SIZE: usize = 400_000;
 const BODY_BUFFER_SIZE: usize = 512;
 
 macro_rules! include_certs {
@@ -195,7 +198,10 @@ pub struct Servers {
     pub http: EspHttpServer<'static>,
 }
 
-pub fn server_setup(sm: Arc<Mutex<ServoManager<'static>>>) -> Servers {
+pub fn server_setup(
+    sm: Option<Arc<Mutex<ServoManager<'static>>>>,
+    ir: Option<Arc<Mutex<IrManager<'static>>>>,
+) -> Servers {
     let server_cert = X509::pem_until_nul(SERVER_CERT);
     let server_key = X509::pem_until_nul(SERVER_KEY);
 
@@ -238,24 +244,43 @@ pub fn server_setup(sm: Arc<Mutex<ServoManager<'static>>>) -> Servers {
             })
             .expect("failed to set store-config HTTP handler");
 
-        let click_sm = sm.clone();
-        server
-            .register_pna_handler("/click", Method::Post, move |req| {
-                handle_click(req, &click_sm)
-            })
-            .expect("failed to set click HTTP handler");
+        if let Some(sm) = sm.clone() {
+            let click_sm = sm.clone();
+            server
+                .register_pna_handler("/click", Method::Post, move |req| {
+                    handle_click(req, &click_sm)
+                })
+                .expect("failed to set click HTTP handler");
 
-        let set_sm = sm.clone();
-        server
-            .register_pna_handler("/set", Method::Post, move |req| handle_set(req, &set_sm))
-            .expect("failed to set set HTTP handler");
+            let set_sm = sm.clone();
+            server
+                .register_pna_handler("/set", Method::Post, move |req| handle_set(req, &set_sm))
+                .expect("failed to set set HTTP handler");
 
-        let reset_sm = sm.clone();
-        server
-            .register_pna_handler("/reset", Method::Post, move |req| {
-                handle_reset(req, &reset_sm)
-            })
-            .expect("failed to set reset HTTP handler");
+            let reset_sm = sm.clone();
+            server
+                .register_pna_handler("/reset", Method::Post, move |req| {
+                    handle_reset(req, &reset_sm)
+                })
+                .expect("failed to set reset HTTP handler");
+        }
+
+        if let Some(ir) = ir.clone() {
+            let record_ir = ir.clone();
+            server
+                .register_pna_handler("/record", Method::Get, move |req| {
+                    handle_record(req, &record_ir)
+                })
+                .expect("failed to set record HTTP handler");
+
+            let play_ir = ir.clone();
+            server
+                .register_pna_handler("/play", Method::Post, move |mut req| {
+                    let body = read_body(&mut req, BODY_MAX_SIZE)?;
+                    handle_play(req, &play_ir, body)
+                })
+                .expect("failed to set play HTTP handler");
+        }
     }
 
     log::info!(target: LOG_TAG, "web server running");
