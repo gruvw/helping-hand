@@ -68,4 +68,8 @@ class FakeRemoteRequestService implements RemoteRequestService {
   @override
   Future<void> reset({required int channel}) =>
       _fakeRequest("reseting channel $channel");
+
+  @override
+  Future<void> play({required String payload}) =>
+      _fakeRequest("playing ir payload $payload");
 }

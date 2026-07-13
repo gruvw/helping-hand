@@ -14,4 +14,6 @@ abstract class RemoteRequestService {
   Future<void> reset({
     required int channel,
   });
+
+  Future<void> play({required String payload});
 }

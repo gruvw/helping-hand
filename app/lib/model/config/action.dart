@@ -128,11 +128,46 @@ class ReleaseConfig extends ActionConfig {
       "$actionType${ActionConfig.typeSeparator}$name${ActionConfig.valueSeparator}$channel";
 }
 
+class IrPlayConfig extends ActionConfig {
+  static final actionType = "irplay";
+
+  static IrPlayConfig? parse(String configLine) {
+    final regex = RegExp(
+      "^$actionType${ActionConfig.typeSeparator}($namePattern)${ActionConfig.valueSeparator}(.+)\$",
+    );
+    final match = regex.firstMatch(configLine.trim());
+    if (match == null) return null;
+
+    return IrPlayConfig(
+      name: match.group(1)!,
+      payload: match.group(2)!,
+    );
+  }
+
+  @override
+  final String name;
+
+  final String payload;
+
+  IrPlayConfig({
+    required this.name,
+    required this.payload,
+  });
+
+  @override
+  String get endpoint => "/play";
+
+  @override
+  String serialize() =>
+      "$actionType${ActionConfig.typeSeparator}$name${ActionConfig.valueSeparator}$payload";
+}
+
 List<ActionConfig> parseConfigActions(String config) {
   final parsers = [
     ClickConfig.parse,
     HoldConfig.parse,
     ReleaseConfig.parse,
+    IrPlayConfig.parse,
   ];
 
   return config

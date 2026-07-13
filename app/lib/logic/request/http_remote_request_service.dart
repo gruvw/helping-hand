@@ -19,6 +19,10 @@ class HttpRemoteRequestService implements RemoteRequestService {
 
   @override
   Future<void> perform(ActionConfig actionConfig) {
+    if (actionConfig is IrPlayConfig) {
+      return play(payload: actionConfig.payload);
+    }
+
     return http
         .post(_uri.resolve(actionConfig.endpoint))
         .timeout(timeout, onTimeout: _onTimeout);
@@ -35,6 +39,13 @@ class HttpRemoteRequestService implements RemoteRequestService {
   Future<void> set({required int channel, required int angle}) {
     return http
         .post(_uri.resolve("/set?channel=$channel&angle=$angle"))
+        .timeout(timeout, onTimeout: _onTimeout);
+  }
+
+  @override
+  Future<void> play({required String payload}) {
+    return http
+        .post(_uri.resolve("/play"), body: payload)
         .timeout(timeout, onTimeout: _onTimeout);
   }
 
